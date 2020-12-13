@@ -82,5 +82,4 @@ const updateLastEntry = () => {
     document.getElementById('feelings').value = '';
 };
 
-// Set event listeners
-document.getElementById('generate').addEventListener('click', updateLastEntry);
+export { updateLastEntry };
