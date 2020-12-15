@@ -17,7 +17,7 @@ const cors = require('cors');
 app.use(cors());
 
 // Initialize the main project folder
-app.use(express.static('../../dist'));
+app.use(express.static('dist'));
 
 // Setup Server
 const port = 8082;
@@ -27,7 +27,7 @@ const server = app.listen(port, () => {
 
 // Server Routes
 app.get('/', (request, response) => {
-    response.sendFile('website/index.html');
+    response.sendFile('dist/index.html');
 });
 
 app.get('/lastEntry', (request, response) => {
