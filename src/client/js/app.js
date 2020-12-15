@@ -1,20 +1,14 @@
-/* Global Variables */
-const baseURL = 'http://api.openweathermap.org/data/2.5/weather?zip=';
-const apiKey = '***REMOVED***'; // Replace with your own API key
-
 // Create a new date instance dynamically with JS
 let d = new Date();
 let newDate = d.getMonth() + '.' + d.getDate() + '.' + d.getFullYear();
 
 // Fetch local temperature for the given zip Code from openweathermap.org
-const fechtWeatherData = async (baseURL, zipCode, key) => {
-    const response = await fetch(
-        baseURL + zipCode + ',us&appid=' + key + '&units=imperial'
-    );
+const fechtWeatherData = async (url = '', zipCode = '00000') => {
+    const response = await fetch(url + '?zipcode=' + zipCode);
     try {
-        const data = await response.json();
+        const weatherData = await response.json();
         return {
-            temperature: data.main.temp,
+            temperature: weatherData.temperature,
         };
     } catch (error) {
         console.log(error);
@@ -69,7 +63,7 @@ const updateUI = async () => {
 const updateLastEntry = () => {
     const zipCode = document.getElementById('zip').value;
     const userResponse = document.getElementById('feelings').value;
-    fechtWeatherData(baseURL, zipCode, apiKey).then((data) => {
+    fechtWeatherData('/weather', zipCode).then((data) => {
         postData('/addData', {
             temperature: data.temperature,
             date: newDate,
