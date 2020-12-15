@@ -1,8 +1,8 @@
 {
-  "name": "weather-journal-app",
+  "name": "travel-app",
   "version": "1.0.0",
-  "description": "A weather journal web application",
-  "main": "server.js",
+  "description": "A travel preparation web app",
+  "main": "src/server/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/server/server.js",
@@ -11,18 +11,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PabloAsencio/weather-journal-app.git"
+    "url": "git+https://github.com/PabloAsencio/travel-app.git"
   },
   "keywords": [
-    "weather",
-    "journal"
+    "travel",
+    "countries"
   ],
   "author": "Pablo Asencio Sanchez",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/PabloAsencio/weather-journal-app/issues"
+    "url": "https://github.com/PabloAsencio/travel-app/issues"
   },
-  "homepage": "https://github.com/PabloAsencio/weather-journal-app#readme",
+  "homepage": "https://github.com/PabloAsencio/travel-app#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
