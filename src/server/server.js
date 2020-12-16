@@ -5,8 +5,8 @@ const axios = require('axios');
 const dotenv = require('dotenv');
 dotenv.config();
 /* Global Variables */
-const baseURL = 'http://api.openweathermap.org/data/2.5/weather?zip=';
-const apiKey = process.env.OW_API_KEY;
+const baseURL = 'http://api.geonames.org/postalCodeSearchJSON?placename=';
+const geonamesUsername = process.env.GEONAMES_USERNAME;
 // Setup empty JS object to act as endpoint for all routes
 projectData = {};
 
@@ -47,26 +47,19 @@ app.post('/addData', (request, response) => {
     response.send(projectData);
 });
 
-app.get('/weather', (request, response) => {
+app.get('/location', (request, response) => {
     const url =
-        baseURL +
-        request.query.zipcode +
-        ',us&appid=' +
-        apiKey +
-        '&units=imperial';
+        baseURL + request.query.placename + '&username=' + geonamesUsername;
     axios
         .get(url)
-        .then((openWeatherResponse) => {
-            const weatherData = openWeatherResponse.data;
-            response.send({
-                temperature: weatherData.main.temp,
-            });
+        .then((geonamesResponse) => {
+            const places = geonamesResponse.data;
+            response.send(places.postalCodes[0]);
         })
         .catch((error) => {
             console.log(error);
             response.send({
-                temperature:
-                    'No temperature was found for this location. Try again!',
+                placeName: 'No location was found under this name. Try again!',
             });
         });
 });
