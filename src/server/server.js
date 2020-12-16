@@ -79,11 +79,13 @@ app.get('/listCities', (request, response) => {
     axios
         .get(url)
         .then((geonamesResponse) => {
-            const places = geonamesResponse.data;
+            const places = geonamesResponse.data.postalCodes;
+            console.log(places);
             const result = {
                 cities: [],
             };
-            for (const city in places.postalCodes) {
+            for (const city of places) {
+                console.log(city);
                 result.cities.push({
                     name: city.placeName,
                     countryCode: city.countryCode,
