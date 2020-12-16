@@ -3,9 +3,10 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const axios = require('axios');
 const dotenv = require('dotenv');
+const { DynamicEntryPlugin } = require('webpack');
 dotenv.config();
 /* Global Variables */
-const baseURL = 'http://api.geonames.org/postalCodeSearchJSON?placename=';
+const baseURL = 'http://api.geonames.org/postalCodeSearchJSON?';
 const geonamesUsername = process.env.GEONAMES_USERNAME;
 // Setup empty JS object to act as endpoint for all routes
 projectData = {};
@@ -49,7 +50,11 @@ app.post('/addData', (request, response) => {
 
 app.get('/location', (request, response) => {
     const url =
-        baseURL + request.query.placename + '&username=' + geonamesUsername;
+        baseURL +
+        'placename=' +
+        request.query.placename +
+        '&username=' +
+        geonamesUsername;
     axios
         .get(url)
         .then((geonamesResponse) => {
@@ -60,6 +65,39 @@ app.get('/location', (request, response) => {
             console.log(error);
             response.send({
                 placeName: 'No location was found under this name. Try again!',
+            });
+        });
+});
+
+app.get('/listCities', (request, response) => {
+    const url =
+        baseURL +
+        'placename_startsWith=' +
+        request.query.city +
+        '&maxRows=5&username=' +
+        geonamesUsername;
+    axios
+        .get(url)
+        .then((geonamesResponse) => {
+            const places = geonamesResponse.data;
+            const result = {
+                cities: [],
+            };
+            for (const city in places.postalCodes) {
+                result.cities.push({
+                    name: city.placeName,
+                    countryCode: city.countryCode,
+                    country: city.countryCode,
+                    lng: city.lng,
+                    lat: city.lat,
+                });
+            }
+            response.send(result);
+        })
+        .catch((error) => {
+            console.log(error);
+            response.send({
+                cities: [],
             });
         });
 });
