@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 const { DynamicEntryPlugin } = require('webpack');
 dotenv.config();
 /* Global Variables */
-const baseURL = 'http://api.geonames.org/postalCodeSearchJSON?';
+const baseURL = 'http://api.geonames.org/search?';
 const geonamesUsername = process.env.GEONAMES_USERNAME;
 // Setup empty JS object to act as endpoint for all routes
 projectData = {};
@@ -51,15 +51,15 @@ app.post('/addData', (request, response) => {
 app.get('/location', (request, response) => {
     const url =
         baseURL +
-        'placename=' +
+        'name=' +
         request.query.placename +
-        '&username=' +
+        '&type=json&username=' +
         geonamesUsername;
     axios
         .get(url)
         .then((geonamesResponse) => {
             const places = geonamesResponse.data;
-            response.send(places.postalCodes[0]);
+            response.send(places.geonames[0]);
         })
         .catch((error) => {
             console.log(error);
@@ -72,27 +72,27 @@ app.get('/location', (request, response) => {
 app.get('/listCities', (request, response) => {
     const url =
         baseURL +
-        'placename_startsWith=' +
+        'name_startsWith=' +
         request.query.city +
-        '&maxRows=5&username=' +
+        '&cities=cities15000&type=json&maxRows=5&lang=en&username=' +
         geonamesUsername;
     axios
         .get(url)
         .then((geonamesResponse) => {
-            const places = geonamesResponse.data.postalCodes;
-            console.log(places);
+            const places = geonamesResponse.data.geonames;
             const result = {
                 cities: [],
             };
-            for (const city of places) {
-                console.log(city);
-                result.cities.push({
-                    name: city.placeName,
-                    countryCode: city.countryCode,
-                    country: city.countryCode,
-                    lng: city.lng,
-                    lat: city.lat,
-                });
+            if (places) {
+                for (const city of places) {
+                    result.cities.push({
+                        name: city.name,
+                        countryCode: city.countryCode,
+                        country: city.countryName,
+                        lng: city.lng,
+                        lat: city.lat,
+                    });
+                }
             }
             response.send(result);
         })
