@@ -14,6 +14,15 @@
     <label for="zip">Enter Zipcode here</label>
     <input type="text" id="zip" placeholder="enter zip code here">
   </div>
+  <!-- This autocomplete form is based on https://www.w3schools.com/howto/howto_js_autocomplete.asp-->
+  <form action="#" autocomplete="off">
+    <div class="autocomplete">
+      <input class="form__city" type="text" id="city" name="city" placeholder="City">
+      <input id="country" name="country" type="hidden" value="">
+      <input id="latitude" name="latitude" type="hidden" value="">
+      <input id="longitude" name="longitude" type="hidden" value="">
+    </div>
+  </form>
   <div class ="holder feel">
     <label for="feelings">How are you feeling today?</label>
     <textarea class= "myInput" id="feelings" placeholder="Enter your feelings here" rows="9" cols="50"></textarea>
