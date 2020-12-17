@@ -32,35 +32,44 @@ function autocomplete(inputElement) {
                 listFragment.appendChild(cityList);
 
                 for (const city of cities) {
-                    const completeName = `${city.name}${
-                        city.name != city.province ? ', ' + city.province : ''
-                    }, ${city.country}`;
                     const listItem = document.createElement('DIV');
-                    const typedText = document.createElement('SPAN');
-                    typedText.classList.add('typedText');
-                    typedText.textContent = completeName.substr(
-                        0,
-                        value.length
-                    );
-                    listItem.appendChild(typedText);
-                    const completedText = document.createElement('SPAN');
-                    completedText.classList.add('completedText');
-                    completedText.textContent = completeName.substr(
-                        value.length
-                    );
-                    listItem.appendChild(completedText);
-                    const hiddenInput = document.createElement('INPUT');
-                    hiddenInput.setAttribute('type', 'hidden');
-                    hiddenInput.setAttribute('value', completeName);
-                    listItem.appendChild(hiddenInput);
+                    if (!city.error) {
+                        const completeName = `${city.name}${
+                            city.name != city.province
+                                ? ', ' + city.province
+                                : ''
+                        }, ${city.country}`;
+                        const typedText = document.createElement('SPAN');
+                        typedText.classList.add('typedText');
+                        typedText.textContent = completeName.substr(
+                            0,
+                            value.length
+                        );
+                        listItem.appendChild(typedText);
+                        const completedText = document.createElement('SPAN');
+                        completedText.classList.add('completedText');
+                        completedText.textContent = completeName.substr(
+                            value.length
+                        );
+                        listItem.appendChild(completedText);
+                        const hiddenInput = document.createElement('INPUT');
+                        hiddenInput.setAttribute('type', 'hidden');
+                        hiddenInput.setAttribute('value', completeName);
+                        listItem.appendChild(hiddenInput);
 
-                    listItem.addEventListener('click', () => {
-                        inputElement.value = hiddenInput.value;
-                        country.value = city.countryCode;
-                        latitude.value = city.lat;
-                        longitude.value = city.lng;
-                        clearCityList();
-                    });
+                        listItem.addEventListener('click', () => {
+                            inputElement.value = hiddenInput.value;
+                            country.value = city.countryCode;
+                            latitude.value = city.lat;
+                            longitude.value = city.lng;
+                            clearCityList();
+                        });
+                    } else {
+                        listItem.textContent = city.error;
+                        listItem.addEventListener('click', () => {
+                            clearCityList();
+                        });
+                    }
 
                     cityList.appendChild(listItem);
                 }
@@ -144,15 +153,36 @@ function removeActive(cities) {
 }
 
 const fetchCities = async (userInput) => {
-    const response = await fetch(
-        '/listCities?city=' + encodeURIComponent(userInput)
-    );
+    let url = '/listCities?city=';
+    const cityInfo = userInput.split(',').map((item) => item.trim());
+    let city, province, country;
+    if (cityInfo.length > 3) {
+        return [
+            {
+                error: 'No results',
+            },
+        ];
+    } else if (cityInfo.length >= 1) {
+        city = encodeURIComponent(cityInfo[0]);
+        url += city;
+        if (cityInfo.length >= 2) {
+            country = encodeURIComponent(cityInfo[cityInfo.length - 1]);
+            url += '&country=' + country;
+            if (cityInfo.length === 3) {
+                province = encodeURIComponent(cityInfo[2]);
+                url += '&province=' + province;
+            }
+        }
+    } else {
+        return [{}];
+    }
+    const response = await fetch(url);
     try {
         const serverResponse = await response.json();
         return serverResponse.cities;
     } catch (error) {
         console.log(error);
-        return [];
+        return [{ error: 'No results' }];
     }
 };
 
