@@ -87,6 +87,7 @@ app.get('/listCities', (request, response) => {
                 for (const city of places) {
                     result.cities.push({
                         name: city.name,
+                        province: city.adminName1,
                         countryCode: city.countryCode,
                         country: city.countryName,
                         lng: city.lng,
