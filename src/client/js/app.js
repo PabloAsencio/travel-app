@@ -40,8 +40,8 @@ const updateUI = async () => {
     const temp = document.getElementById('temp');
     const date = document.getElementById('date');
     const content = document.getElementById('content');
-
-    const response = await fetch('/lastEntry', {
+    // TODO: Remove references to localhost from final version
+    const response = await fetch('http://localhost:8082/lastEntry', {
         method: 'GET',
         credentials: 'same-origin',
     });
@@ -59,15 +59,17 @@ const updateUI = async () => {
 const updateLastEntry = () => {
     const location = document.getElementById('zip').value;
     const userResponse = document.getElementById('feelings').value;
-    fechtWeatherData('/location', location).then((data) => {
-        postData('/addData', {
-            temperature: data.placeName,
-            date: newDate,
-            userResponse: userResponse,
-        }).then(() => {
-            updateUI();
-        });
-    });
+    fechtWeatherData('http://localhost:8082/location', location).then(
+        (data) => {
+            postData('http://localhost:8082/addData', {
+                temperature: data.placeName,
+                date: newDate,
+                userResponse: userResponse,
+            }).then(() => {
+                updateUI();
+            });
+        }
+    );
     document.getElementById('zip').value = '';
     document.getElementById('feelings').value = '';
 };

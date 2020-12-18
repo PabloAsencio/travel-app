@@ -148,7 +148,8 @@ function removeActive(cities) {
 }
 
 const fetchCities = async (userInput) => {
-    let url = '/listCities?city=';
+    // TODO: Remove references to localhost from final version
+    let url = 'http://localhost:8082/listCities?city=';
     const cityInfo = userInput.split(',').map((item) => item.trim());
     let city;
     let secondParameter;
