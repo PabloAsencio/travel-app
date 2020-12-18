@@ -3,18 +3,15 @@ let d = new Date();
 let newDate = d.getMonth() + '.' + d.getDate() + '.' + d.getFullYear();
 
 // Fetch local temperature for the given zip Code from openweathermap.org
-const fechtWeatherData = async (url = '', zipCode = '00000') => {
-    const response = await fetch(url + '?zipcode=' + zipCode);
+const fechtWeatherData = async (url = '', location = '') => {
+    const response = await fetch(url + '?placename=' + location);
     try {
-        const weatherData = await response.json();
-        return {
-            temperature: weatherData.temperature,
-        };
+        const locationData = await response.json();
+        return locationData;
     } catch (error) {
         console.log(error);
         return {
-            temperature:
-                'No temperature was found for this location. Try again!',
+            placeName: 'No location was found under this name. Try again!',
         };
     }
 };
@@ -40,7 +37,6 @@ const postData = async (url = '', data = {}) => {
 
 // Fetch the last journal entry from the server and update the UI with it
 const updateUI = async () => {
-    console.log('Entering updateUI');
     const temp = document.getElementById('temp');
     const date = document.getElementById('date');
     const content = document.getElementById('content');
@@ -61,11 +57,11 @@ const updateUI = async () => {
 
 // Callback to post a new journal entry to the server and update the UI with it
 const updateLastEntry = () => {
-    const zipCode = document.getElementById('zip').value;
+    const location = document.getElementById('zip').value;
     const userResponse = document.getElementById('feelings').value;
-    fechtWeatherData('/weather', zipCode).then((data) => {
+    fechtWeatherData('/location', location).then((data) => {
         postData('/addData', {
-            temperature: data.temperature,
+            temperature: data.placeName,
             date: newDate,
             userResponse: userResponse,
         }).then(() => {

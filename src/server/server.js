@@ -3,10 +3,14 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const axios = require('axios');
 const dotenv = require('dotenv');
+const { DynamicEntryPlugin } = require('webpack');
+const fs = require('fs');
 dotenv.config();
 /* Global Variables */
-const baseURL = 'http://api.openweathermap.org/data/2.5/weather?zip=';
-const apiKey = process.env.OW_API_KEY;
+const jsonFile = fs.readFileSync('src/server/data/country-codes.json');
+const countryCodes = JSON.parse(jsonFile);
+const baseURL = 'http://api.geonames.org/search?';
+const geonamesUsername = process.env.GEONAMES_USERNAME;
 // Setup empty JS object to act as endpoint for all routes
 projectData = {};
 
@@ -47,26 +51,66 @@ app.post('/addData', (request, response) => {
     response.send(projectData);
 });
 
-app.get('/weather', (request, response) => {
+app.get('/location', (request, response) => {
     const url =
         baseURL +
-        request.query.zipcode +
-        ',us&appid=' +
-        apiKey +
-        '&units=imperial';
+        'name=' +
+        request.query.placename +
+        '&type=json&username=' +
+        geonamesUsername;
     axios
         .get(url)
-        .then((openWeatherResponse) => {
-            const weatherData = openWeatherResponse.data;
-            response.send({
-                temperature: weatherData.main.temp,
-            });
+        .then((geonamesResponse) => {
+            const places = geonamesResponse.data;
+            response.send(places.geonames[0]);
         })
         .catch((error) => {
             console.log(error);
             response.send({
-                temperature:
-                    'No temperature was found for this location. Try again!',
+                placeName: 'No location was found under this name. Try again!',
             });
         });
 });
+
+app.get('/listCities', (request, response) => {
+    const url = `${baseURL}name_startsWith=${request.query.city}${
+        request.query.secondParameter
+            ? '&q=' + request.query.secondParameter
+            : ''
+    }${
+        request.query.thirdParameter ? '&q=' + request.query.thirdParameter : ''
+    }&cities=cities15000&type=json&maxRows=5&lang&=en&orderby=relevance&username=${geonamesUsername}`;
+    axios
+        .get(url)
+        .then((geonamesResponse) => {
+            const places = geonamesResponse.data.geonames;
+            const result = {
+                cities: [],
+            };
+            if (places && places.length > 0) {
+                for (const city of places) {
+                    result.cities.push({
+                        name: city.name,
+                        province: city.adminName1,
+                        countryCode: city.countryCode,
+                        country: getCountryName(city.countryCode),
+                        lng: city.lng,
+                        lat: city.lat,
+                    });
+                }
+            } else {
+                result.cities.push({ error: 'No results' });
+            }
+            response.send(result);
+        })
+        .catch((error) => {
+            console.log(error);
+            response.send({
+                cities: { error: 'No results' },
+            });
+        });
+});
+
+function getCountryName(countryCode) {
+    return countryCodes[countryCode];
+}
