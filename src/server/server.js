@@ -4,8 +4,11 @@ const cors = require('cors');
 const axios = require('axios');
 const dotenv = require('dotenv');
 const { DynamicEntryPlugin } = require('webpack');
+const fs = require('fs');
 dotenv.config();
 /* Global Variables */
+const jsonFile = fs.readFileSync('src/server/data/country-codes.json');
+const countryCodes = JSON.parse(jsonFile);
 const baseURL = 'http://api.geonames.org/search?';
 const geonamesUsername = process.env.GEONAMES_USERNAME;
 // Setup empty JS object to act as endpoint for all routes
@@ -70,12 +73,13 @@ app.get('/location', (request, response) => {
 });
 
 app.get('/listCities', (request, response) => {
-    const url =
-        baseURL +
-        'name_startsWith=' +
-        request.query.city +
-        '&cities=cities15000&type=json&maxRows=5&lang=en&username=' +
-        geonamesUsername;
+    const url = `${baseURL}name_startsWith=${request.query.city}${
+        request.query.secondParameter
+            ? '&q=' + request.query.secondParameter
+            : ''
+    }${
+        request.query.thirdParameter ? '&q=' + request.query.thirdParameter : ''
+    }&cities=cities15000&type=json&maxRows=5&lang&=en&orderby=relevance&username=${geonamesUsername}`;
     axios
         .get(url)
         .then((geonamesResponse) => {
@@ -83,24 +87,30 @@ app.get('/listCities', (request, response) => {
             const result = {
                 cities: [],
             };
-            if (places) {
+            if (places && places.length > 0) {
                 for (const city of places) {
                     result.cities.push({
                         name: city.name,
                         province: city.adminName1,
                         countryCode: city.countryCode,
-                        country: city.countryName,
+                        country: getCountryName(city.countryCode),
                         lng: city.lng,
                         lat: city.lat,
                     });
                 }
+            } else {
+                result.cities.push({ error: 'No results' });
             }
             response.send(result);
         })
         .catch((error) => {
             console.log(error);
             response.send({
-                cities: [],
+                cities: { error: 'No results' },
             });
         });
 });
+
+function getCountryName(countryCode) {
+    return countryCodes[countryCode];
+}

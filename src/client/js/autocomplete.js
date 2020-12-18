@@ -73,21 +73,16 @@ function autocomplete(inputElement) {
 
                     cityList.appendChild(listItem);
                 }
-                /* This second call is necessary: if the user
-                types fast, the call to clearCityList above will
-                happen before the list for the previous input
-                has had time to be fetched and rendered. For the
-                dropdown functionality to work as expected we
-                have to make sure that any time we render a new
-                list all previous ones are gone.*/
-                clearCityList();
-                inputElement.parentNode.appendChild(listFragment);
+                /* The value may have become stale since the fetch function was called. Update the UI only if the live value is still the same with which the function was called*/
+                if (value == inputElement.value) {
+                    clearCityList();
+                    inputElement.parentNode.appendChild(listFragment);
+                }
             }
         }
     }
 
     function navigateList(event) {
-        console.log('Keydown event triggered!');
         const autocompleteList = document.getElementById(
             'city-autocomplete-list'
         );
@@ -155,7 +150,9 @@ function removeActive(cities) {
 const fetchCities = async (userInput) => {
     let url = '/listCities?city=';
     const cityInfo = userInput.split(',').map((item) => item.trim());
-    let city, province, country;
+    let city;
+    let secondParameter;
+    let thirdParameter;
     if (cityInfo.length > 3) {
         return [
             {
@@ -166,11 +163,11 @@ const fetchCities = async (userInput) => {
         city = encodeURIComponent(cityInfo[0]);
         url += city;
         if (cityInfo.length >= 2) {
-            country = encodeURIComponent(cityInfo[cityInfo.length - 1]);
-            url += '&country=' + country;
+            secondParameter = encodeURIComponent(cityInfo[1]);
+            url += '&secondParameter=' + secondParameter;
             if (cityInfo.length === 3) {
-                province = encodeURIComponent(cityInfo[2]);
-                url += '&province=' + province;
+                thirdParameter = encodeURIComponent(cityInfo[2]);
+                url += '&thirdParameter=' + thirdParameter;
             }
         }
     } else {
