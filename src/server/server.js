@@ -9,8 +9,10 @@ dotenv.config();
 /* Global Variables */
 const jsonFile = fs.readFileSync('src/server/data/country-codes.json');
 const countryCodes = JSON.parse(jsonFile);
-const baseURL = 'http://api.geonames.org/search?';
+const geonamesBaseURL = 'http://api.geonames.org/search?';
 const geonamesUsername = process.env.GEONAMES_USERNAME;
+const weatherbitBaseURL = 'https://api.weatherbit.io/v2.0/current?';
+const weatherbitApiKey = process.env.WEATHERBIT_API_KEY;
 // Setup empty JS object to act as endpoint for all routes
 projectData = {};
 
@@ -53,7 +55,7 @@ app.post('/addData', (request, response) => {
 
 app.get('/location', (request, response) => {
     const url =
-        baseURL +
+        geonamesBaseURL +
         'name=' +
         request.query.placename +
         '&type=json&username=' +
@@ -72,8 +74,60 @@ app.get('/location', (request, response) => {
         });
 });
 
+app.get('/weather', (request, response) => {
+    let url;
+    const latitude = request.query.latitude;
+    const longitude = request.query.longitude;
+    if (typeof latitude != 'undefined' && typeof longitude != 'undefined') {
+        url = `${weatherbitBaseURL}lat=${latitude}&lon=${longitude}&key=${weatherbitApiKey}`;
+    } else {
+        const city = request.query.city;
+        const province = request.query.province;
+        const country = request.query.country;
+        if (city) {
+            url = `${weatherbitBaseURL}city=${city}${
+                province ? ',' + province : ''
+            }${country ? '&country=' + country : ''}&key=${weatherbitApiKey}`;
+        }
+    }
+
+    if (url) {
+        axios
+            .get(url)
+            .then((weatherbitResponse) => {
+                if (weatherbitResponse.data.count > 0) {
+                    const weatherReport = weatherbitResponse.data.data[0];
+                    response.send({
+                        code: weatherReport.weather.code,
+                        description: weatherReport.weather.description,
+                        temperature: weatherReport.temp,
+                        feelsLike: weatherReport.app_temp,
+                        windSpeed: weatherReport.wind_spd,
+                        windDirectionInDegrees: weatherReport.wind_dir,
+                        windDirectionAsText: weatherReport.wind_cdir,
+                    });
+                } else {
+                    response.send({
+                        error: 'No results were found for this location',
+                    });
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                response.send({
+                    error:
+                        'Something went wrong while retrieving the weather report',
+                });
+            });
+    } else {
+        response.send({
+            error: 'Not enough data to identify the desired location',
+        });
+    }
+});
+
 app.get('/listCities', (request, response) => {
-    const url = `${baseURL}name_startsWith=${request.query.city}${
+    const url = `${geonamesBaseURL}name_startsWith=${request.query.city}${
         request.query.secondParameter
             ? '&q=' + request.query.secondParameter
             : ''
