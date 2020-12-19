@@ -7,8 +7,12 @@ const { DynamicEntryPlugin } = require('webpack');
 const fs = require('fs');
 dotenv.config();
 /* Global Variables */
-const jsonFile = fs.readFileSync('src/server/data/country-codes.json');
-const countryCodes = JSON.parse(jsonFile);
+const countryCodesFile = fs.readFileSync('src/server/data/country-codes.json');
+const countryCodes = JSON.parse(countryCodesFile);
+const stateCodesFile = fs.readFileSync(
+    'src/server/data/weatherbit-state-codes.json'
+);
+const stateCodes = JSON.parse(stateCodesFile);
 const geonamesBaseURL = 'http://api.geonames.org/search?';
 const geonamesUsername = process.env.GEONAMES_USERNAME;
 const weatherbitBaseURL = 'https://api.weatherbit.io/v2.0/current?';
@@ -98,6 +102,12 @@ app.get('/weather', (request, response) => {
                 if (weatherbitResponse.data.count > 0) {
                     const weatherReport = weatherbitResponse.data.data[0];
                     response.send({
+                        city: weatherReport.city_name,
+                        province: getStateName(
+                            weatherReport.country_code,
+                            weatherReport.state_code
+                        ),
+                        country: getCountryName(weatherReport.country_code),
                         code: weatherReport.weather.code,
                         description: weatherReport.weather.description,
                         temperature: weatherReport.temp,
@@ -167,4 +177,8 @@ app.get('/listCities', (request, response) => {
 
 function getCountryName(countryCode) {
     return countryCodes[countryCode];
+}
+
+function getStateName(countryCode, stateCode) {
+    return stateCodes[countryCode][stateCode] || stateCode;
 }
