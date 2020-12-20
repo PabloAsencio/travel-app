@@ -10,25 +10,30 @@ function handleSubmit(event) {
     const server = 'http://localhost:8082/';
     const currentWeatherEndpoint = 'currentWeather';
     const forecastEndpoint = 'forecast';
-    let query = '?';
+    const pictureEndpoint = 'pictures';
     const latitude = document.getElementById('latitude').value;
     const longitude = document.getElementById('longitude').value;
+    const [city, province, country] = document
+        .getElementById('city')
+        .value.split(',')
+        .map((word) => word.trim());
 
+    let weatherQuery = '?';
     if (latitude && longitude) {
-        query += `latitude=${encodeURIComponent(
+        weatherQuery += `latitude=${encodeURIComponent(
             latitude
         )}&longitude=${encodeURIComponent(longitude)}`;
     } else {
-        const [city, province, country] = document
-            .getElementById('city')
-            .value.split(',')
-            .map((word) => word.trim());
-        query += `city=${city ? encodeURIComponent(city) : ''}&province=${
-            province ? encodeURIComponent(province) : ''
-        }&country=${country ? encodeURIComponent(country) : ''}`;
+        weatherQuery += `city=${
+            city ? encodeURIComponent(city) : ''
+        }&province=${province ? encodeURIComponent(province) : ''}&country=${
+            country ? encodeURIComponent(country) : ''
+        }`;
     }
 
-    const currentWeather = fetch(server + currentWeatherEndpoint + query);
+    const currentWeather = fetch(
+        server + currentWeatherEndpoint + weatherQuery
+    );
 
     const timeToTrip = document
         .getElementById('time-to-trip')
@@ -37,11 +42,16 @@ function handleSubmit(event) {
     const duration = document
         .getElementById('duration')
         .textContent.split(' ')[0];
-    query += `&timeToTrip=${encodeURIComponent(
+    weatherQuery += `&timeToTrip=${encodeURIComponent(
         timeToTrip
     )}&duration=${encodeURIComponent(duration)}`;
 
-    const forecast = fetch(server + forecastEndpoint + query);
+    const forecast = fetch(server + forecastEndpoint + weatherQuery);
+
+    // TODO: Retrieve country name from server if it is missing before making the API call
+    let pictureQuery = `?city=${city}&country=${country || province || ''}`;
+
+    const pictures = fetch(server + pictureEndpoint + pictureQuery);
 
     clearWeatherSection();
 
@@ -53,6 +63,10 @@ function handleSubmit(event) {
     forecast
         .then((response) => response.json())
         .then((forecast) => updateWeatherForecast(forecast))
+        .catch((error) => console.log(error));
+    pictures
+        .then((response) => response.json())
+        .then((pictures) => console.log(pictures))
         .catch((error) => console.log(error));
 }
 
