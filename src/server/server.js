@@ -142,7 +142,7 @@ app.get('/forecast', (request, response) => {
                             windDirectionInDegrees: report.wind_dir,
                             windDirectionAsText: report.wind_cdir,
                             maxTemperature: report.max_temp,
-                            minTepmerature: report.min_temp,
+                            minTemperature: report.min_temp,
                             maxfeelsLike: report.app_max_temp,
                             minfeelsLike: report.app_min_temp,
                         };
@@ -220,15 +220,17 @@ function getWeatherbitQuery(request) {
     const latitude = request.query.latitude;
     const longitude = request.query.longitude;
     if (latitude && longitude) {
-        query += `lat=${latitude}&lon=${longitude}`;
+        query += `lat=${encodeURIComponent(latitude)}&lon=${encodeURIComponent(
+            longitude
+        )}`;
     } else {
         const city = request.query.city;
         const province = request.query.province;
         const country = request.query.country;
         if (city) {
-            query += `city=${city}${province ? ',' + province : ''}${
-                country ? '&country=' + country : ''
-            }&key=${weatherbitApiKey}`;
+            query += `city=${encodeURIComponent(city)}${
+                province ? ',' + encodeURIComponent(province) : ''
+            }${country ? '&country=' + encodeURIComponent(country) : ''}`;
         }
     }
     if (query) {
@@ -236,7 +238,7 @@ function getWeatherbitQuery(request) {
         const duration = request.query.duration;
         if (timeToTrip && duration) {
             const days = parseInt(timeToTrip, 10) + parseInt(duration, 10);
-            query += `&days=${days}`;
+            query += `&days=${encodeURIComponent(days)}`;
         }
         query += `&key=${weatherbitApiKey}`;
     }
