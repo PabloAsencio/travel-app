@@ -104,7 +104,9 @@ function autocomplete(inputElement) {
                     if (currentFocus > -1 && cities.length > currentFocus) {
                         cities[currentFocus].click();
                     } else {
-                        document.getElementById('tripInfo').submit();
+                        document.forms['tripInfo'].requestSubmit(
+                            document.getElementById('submit')
+                        );
                     }
                     break;
                 case 'Escape':
