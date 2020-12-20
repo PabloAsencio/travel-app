@@ -71,7 +71,7 @@ const pictureAPI = (function () {
         function makeURL(query) {
             return `${pixabayBaseURL}&q=${encodeURIComponent(
                 query
-            )}&image_type=photo&category=places&per_page=3&safesearch=true&orientation=horizontal`;
+            )}&image_type=photo&category=travel+places+building&per_page=3&safesearch=true&orientation=horizontal`;
         }
 
         function makeSubject(country, city = '') {
