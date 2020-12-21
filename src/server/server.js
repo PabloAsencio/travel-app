@@ -3,9 +3,13 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const axios = require('axios');
 const dotenv = require('dotenv');
+dotenv.config();
 const { DynamicEntryPlugin } = require('webpack');
 const fs = require('fs');
-dotenv.config();
+const cacheService = require('./cache-service');
+cacheService.load('src/server/data/pixabay-cache.json');
+const pictureAPI = require('./picture-api');
+const pixabay = pictureAPI.createAPI(cacheService);
 /* Global Variables */
 const countryCodesFile = fs.readFileSync('src/server/data/country-codes.json');
 const countryCodes = JSON.parse(countryCodesFile);
@@ -176,6 +180,8 @@ app.get('/forecast', (request, response) => {
     }
 });
 
+app.get('/pictures', pixabay.retrievePicture);
+
 app.get('/listCities', (request, response) => {
     const url = `${geonamesBaseURL}name_startsWith=${request.query.city}${
         request.query.secondParameter
@@ -252,3 +258,23 @@ function getCountryName(countryCode) {
 function getStateName(countryCode, stateCode) {
     return stateCodes[countryCode][stateCode] || stateCode;
 }
+
+// Gracefully close the system and save cache when termination signal is received
+// See https://expressjs.com/en/advanced/healthcheck-graceful-shutdown.html
+process.on('SIGTERM', () => {
+    console.log('SIGTERM signal received: closing HTTP server');
+    server.close(() => {
+        cacheService.save();
+        cacheService.close();
+        console.log('HTTP server closed');
+    });
+});
+
+process.on('SIGINT', () => {
+    console.log('SIGINT signal received: closing HTTP server');
+    server.close(() => {
+        cacheService.save();
+        cacheService.close();
+        console.log('HTTP server closed');
+    });
+});
