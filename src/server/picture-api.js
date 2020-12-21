@@ -89,6 +89,7 @@ const pictureAPI = (function () {
         function makePictureObject(rawObject, subject) {
             return {
                 subject,
+                pageURL: rawObject.pageURL,
                 imageURL: rawObject.webformatURL,
                 largeImageURL: rawObject.largeImageURL,
                 user: rawObject.user,
