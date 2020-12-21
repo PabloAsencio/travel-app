@@ -1,3 +1,5 @@
+import logo from '../../assets/images/pixabay-logo.svg';
+
 const weatherSection = document.getElementById('weather');
 
 function updateCurrentWeather(currentWeather) {
@@ -29,7 +31,7 @@ function updatePicture(photos) {
 
     img.setAttribute('src', photo.imageURL);
     img.setAttribute('alt', photo.subject);
-    caption.innerHTML = `${photo.subject}. Photo by <a href="${photo.userURL}">${photo.user}</a> at <a href="${photo.pageURL}">Pixabay</a>`;
+    caption.innerHTML = `${photo.subject}. Photo by <a href="${photo.userURL}">${photo.user}</a> at <a href="${photo.pageURL}"><img src="${logo}" alt="Pixabay"></a>`;
 }
 
 function showErrorMessage(errorMessage) {

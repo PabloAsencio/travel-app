@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const svgToMiniDataURI = require('mini-svg-data-uri');
 module.exports = {
     entry: './src/client/index.js',
     mode: 'development',
@@ -20,6 +21,19 @@ module.exports = {
             {
                 test: /\.scss$/,
                 use: ['style-loader', 'css-loader', 'sass-loader'],
+            },
+            {
+                // See https://webpack.js.org/loaders/url-loader/
+                test: /\.svg$/,
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            generator: (content) =>
+                                svgToMiniDataURI(content.toString()),
+                        },
+                    },
+                ],
             },
         ],
     },
