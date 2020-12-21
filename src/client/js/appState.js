@@ -131,6 +131,18 @@ const applicationState = (function () {
         return /^(-)?(1)?\d{1,2}(\.(\d)+)?$/.test(coordinate);
     }
 
+    function reset() {
+        _city = '';
+        _province = '';
+        _country = '';
+        _latitude = '';
+        _longitude = '';
+        _startDate = '';
+        _endDate = '';
+        _duration = 1;
+        _daysToTrip = 0;
+    }
+
     return {
         get city() {
             return getCity();
@@ -186,6 +198,7 @@ const applicationState = (function () {
         set daysToTrip(daysToTrip) {
             setDaysToTrip(daysToTrip);
         },
+        reset,
     };
 })();
 
