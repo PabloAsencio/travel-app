@@ -2,6 +2,7 @@ import {
     updateCurrentWeather,
     updateWeatherForecast,
     clearWeatherSection,
+    updatePicture,
 } from './uiUpdater';
 
 function handleSubmit(event) {
@@ -66,7 +67,7 @@ function handleSubmit(event) {
         .catch((error) => console.log(error));
     pictures
         .then((response) => response.json())
-        .then((pictures) => console.log(pictures))
+        .then((pictures) => updatePicture(pictures))
         .catch((error) => console.log(error));
 }
 

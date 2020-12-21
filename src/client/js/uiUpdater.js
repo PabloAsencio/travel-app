@@ -20,6 +20,18 @@ function updateWeatherForecast(weatherForecast) {
     }
 }
 
+function updatePicture(photos) {
+    const photo = photos['pictures'][0]; // In the future all pictures should be shown in a carrousel
+    const figure = document.getElementById('photo');
+    const picture = figure.getElementsByTagName('picture')[0];
+    const img = picture.getElementsByTagName('img')[0];
+    const caption = document.getElementById('caption');
+
+    img.setAttribute('src', photo.imageURL);
+    img.setAttribute('alt', photo.subject);
+    caption.innerHTML = `${photo.subject}. Photo by <a href="${photo.userURL}">${photo.user}</a> at <a href="${photo.pageURL}">Pixabay</a>`;
+}
+
 function showErrorMessage(errorMessage) {
     const fragment = document.createDocumentFragment();
     const error = document.createElement('P');
@@ -88,4 +100,9 @@ function createLocationCard(currentWeather) {
     weatherSection.appendChild(fragment);
 }
 
-export { updateCurrentWeather, updateWeatherForecast, clearWeatherSection };
+export {
+    updateCurrentWeather,
+    updateWeatherForecast,
+    clearWeatherSection,
+    updatePicture,
+};
