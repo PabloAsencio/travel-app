@@ -28,7 +28,13 @@ function updatePicture(photos) {
     const picture = figure.getElementsByTagName('picture')[0];
     const img = picture.getElementsByTagName('img')[0];
     const caption = document.getElementById('caption');
-
+    const source = document.createElement('SOURCE');
+    source.setAttribute(
+        'srcset',
+        `${photo.imageURL} 1x, ${photo.largeImageURL} 2x`
+    );
+    source.setAttribute('type', 'image/jpeg');
+    img.parentNode.prepend(source);
     img.setAttribute('src', photo.imageURL);
     img.setAttribute('alt', photo.subject);
     caption.innerHTML = `${photo.subject}. Photo by <a href="${photo.userURL}">${photo.user}</a> at <a href="${photo.pageURL}"><img src="${logo}" alt="Pixabay"></a>`;
