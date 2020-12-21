@@ -1,9 +1,15 @@
+import { applicationState } from './appState';
+import { createDateController } from './dateController';
 import {
     updateCurrentWeather,
     updateWeatherForecast,
     clearWeatherSection,
     updatePicture,
 } from './uiUpdater';
+
+function startApplication(applicationState) {
+    createDateController(applicationState).start();
+}
 
 function handleSubmit(event) {
     event.preventDefault();
@@ -37,7 +43,7 @@ function handleSubmit(event) {
     );
 
     const timeToTrip = document
-        .getElementById('time-to-trip')
+        .getElementById('daysToTrip')
         .textContent.split(' ')[0];
 
     const duration = document
@@ -71,4 +77,4 @@ function handleSubmit(event) {
         .catch((error) => console.log(error));
 }
 
-export { handleSubmit };
+export { handleSubmit, startApplication };
