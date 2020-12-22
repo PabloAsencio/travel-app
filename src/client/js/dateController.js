@@ -4,25 +4,13 @@ const createDateController = (appState) => {
     const millisecondsInOneDay = 24 * 3600 * 1000;
     const now = Date.now();
     const today = new Date(now);
-    const todayString =
-        today.getFullYear() +
-        '-' +
-        (today.getMonth() + 1) +
-        '-' +
-        today.getDate();
     const tomorrow = new Date(now + millisecondsInOneDay);
-    const tomorrowString =
-        tomorrow.getFullYear() +
-        '-' +
-        (tomorrow.getMonth() + 1) +
-        '-' +
-        tomorrow.getDate();
 
     function setDateFields() {
-        startDateInput.value = todayString;
-        appState.startDate = todayString;
-        endDateInput.value = tomorrowString;
-        appState.endDate = tomorrowString;
+        startDateInput.value = getDateAsString(today);
+        appState.startDate = getDateAsString(today);
+        endDateInput.value = getDateAsString(tomorrow);
+        appState.endDate = getDateAsString(tomorrow);
         startDateInput.addEventListener('input', handleDateChange);
         endDateInput.addEventListener('input', handleDateChange);
     }
@@ -32,26 +20,16 @@ const createDateController = (appState) => {
         let endDate = new Date(endDateInput.value.split('-'));
 
         if (startDate.getTime() < today.getTime()) {
-            startDateInput.value = todayString;
+            startDateInput.value = getDateAsString(today);
             startDate = today;
         }
         if (endDate.getTime() < startDate.getTime()) {
             if (event.target === startDateInput) {
                 endDate = new Date(startDate.getTime() + millisecondsInOneDay);
-                endDateInput.value =
-                    endDate.getFullYear() +
-                    '-' +
-                    (endDate.getMonth() + 1) +
-                    '-' +
-                    endDate.getDate();
+                endDateInput.value = getDateAsString(endDate);
             } else {
                 startDate = new Date(endDate.getTime() - millisecondsInOneDay);
-                startDateInput.value =
-                    startDate.getFullYear() +
-                    '-' +
-                    (startDate.getMonth() + 1) +
-                    '-' +
-                    startDate.getDate();
+                startDateInput.value = getDateAsString(startDate);
             }
         }
         const daysToTrip = getDifferenceInDays(today, startDate);
@@ -66,6 +44,18 @@ const createDateController = (appState) => {
             daysToTrip + ' day' + (daysToTrip != 1 ? 's' : '');
         document.getElementById('duration').textContent =
             duration + 1 + ' day' + (duration + 1 != 1 ? 's' : '');
+    }
+
+    function getDateAsString(date) {
+        return (
+            date.getFullYear() +
+            '-' +
+            (date.getMonth() < 9 ? '0' : '') +
+            (date.getMonth() + 1) +
+            '-' +
+            (date.getDate() < 10 ? '0' : '') +
+            date.getDate()
+        );
     }
 
     function getDifferenceInDays(start, end) {
