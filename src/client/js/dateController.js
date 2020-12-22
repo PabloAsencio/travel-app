@@ -10,8 +10,8 @@ const createDateController = (appState) => {
 
     function setDateFields() {
         initializeState();
-        startDateInput.addEventListener('input', handleDateChange);
-        endDateInput.addEventListener('input', handleDateChange);
+        startDateInput.addEventListener('blur', handleDateChange);
+        endDateInput.addEventListener('blur', handleDateChange);
     }
 
     function handleDateChange(event) {
@@ -49,12 +49,12 @@ const createDateController = (appState) => {
     }
 
     function updateState(newState) {
-        startDateInput.value = newState.startDate;
-        endDateInput.value = newState.endDate;
         const startDate = new Date(newState.startDate);
         const endDate = new Date(newState.endDate);
         const daysToTrip = getDifferenceInDays(today, startDate);
         const duration = getDifferenceInDays(startDate, endDate);
+        startDateInput.value = newState.startDate;
+        endDateInput.value = newState.endDate;
         appState.startDate = newState.startDate;
         appState.endDate = newState.startDate;
         appState.daysToTrip = daysToTrip;
