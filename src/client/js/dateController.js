@@ -15,6 +15,21 @@ const createDateController = (appState) => {
     }
 
     function handleDateChange(event) {
+        const validatedDates = getValidatedDates(event);
+        updateState(validatedDates);
+    }
+
+    function initializeState() {
+        startDateInput.value = getDateAsString(today);
+        appState.startDate = startDateInput.value;
+        endDateInput.value = getDateAsString(tomorrow);
+        appState.endDate = endDateInput.value;
+        appState.duration = 1;
+        appState.daysToTrip = 0;
+        updateDate(0, 1); // Update the ui with the initial values for daysToTrip and duration
+    }
+
+    function getValidatedDates(event) {
         let startDate = new Date(startDateInput.value.split('-'));
         let endDate = new Date(endDateInput.value.split('-'));
 
@@ -32,20 +47,10 @@ const createDateController = (appState) => {
             }
         }
 
-        updateState({
+        return {
             startDate: getDateAsString(startDate),
             endDate: getDateAsString(endDate),
-        });
-    }
-
-    function initializeState() {
-        startDateInput.value = getDateAsString(today);
-        appState.startDate = startDateInput.value;
-        endDateInput.value = getDateAsString(tomorrow);
-        appState.endDate = endDateInput.value;
-        appState.duration = 1;
-        appState.daysToTrip = 0;
-        updateDate(0, 1); // Update the ui with the initial values for daysToTrip and duration
+        };
     }
 
     function updateState(newState) {
