@@ -2,9 +2,8 @@ const createDateController = (appState) => {
     const startDateInput = document.getElementById('startDate');
     const endDateInput = document.getElementById('endDate');
     const millisecondsInOneDay = 24 * 3600 * 1000;
-    const now = Date.now();
-    const today = new Date(now);
-    const tomorrow = new Date(now + millisecondsInOneDay);
+    const today = getTodaysDate();
+    const tomorrow = new Date(today.getTime() + millisecondsInOneDay);
 
     function setDateFields() {
         startDateInput.value = getDateAsString(today);
@@ -24,7 +23,10 @@ const createDateController = (appState) => {
             startDate = today;
         }
         if (endDate.getTime() < startDate.getTime()) {
-            if (event.target === startDateInput) {
+            if (
+                event.target === startDateInput ||
+                endDate.getTime() < today.getTime()
+            ) {
                 endDate = new Date(startDate.getTime() + millisecondsInOneDay);
                 endDateInput.value = getDateAsString(endDate);
             } else {
@@ -44,6 +46,16 @@ const createDateController = (appState) => {
             daysToTrip + ' day' + (daysToTrip != 1 ? 's' : '');
         document.getElementById('duration').textContent =
             duration + 1 + ' day' + (duration + 1 != 1 ? 's' : '');
+    }
+
+    function getTodaysDate() {
+        const now = Date.now();
+        const today = new Date(now);
+        today.setHours(0);
+        today.setMinutes(0);
+        today.setSeconds(0);
+        today.setMilliseconds(0);
+        return today;
     }
 
     function getDateAsString(date) {
