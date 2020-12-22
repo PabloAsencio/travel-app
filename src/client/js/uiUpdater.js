@@ -2,6 +2,13 @@ import logo from '../../assets/images/pixabay-logo.svg';
 
 const weatherSection = document.getElementById('weather');
 
+function updateDate(daysToTrip, duration) {
+    document.getElementById('daysToTrip').textContent =
+        daysToTrip + ' day' + (daysToTrip != 1 ? 's' : '');
+    document.getElementById('duration').textContent =
+        duration + 1 + ' day' + (duration + 1 != 1 ? 's' : '');
+}
+
 function updateCurrentWeather(currentWeather) {
     if (currentWeather.error) {
         showErrorMessage(currentWeather.error);
@@ -109,6 +116,7 @@ function createLocationCard(currentWeather) {
 }
 
 export {
+    updateDate,
     updateCurrentWeather,
     updateWeatherForecast,
     clearWeatherSection,

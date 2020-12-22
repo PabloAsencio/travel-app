@@ -1,3 +1,6 @@
+// TODO: Replace direct import with injected component
+import { updateDate } from './uiUpdater';
+
 const createDateController = (appState) => {
     const startDateInput = document.getElementById('startDate');
     const endDateInput = document.getElementById('endDate');
@@ -42,10 +45,7 @@ const createDateController = (appState) => {
         appState.daysToTrip = daysToTrip;
         appState.duration = duration;
 
-        document.getElementById('daysToTrip').textContent =
-            daysToTrip + ' day' + (daysToTrip != 1 ? 's' : '');
-        document.getElementById('duration').textContent =
-            duration + 1 + ' day' + (duration + 1 != 1 ? 's' : '');
+        updateDate(daysToTrip, duration);
     }
 
     function getTodaysDate() {
