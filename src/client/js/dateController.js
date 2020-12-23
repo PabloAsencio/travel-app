@@ -29,42 +29,44 @@ const createDateController = (appState) => {
         updateDate(0, 1); // Update the ui with the initial values for daysToTrip and duration
     }
 
-    function getValidatedDates(event) {
+    function getValidatedDates() {
         let startDate = new Date(startDateInput.value.split('-'));
         let endDate = new Date(endDateInput.value.split('-'));
+        const result = {};
 
         if (startDate.getTime() < today.getTime()) {
-            startDate = today;
-        }
-        if (endDate.getTime() < startDate.getTime()) {
-            if (
-                event.target === startDateInput ||
-                endDate.getTime() < today.getTime()
-            ) {
-                endDate = new Date(startDate.getTime() + millisecondsInOneDay);
-            } else {
-                startDate = new Date(endDate.getTime() - millisecondsInOneDay);
-            }
+            result.error = 'The start date cannot be in the past.';
+        } else if (endDate.getTime() < startDate.getTime()) {
+            result.error =
+                'The end date cannot be earlier than the start date.';
         }
 
-        return {
-            startDate: getDateAsString(startDate),
-            endDate: getDateAsString(endDate),
-        };
+        if (!result.error) {
+            result.startDate = startDate;
+            result.endDate = endDate;
+        }
+
+        return result;
     }
 
     function updateState(newState) {
-        const startDate = new Date(newState.startDate);
-        const endDate = new Date(newState.endDate);
-        const daysToTrip = getDifferenceInDays(today, startDate);
-        const duration = getDifferenceInDays(startDate, endDate);
-        startDateInput.value = newState.startDate;
-        endDateInput.value = newState.endDate;
-        appState.startDate = newState.startDate;
-        appState.endDate = newState.startDate;
-        appState.daysToTrip = daysToTrip;
-        appState.duration = duration;
-        updateDate(daysToTrip, duration);
+        if (!newState.error) {
+            const daysToTrip = getDifferenceInDays(today, newState.startDate);
+            const duration = getDifferenceInDays(
+                newState.startDate,
+                newState.endDate
+            );
+            appState.startDate = getDateAsString(newState.startDate);
+            appState.endDate = getDateAsString(newState.startDate);
+            appState.daysToTrip = daysToTrip;
+            appState.duration = duration;
+            updateDate(daysToTrip, duration);
+        } else {
+            appState.startDate = '';
+            appState.endDate = '';
+            appState.daysToTrip = 0;
+            appState.duration = 1;
+        }
     }
 
     function getTodaysDate() {
