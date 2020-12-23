@@ -1,15 +1,10 @@
-import { applicationState } from './appState';
 import { createDateController } from './dateController';
-import {
-    updateCurrentWeather,
-    updateWeatherForecast,
-    clearWeatherSection,
-    updatePicture,
-    createViewUpdater,
-} from './uiUpdater';
+import { createViewUpdater } from './uiUpdater';
+
+let viewUpdater;
 
 function startApplication(applicationState) {
-    const viewUpdater = createViewUpdater(applicationState);
+    viewUpdater = createViewUpdater(applicationState);
     createDateController(applicationState, viewUpdater).start();
 }
 
@@ -62,20 +57,20 @@ function handleSubmit(event) {
 
     const pictures = fetch(server + pictureEndpoint + pictureQuery);
 
-    clearWeatherSection();
+    viewUpdater.clearWeatherSection();
 
     // TODO: Show some informative error message in the UI instead of logging it
     currentWeather
         .then((response) => response.json())
-        .then((weather) => updateCurrentWeather(weather))
+        .then((weather) => viewUpdater.updateCurrentWeather(weather))
         .catch((error) => console.log(error));
     forecast
         .then((response) => response.json())
-        .then((forecast) => updateWeatherForecast(forecast))
+        .then((forecast) => viewUpdater.updateWeatherForecast(forecast))
         .catch((error) => console.log(error));
     pictures
         .then((response) => response.json())
-        .then((pictures) => updatePicture(pictures))
+        .then((pictures) => viewUpdater.updatePicture(pictures))
         .catch((error) => console.log(error));
 }
 
