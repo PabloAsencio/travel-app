@@ -1,13 +1,21 @@
 import logo from '../../assets/images/pixabay-logo.svg';
 
-const weatherSection = document.getElementById('weather');
+const createViewUpdater = function (appState) {
+    function updateDateView() {
+        document.getElementById('daysToTrip').textContent =
+            appState.daysToTrip +
+            ' day' +
+            (appState.daysToTrip != 1 ? 's' : '');
+        document.getElementById('duration').textContent =
+            appState.duration +
+            1 +
+            ' day' +
+            (appState.duration + 1 != 1 ? 's' : '');
+    }
+    return { updateDateView };
+};
 
-function updateDate(daysToTrip, duration) {
-    document.getElementById('daysToTrip').textContent =
-        daysToTrip + ' day' + (daysToTrip != 1 ? 's' : '');
-    document.getElementById('duration').textContent =
-        duration + 1 + ' day' + (duration + 1 != 1 ? 's' : '');
-}
+const weatherSection = document.getElementById('weather');
 
 function updateCurrentWeather(currentWeather) {
     if (currentWeather.error) {
@@ -116,9 +124,9 @@ function createLocationCard(currentWeather) {
 }
 
 export {
-    updateDate,
     updateCurrentWeather,
     updateWeatherForecast,
     clearWeatherSection,
     updatePicture,
+    createViewUpdater,
 };

@@ -5,10 +5,12 @@ import {
     updateWeatherForecast,
     clearWeatherSection,
     updatePicture,
+    createViewUpdater,
 } from './uiUpdater';
 
 function startApplication(applicationState) {
-    createDateController(applicationState).start();
+    const viewUpdater = createViewUpdater(applicationState);
+    createDateController(applicationState, viewUpdater).start();
 }
 
 function handleSubmit(event) {

@@ -1,7 +1,4 @@
-// TODO: Replace direct import with injected component
-import { updateDate } from './uiUpdater';
-
-const createDateController = (appState) => {
+const createDateController = (appState, viewUpdater) => {
     const startDateInput = document.getElementById('startDate');
     const endDateInput = document.getElementById('endDate');
     const millisecondsInOneDay = 24 * 3600 * 1000;
@@ -12,11 +9,13 @@ const createDateController = (appState) => {
         initializeState();
         startDateInput.addEventListener('blur', handleDateChange);
         endDateInput.addEventListener('blur', handleDateChange);
+        viewUpdater.updateDateView();
     }
 
     function handleDateChange(event) {
         const validatedDates = getValidatedDates(event);
         updateState(validatedDates);
+        viewUpdater.updateDateView();
     }
 
     function initializeState() {
@@ -26,24 +25,23 @@ const createDateController = (appState) => {
         appState.endDate = endDateInput.value;
         appState.duration = 1;
         appState.daysToTrip = 0;
-        updateDate(0, 1); // Update the ui with the initial values for daysToTrip and duration
     }
 
     function getValidatedDates() {
         let startDate = new Date(startDateInput.value.split('-'));
         let endDate = new Date(endDateInput.value.split('-'));
-        const result = {};
+        const result = { startDate, endDate };
 
         if (startDate.getTime() < today.getTime()) {
             result.error = 'The start date cannot be in the past.';
-        } else if (endDate.getTime() < startDate.getTime()) {
+            result.startDate = null;
+        } else if (
+            endDate.getTime() < startDate.getTime() ||
+            endDate.getTime() < today.getTime()
+        ) {
             result.error =
                 'The end date cannot be earlier than the start date.';
-        }
-
-        if (!result.error) {
-            result.startDate = startDate;
-            result.endDate = endDate;
+            result.endDate = null;
         }
 
         return result;
@@ -60,10 +58,13 @@ const createDateController = (appState) => {
             appState.endDate = getDateAsString(newState.startDate);
             appState.daysToTrip = daysToTrip;
             appState.duration = duration;
-            updateDate(daysToTrip, duration);
         } else {
-            appState.startDate = '';
-            appState.endDate = '';
+            appState.startDate = newState.startDate
+                ? getDateAsString(newState.startDate)
+                : '';
+            appState.endDate = newState.endDate
+                ? getDateAsString(newState.endDate)
+                : '';
             appState.daysToTrip = 0;
             appState.duration = 1;
         }
