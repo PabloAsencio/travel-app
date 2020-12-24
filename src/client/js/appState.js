@@ -2,6 +2,7 @@ const applicationState = (function () {
     let _city = '';
     let _province = '';
     let _country = '';
+    let _countryCode = '';
     let _latitude = '';
     let _longitude = '';
     let _startDate = '';
@@ -41,7 +42,19 @@ const applicationState = (function () {
         if (validatePlaceName(country)) {
             _country = country;
         } else {
-            country = '';
+            _country = '';
+        }
+    }
+
+    function getCountryCode(countryCode) {
+        return _countryCode;
+    }
+
+    function setCountryCode(countryCode) {
+        if (validateCountryCode(countryCode)) {
+            _countryCode = country;
+        } else {
+            _countryCode = '';
         }
     }
 
@@ -123,6 +136,10 @@ const applicationState = (function () {
         );
     }
 
+    function validateCountryCode(countryCode) {
+        return /^[A-Za-z]{2}$/.test(countryCode);
+    }
+
     function validateDateFormat(date) {
         return /^\d{4}-\d{2}-\d{2}$/.test(date);
     }
@@ -161,6 +178,12 @@ const applicationState = (function () {
         },
         set country(country) {
             setCountry(country);
+        },
+        get countryCode() {
+            return getCountryCode();
+        },
+        set countryCode(countryCode) {
+            setCountryCode(countryCode);
         },
         get latitude() {
             return getLatitude();

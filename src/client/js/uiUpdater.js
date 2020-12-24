@@ -1,6 +1,7 @@
 import logo from '../../assets/images/pixabay-logo.svg';
 
 const createViewUpdater = function (appState) {
+    const cityInputElement = document.getElementById('city');
     function updateDateView() {
         document.getElementById('daysToTrip').textContent =
             appState.daysToTrip +
@@ -11,6 +12,66 @@ const createViewUpdater = function (appState) {
             1 +
             ' day' +
             (appState.duration + 1 != 1 ? 's' : '');
+    }
+
+    function createNewCityList() {
+        const listFragment = document.createDocumentFragment();
+        const cityList = document.createElement('DIV');
+        cityList.setAttribute('id', 'city-autocomplete-list');
+        cityList.classList.add('autocomplete-items');
+        listFragment.appendChild(cityList);
+
+        function createListItem(city, length) {
+            const listItem = document.createElement('DIV');
+            if (!city.error) {
+                const completeName = `${city.name}${
+                    city.name != city.province ? ', ' + city.province : ''
+                }, ${city.country}`;
+                const typedText = document.createElement('SPAN');
+                typedText.classList.add('typedText');
+                typedText.textContent = completeName.substr(0, length);
+                listItem.appendChild(typedText);
+                const completedText = document.createElement('SPAN');
+                completedText.classList.add('completedText');
+                completedText.textContent = completeName.substr(length);
+                listItem.appendChild(completedText);
+            } else {
+                listItem.textContent = city.error;
+            }
+
+            cityList.appendChild(listItem);
+
+            return listItem;
+        }
+
+        function render() {
+            cityInputElement.parentNode.appendChild(listFragment);
+        }
+
+        return {
+            createListItem,
+            render,
+        };
+    }
+
+    function setActiveCity(cities, index) {
+        removeActiveCity(cities);
+        cities[index].classList.add('autocomplete-active');
+    }
+
+    function removeActiveCity(cities) {
+        for (const city of cities) {
+            city.classList.remove('autocomplete-active');
+        }
+    }
+
+    function clearCityList() {
+        const autocompleteLists = document.getElementsByClassName(
+            'autocomplete-items'
+        );
+        for (const list of autocompleteLists) {
+            list.parentNode.removeChild(list);
+        }
     }
 
     function updatePicture(photos) {
@@ -47,7 +108,6 @@ const createViewUpdater = function (appState) {
         } else {
             const dailyForecasts = weatherForecast.dailyForecasts;
             for (const day of dailyForecasts) {
-                console.log(day);
                 createForecastCard(day);
             }
         }
@@ -121,6 +181,9 @@ const createViewUpdater = function (appState) {
         weatherSection.appendChild(fragment);
     }
     return {
+        createNewCityList,
+        setActiveCity,
+        clearCityList,
         updateDateView,
         updatePicture,
         updateCurrentWeather,
