@@ -1,5 +1,5 @@
 // This script is based on the example at https://www.w3schools.com/howto/howto_js_autocomplete.asp
-function autocomplete(inputElement) {
+function autocomplete(inputElement, apiService) {
     inputElement.addEventListener('input', handleInput);
     inputElement.addEventListener('keydown', navigateList);
     document.addEventListener('click', clearCityList);
@@ -132,58 +132,34 @@ function autocomplete(inputElement) {
             cities[currentFocus].classList.add('autocomplete-active');
         }
     }
-}
-
-function clearCityList() {
-    const autocompleteLists = document.getElementsByClassName(
-        'autocomplete-items'
-    );
-    for (const list of autocompleteLists) {
-        list.parentNode.removeChild(list);
-    }
-}
-
-function removeActive(cities) {
-    for (const city of cities) {
-        city.classList.remove('autocomplete-active');
-    }
-}
-
-const fetchCities = async (userInput) => {
-    // TODO: Remove references to localhost from final version
-    let url = 'http://localhost:8082/listCities?city=';
-    const cityInfo = userInput.split(',').map((item) => item.trim());
-    let city;
-    let secondParameter;
-    let thirdParameter;
-    if (cityInfo.length > 3) {
-        return [
-            {
-                error: 'No results',
-            },
-        ];
-    } else if (cityInfo.length >= 1) {
-        city = encodeURIComponent(cityInfo[0]);
-        url += city;
-        if (cityInfo.length >= 2) {
-            secondParameter = encodeURIComponent(cityInfo[1]);
-            url += '&secondParameter=' + secondParameter;
-            if (cityInfo.length === 3) {
-                thirdParameter = encodeURIComponent(cityInfo[2]);
-                url += '&thirdParameter=' + thirdParameter;
-            }
+    function clearCityList() {
+        const autocompleteLists = document.getElementsByClassName(
+            'autocomplete-items'
+        );
+        for (const list of autocompleteLists) {
+            list.parentNode.removeChild(list);
         }
-    } else {
-        return [{}];
     }
-    const response = await fetch(url);
-    try {
-        const serverResponse = await response.json();
-        return serverResponse.cities;
-    } catch (error) {
-        console.log(error);
-        return [{ error: 'No results' }];
+
+    function removeActive(cities) {
+        for (const city of cities) {
+            city.classList.remove('autocomplete-active');
+        }
     }
-};
+
+    const fetchCities = (userInput) => {
+        let cities;
+        const [city, province, country] = userInput
+            .split(',')
+            .map((item) => item.trim());
+
+        cities = apiService
+            .fetchCities(city, province, country)
+            .then((response) => response.json())
+            .then((data) => data.cities)
+            .catch((error) => [{ error: error.message }]);
+        return cities;
+    };
+}
 
 export { autocomplete };

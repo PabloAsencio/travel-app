@@ -1,43 +1,27 @@
 import { createDateController } from './dateController';
 import { createViewUpdater } from './uiUpdater';
+import { createAPIService } from './apiService';
+import { autocomplete } from './autocomplete';
 
 let viewUpdater;
+let apiService;
 
 function startApplication(applicationState) {
     viewUpdater = createViewUpdater(applicationState);
+    apiService = createAPIService();
     createDateController(applicationState, viewUpdater).start();
+    // Set functionality and event listener for the dropdown list
+    autocomplete(document.getElementById('city'), apiService);
 }
 
 function handleSubmit(event) {
     event.preventDefault();
-    // TODO: Remove references to localhost from final versio
-    const server = 'http://localhost:8082/';
-    const currentWeatherEndpoint = 'currentWeather';
-    const forecastEndpoint = 'forecast';
-    const pictureEndpoint = 'pictures';
     const latitude = document.getElementById('latitude').value;
     const longitude = document.getElementById('longitude').value;
     const [city, province, country] = document
         .getElementById('city')
         .value.split(',')
         .map((word) => word.trim());
-
-    let weatherQuery = '?';
-    if (latitude && longitude) {
-        weatherQuery += `latitude=${encodeURIComponent(
-            latitude
-        )}&longitude=${encodeURIComponent(longitude)}`;
-    } else {
-        weatherQuery += `city=${
-            city ? encodeURIComponent(city) : ''
-        }&province=${province ? encodeURIComponent(province) : ''}&country=${
-            country ? encodeURIComponent(country) : ''
-        }`;
-    }
-
-    const currentWeather = fetch(
-        server + currentWeatherEndpoint + weatherQuery
-    );
 
     const timeToTrip = document
         .getElementById('daysToTrip')
@@ -46,16 +30,16 @@ function handleSubmit(event) {
     const duration = document
         .getElementById('duration')
         .textContent.split(' ')[0];
-    weatherQuery += `&timeToTrip=${encodeURIComponent(
-        timeToTrip
-    )}&duration=${encodeURIComponent(duration)}`;
 
-    const forecast = fetch(server + forecastEndpoint + weatherQuery);
-
+    const currentWeather = apiService.fetchCurrentWeather(latitude, longitude);
+    const forecast = apiService.fetchWeatherForecast(
+        latitude,
+        longitude,
+        timeToTrip,
+        duration
+    );
     // TODO: Retrieve country name from server if it is missing before making the API call
-    let pictureQuery = `?city=${city}&country=${country || province || ''}`;
-
-    const pictures = fetch(server + pictureEndpoint + pictureQuery);
+    const pictures = apiService.fetchPictures(city, country);
 
     viewUpdater.clearWeatherSection();
 
@@ -63,15 +47,15 @@ function handleSubmit(event) {
     currentWeather
         .then((response) => response.json())
         .then((weather) => viewUpdater.updateCurrentWeather(weather))
-        .catch((error) => console.log(error));
+        .catch((error) => console.log(error.message));
     forecast
         .then((response) => response.json())
         .then((forecast) => viewUpdater.updateWeatherForecast(forecast))
-        .catch((error) => console.log(error));
+        .catch((error) => console.log(error.message));
     pictures
         .then((response) => response.json())
         .then((pictures) => viewUpdater.updatePicture(pictures))
-        .catch((error) => console.log(error));
+        .catch((error) => console.log(error.message));
 }
 
 export { handleSubmit, startApplication };

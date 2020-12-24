@@ -47,6 +47,7 @@ const createViewUpdater = function (appState) {
         } else {
             const dailyForecasts = weatherForecast.dailyForecasts;
             for (const day of dailyForecasts) {
+                console.log(day);
                 createForecastCard(day);
             }
         }
