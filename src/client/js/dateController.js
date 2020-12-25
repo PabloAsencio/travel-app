@@ -1,4 +1,4 @@
-const createDateController = (appState, viewUpdater) => {
+const createDateController = (applicationState, viewUpdater) => {
     const startDateInput = document.getElementById('startDate');
     const endDateInput = document.getElementById('endDate');
     const millisecondsInOneDay = 24 * 3600 * 1000;
@@ -21,11 +21,11 @@ const createDateController = (appState, viewUpdater) => {
 
     function initializeState() {
         startDateInput.value = getDateAsString(today);
-        appState.startDate = startDateInput.value;
+        applicationState.startDate = startDateInput.value;
         endDateInput.value = getDateAsString(tomorrow);
-        appState.endDate = endDateInput.value;
-        appState.duration = 1;
-        appState.daysToTrip = 0;
+        applicationState.endDate = endDateInput.value;
+        applicationState.duration = 1;
+        applicationState.daysToTrip = 0;
     }
 
     function getValidatedDates() {
@@ -55,19 +55,19 @@ const createDateController = (appState, viewUpdater) => {
                 newState.startDate,
                 newState.endDate
             );
-            appState.startDate = getDateAsString(newState.startDate);
-            appState.endDate = getDateAsString(newState.startDate);
-            appState.daysToTrip = daysToTrip;
-            appState.duration = duration;
+            applicationState.startDate = getDateAsString(newState.startDate);
+            applicationState.endDate = getDateAsString(newState.startDate);
+            applicationState.daysToTrip = daysToTrip;
+            applicationState.duration = duration;
         } else {
-            appState.startDate = newState.startDate
+            applicationState.startDate = newState.startDate
                 ? getDateAsString(newState.startDate)
                 : '';
-            appState.endDate = newState.endDate
+            applicationState.endDate = newState.endDate
                 ? getDateAsString(newState.endDate)
                 : '';
-            appState.daysToTrip = 0;
-            appState.duration = 1;
+            applicationState.daysToTrip = 0;
+            applicationState.duration = 1;
         }
     }
 

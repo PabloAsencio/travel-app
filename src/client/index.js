@@ -1,9 +1,9 @@
 import { app } from './js/app';
-import { applicationState } from './js/appState';
+import { applicationState } from './js/applicationState';
 import { createAPIService } from './js/apiService';
 import { createDateController } from './js/dateController';
-import { createViewUpdater } from './js/uiUpdater';
-import { cityDropdownListController } from './js/autocomplete';
+import { createViewUpdater } from './js/viewUpdater';
+import { cityController } from './js/cityController';
 
 import './styles/style.scss';
 import './styles/form.scss';
@@ -13,14 +13,14 @@ const apiService = createAPIService();
 const viewUpdater = createViewUpdater(applicationState);
 const dateController = createDateController(applicationState, viewUpdater);
 // Configure dependencies for the dropdown list
-cityDropdownListController.apiService = apiService;
-cityDropdownListController.appState = applicationState;
-cityDropdownListController.viewUpdater = viewUpdater;
+cityController.apiService = apiService;
+cityController.appState = applicationState;
+cityController.viewUpdater = viewUpdater;
 
 // Configure dependencies and start application
 app.apiService = apiService;
 app.applicationState = applicationState;
-app.cityController = cityDropdownListController;
+app.cityController = cityController;
 app.dateController = dateController;
 app.viewUpdater = viewUpdater;
 app.start();
