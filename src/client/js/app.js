@@ -6,11 +6,13 @@ import { applicationState } from './appState';
 
 let viewUpdater;
 let apiService;
+let dateController;
 
 function startApplication(applicationState) {
     viewUpdater = createViewUpdater(applicationState);
     apiService = createAPIService();
-    createDateController(applicationState, viewUpdater).start();
+    dateController = createDateController(applicationState, viewUpdater);
+    dateController.start();
     // Set functionality and event listener for the dropdown list
     cityDropdownListController.apiService = apiService;
     cityDropdownListController.appState = applicationState;
@@ -22,26 +24,21 @@ async function handleSubmit(event) {
     event.preventDefault();
 
     if (
-        cityDropdownListController.isValidCity() ||
-        (await cityDropdownListController.fetchCity())
+        dateController.areDatesValid() &&
+        (cityDropdownListController.isValidCity() ||
+            (await cityDropdownListController.fetchCity()))
     ) {
-        const timeToTrip = document
-            .getElementById('daysToTrip')
-            .textContent.split(' ')[0];
-
-        const duration = document
-            .getElementById('duration')
-            .textContent.split(' ')[0];
-
         const currentWeather = apiService.fetchCurrentWeather(
             applicationState.latitude,
             applicationState.longitude
         );
+        console.log(applicationState.daysToTrip);
+        console.log(applicationState.duration);
         const forecast = apiService.fetchWeatherForecast(
             applicationState.latitude,
             applicationState.longitude,
-            timeToTrip,
-            duration
+            applicationState.daysToTrip.toString(10),
+            applicationState.duration.toString(10)
         );
         const pictures = apiService.fetchPictures(
             applicationState.city,

@@ -7,15 +7,16 @@ const createDateController = (appState, viewUpdater) => {
 
     function setDateFields() {
         initializeState();
-        startDateInput.addEventListener('blur', handleDateChange);
-        endDateInput.addEventListener('blur', handleDateChange);
+        startDateInput.addEventListener('blur', validateDates);
+        endDateInput.addEventListener('blur', validateDates);
         viewUpdater.updateDateView();
     }
 
-    function handleDateChange(event) {
+    function validateDates(event) {
         const validatedDates = getValidatedDates(event);
         updateState(validatedDates);
         viewUpdater.updateDateView();
+        return !validatedDates.hasOwnProperty('error');
     }
 
     function initializeState() {
@@ -34,14 +35,14 @@ const createDateController = (appState, viewUpdater) => {
 
         if (startDate.getTime() < today.getTime()) {
             result.error = 'The start date cannot be in the past.';
-            result.startDate = null;
+            result.startDate = '';
         } else if (
             endDate.getTime() < startDate.getTime() ||
             endDate.getTime() < today.getTime()
         ) {
             result.error =
                 'The end date cannot be earlier than the start date.';
-            result.endDate = null;
+            result.endDate = '';
         }
 
         return result;
@@ -104,6 +105,7 @@ const createDateController = (appState, viewUpdater) => {
         },
         reset: initializeState,
         load: updateState,
+        areDatesValid: validateDates,
     };
 };
 
