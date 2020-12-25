@@ -131,7 +131,7 @@ const applicationState = (function () {
     }
 
     function validatePlaceName(placeName) {
-        return /^[^0-9^\.\\~\$%\\\/(\)\[\]\{\}|@#\*"=\?!+`´\^_:;,<>]*$/.test(
+        return /^[^0-9^\\~\$%\\\/(\)\[\]\{\}|@#\*"=\?!+`´\^_:;,<>]*$/.test(
             placeName
         );
     }
