@@ -1,4 +1,4 @@
-function createAPIService() {
+const apiService = (function () {
     // TODO: Remove references to localhost from final version
     const server = 'http://localhost:8082/';
     const citiesEndpoint = 'listCities';
@@ -113,6 +113,6 @@ function createAPIService() {
         fetchWeatherForecast,
         fetchPictures,
     };
-}
+})();
 
-export { createAPIService };
+export { apiService };

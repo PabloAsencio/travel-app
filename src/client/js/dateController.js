@@ -1,4 +1,6 @@
-const createDateController = (applicationState, viewUpdater) => {
+const dateController = (function () {
+    let _applicationState;
+    let _viewUpdater;
     const startDateInput = document.getElementById('startDate');
     const endDateInput = document.getElementById('endDate');
     const millisecondsInOneDay = 24 * 3600 * 1000;
@@ -9,23 +11,23 @@ const createDateController = (applicationState, viewUpdater) => {
         initializeState();
         startDateInput.addEventListener('blur', validateDates);
         endDateInput.addEventListener('blur', validateDates);
-        viewUpdater.updateDateView();
+        _viewUpdater.updateDateView();
     }
 
     function validateDates(event) {
         const validatedDates = getValidatedDates(event);
         updateState(validatedDates);
-        viewUpdater.updateDateView();
+        _viewUpdater.updateDateView();
         return !validatedDates.hasOwnProperty('error');
     }
 
     function initializeState() {
         startDateInput.value = getDateAsString(today);
-        applicationState.startDate = startDateInput.value;
+        _applicationState.startDate = startDateInput.value;
         endDateInput.value = getDateAsString(tomorrow);
-        applicationState.endDate = endDateInput.value;
-        applicationState.duration = 1;
-        applicationState.daysToTrip = 0;
+        _applicationState.endDate = endDateInput.value;
+        _applicationState.duration = 1;
+        _applicationState.daysToTrip = 0;
     }
 
     function getValidatedDates() {
@@ -55,19 +57,19 @@ const createDateController = (applicationState, viewUpdater) => {
                 newState.startDate,
                 newState.endDate
             );
-            applicationState.startDate = getDateAsString(newState.startDate);
-            applicationState.endDate = getDateAsString(newState.startDate);
-            applicationState.daysToTrip = daysToTrip;
-            applicationState.duration = duration;
+            _applicationState.startDate = getDateAsString(newState.startDate);
+            _applicationState.endDate = getDateAsString(newState.startDate);
+            _applicationState.daysToTrip = daysToTrip;
+            _applicationState.duration = duration;
         } else {
-            applicationState.startDate = newState.startDate
+            _applicationState.startDate = newState.startDate
                 ? getDateAsString(newState.startDate)
                 : '';
-            applicationState.endDate = newState.endDate
+            _applicationState.endDate = newState.endDate
                 ? getDateAsString(newState.endDate)
                 : '';
-            applicationState.daysToTrip = 0;
-            applicationState.duration = 1;
+            _applicationState.daysToTrip = 0;
+            _applicationState.duration = 1;
         }
     }
 
@@ -100,6 +102,12 @@ const createDateController = (applicationState, viewUpdater) => {
     }
 
     return {
+        set applicationState(applicationState) {
+            _applicationState = applicationState;
+        },
+        set viewUpdater(viewUpdater) {
+            _viewUpdater = viewUpdater;
+        },
         start: () => {
             setDateFields();
         },
@@ -107,6 +115,6 @@ const createDateController = (applicationState, viewUpdater) => {
         load: updateState,
         areDatesValid: validateDates,
     };
-};
+})();
 
-export { createDateController };
+export { dateController };

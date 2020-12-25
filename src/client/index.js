@@ -1,17 +1,20 @@
 import { app } from './js/app';
 import { applicationState } from './js/applicationState';
-import { createAPIService } from './js/apiService';
-import { createDateController } from './js/dateController';
-import { createViewUpdater } from './js/viewUpdater';
+import { apiService } from './js/apiService';
+import { dateController } from './js/dateController';
+import { viewUpdater } from './js/viewUpdater';
 import { cityController } from './js/cityController';
 
 import './styles/style.scss';
 import './styles/form.scss';
 
-// Set up components
-const apiService = createAPIService();
-const viewUpdater = createViewUpdater(applicationState);
-const dateController = createDateController(applicationState, viewUpdater);
+// Configure dependencies for the viewUpdater
+viewUpdater.applicationState = applicationState;
+
+// Configure dependencies for the date controller
+dateController.applicationState = applicationState;
+dateController.viewUpdater = viewUpdater;
+
 // Configure dependencies for the dropdown list
 cityController.apiService = apiService;
 cityController.appState = applicationState;

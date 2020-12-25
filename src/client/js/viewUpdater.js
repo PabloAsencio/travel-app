@@ -1,17 +1,19 @@
 import logo from '../../assets/images/pixabay-logo.svg';
 
-const createViewUpdater = function (applicationState) {
+const viewUpdater = (function () {
+    let _applicationState;
     const cityInputElement = document.getElementById('city');
+
     function updateDateView() {
         document.getElementById('daysToTrip').textContent =
-            applicationState.daysToTrip +
+            _applicationState.daysToTrip +
             ' day' +
-            (applicationState.daysToTrip != 1 ? 's' : '');
+            (_applicationState.daysToTrip != 1 ? 's' : '');
         document.getElementById('duration').textContent =
-            applicationState.duration +
+            _applicationState.duration +
             1 +
             ' day' +
-            (applicationState.duration + 1 != 1 ? 's' : '');
+            (_applicationState.duration + 1 != 1 ? 's' : '');
     }
 
     function createNewCityList() {
@@ -171,16 +173,19 @@ const createViewUpdater = function (applicationState) {
         card.setAttribute('id', 'weather__location');
         card.classList.add('weather__location');
         const city = document.createElement('P');
-        city.textContent = applicationState.city;
+        city.textContent = _applicationState.city;
         card.appendChild(city);
         const provinceAndCountry = document.createElement('P');
         provinceAndCountry.textContent =
-            applicationState.province + ', ' + applicationState.country;
+            _applicationState.province + ', ' + _applicationState.country;
         card.appendChild(provinceAndCountry);
         fragment.appendChild(card);
         weatherSection.appendChild(fragment);
     }
     return {
+        set applicationState(applicationState) {
+            _applicationState = applicationState;
+        },
         createNewCityList,
         setActiveCity,
         clearCityList,
@@ -190,6 +195,6 @@ const createViewUpdater = function (applicationState) {
         updateWeatherForecast,
         clearWeatherSection,
     };
-};
+})();
 
-export { createViewUpdater };
+export { viewUpdater };
