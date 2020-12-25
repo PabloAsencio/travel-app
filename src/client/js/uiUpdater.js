@@ -97,7 +97,7 @@ const createViewUpdater = function (appState) {
         if (currentWeather.error) {
             showErrorMessage(currentWeather.error);
         } else {
-            createLocationCard(currentWeather);
+            createLocationCard();
             createCurrentWeatherCard(currentWeather);
         }
     }
@@ -165,17 +165,17 @@ const createViewUpdater = function (appState) {
         weatherSection.appendChild(fragment);
     }
 
-    function createLocationCard(currentWeather) {
+    function createLocationCard() {
         const fragment = document.createDocumentFragment();
         const card = document.createElement('ARTICLE');
         card.setAttribute('id', 'weather__location');
         card.classList.add('weather__location');
         const city = document.createElement('P');
-        city.textContent = currentWeather.city;
+        city.textContent = appState.city;
         card.appendChild(city);
         const provinceAndCountry = document.createElement('P');
         provinceAndCountry.textContent =
-            currentWeather.province + ', ' + currentWeather.country;
+            appState.province + ', ' + appState.country;
         card.appendChild(provinceAndCountry);
         fragment.appendChild(card);
         weatherSection.appendChild(fragment);
