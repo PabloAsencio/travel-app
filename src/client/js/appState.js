@@ -123,7 +123,7 @@ const applicationState = (function () {
     }
 
     function setDaysToTrip(daysToTrip) {
-        if (Number.isInteger(daysToTrip) && duration > 0) {
+        if (Number.isInteger(daysToTrip) && daysToTrip >= 0) {
             _daysToTrip = daysToTrip;
         } else {
             _daysToTrip = 0;
