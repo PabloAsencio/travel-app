@@ -3,8 +3,6 @@ const weatherbitBaseURL = 'https://api.weatherbit.io/v2.0/';
 const weatherbitApiKey = process.env.WEATHERBIT_API_KEY;
 
 const weatherAPI = (function () {
-    let _countryInfoService;
-
     function fetchCurrentWeather(request, response) {
         const query = getWeatherbitQuery(request);
 
@@ -16,14 +14,6 @@ const weatherAPI = (function () {
                     if (weatherbitResponse.data.count > 0) {
                         const weatherReport = weatherbitResponse.data.data[0];
                         response.send({
-                            city: weatherReport.city_name,
-                            province: _countryInfoService.getStateName(
-                                weatherReport.country_code,
-                                weatherReport.state_code
-                            ),
-                            country: _countryInfoService.getCountryName(
-                                weatherReport.country_code
-                            ),
                             code: weatherReport.weather.code,
                             description: weatherReport.weather.description,
                             temperature: weatherReport.temp,
@@ -79,14 +69,6 @@ const weatherAPI = (function () {
                             }
                         );
                         response.send({
-                            city: weatherReport.city_name,
-                            province: _countryInfoService.getStateName(
-                                weatherReport.country_code,
-                                weatherReport.state_code
-                            ),
-                            country: _countryInfoService.getCountryName(
-                                weatherReport.country_code
-                            ),
                             dailyForecasts: dailyForecasts,
                         });
                     } else {
@@ -140,9 +122,6 @@ const weatherAPI = (function () {
     }
 
     return {
-        set countryInfoService(countryInfoService) {
-            _countryInfoService = countryInfoService;
-        },
         fetchCurrentWeather,
         fetchWeatherForecast,
     };

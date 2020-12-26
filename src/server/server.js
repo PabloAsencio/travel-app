@@ -12,7 +12,6 @@ const pictureAPI = require('./picture-api');
 cacheService.load('src/server/data/pixabay-cache.json');
 const pixabay = pictureAPI.createAPI(cacheService);
 geonamesAPI.countryInfoService = countryInfoService;
-weatherAPI.countryInfoService = countryInfoService;
 
 // *** APPLICATION SETUP ***
 const app = express();
