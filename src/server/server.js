@@ -5,18 +5,13 @@ const axios = require('axios');
 const dotenv = require('dotenv');
 dotenv.config();
 const { DynamicEntryPlugin } = require('webpack');
-const fs = require('fs');
+const countryInfoService = require('./country-info-service');
 const cacheService = require('./cache-service');
 cacheService.load('src/server/data/pixabay-cache.json');
 const pictureAPI = require('./picture-api');
 const pixabay = pictureAPI.createAPI(cacheService);
 /* Global Variables */
-const countryCodesFile = fs.readFileSync('src/server/data/country-codes.json');
-const countryCodes = JSON.parse(countryCodesFile);
-const stateCodesFile = fs.readFileSync(
-    'src/server/data/weatherbit-state-codes.json'
-);
-const stateCodes = JSON.parse(stateCodesFile);
+
 const geonamesBaseURL = 'http://api.geonames.org/search?';
 const geonamesUsername = process.env.GEONAMES_USERNAME;
 const weatherbitBaseURL = 'https://api.weatherbit.io/v2.0/';
@@ -94,11 +89,13 @@ app.get('/currentWeather', (request, response) => {
                     const weatherReport = weatherbitResponse.data.data[0];
                     response.send({
                         city: weatherReport.city_name,
-                        province: getStateName(
+                        province: countryInfoService.getStateName(
                             weatherReport.country_code,
                             weatherReport.state_code
                         ),
-                        country: getCountryName(weatherReport.country_code),
+                        country: countryInfoService.getCountryName(
+                            weatherReport.country_code
+                        ),
                         code: weatherReport.weather.code,
                         description: weatherReport.weather.description,
                         temperature: weatherReport.temp,
@@ -153,11 +150,13 @@ app.get('/forecast', (request, response) => {
                     });
                     response.send({
                         city: weatherReport.city_name,
-                        province: getStateName(
+                        province: countryInfoService.getStateName(
                             weatherReport.country_code,
                             weatherReport.state_code
                         ),
-                        country: getCountryName(weatherReport.country_code),
+                        country: countryInfoService.getCountryName(
+                            weatherReport.country_code
+                        ),
                         dailyForecasts: dailyForecasts,
                     });
                 } else {
@@ -203,7 +202,9 @@ app.get('/listCities', (request, response) => {
                         name: city.name,
                         province: city.adminName1,
                         countryCode: city.countryCode,
-                        country: getCountryName(city.countryCode),
+                        country: countryInfoService.getCountryName(
+                            city.countryCode
+                        ),
                         lng: city.lng,
                         lat: city.lat,
                     });
@@ -249,14 +250,6 @@ function getWeatherbitQuery(request) {
         query += `&key=${weatherbitApiKey}`;
     }
     return query;
-}
-
-function getCountryName(countryCode) {
-    return countryCodes[countryCode];
-}
-
-function getStateName(countryCode, stateCode) {
-    return stateCodes[countryCode][stateCode] || stateCode;
 }
 
 // Gracefully close the system and save cache when termination signal is received
