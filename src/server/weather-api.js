@@ -99,17 +99,6 @@ const weatherAPI = (function () {
             query += `lat=${encodeURIComponent(
                 latitude
             )}&lon=${encodeURIComponent(longitude)}`;
-        } else {
-            const city = request.query.city;
-            const province = request.query.province;
-            const country = request.query.country;
-            if (city) {
-                query += `city=${encodeURIComponent(city)}${
-                    province ? ',' + encodeURIComponent(province) : ''
-                }${country ? '&country=' + encodeURIComponent(country) : ''}`;
-            }
-        }
-        if (query) {
             const timeToTrip = request.query.timeToTrip;
             const duration = request.query.duration;
             if (timeToTrip && duration) {
