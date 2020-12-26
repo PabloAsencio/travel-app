@@ -8,12 +8,11 @@ const { DynamicEntryPlugin } = require('webpack');
 const countryInfoService = require('./country-info-service');
 const cacheService = require('./cache-service');
 cacheService.load('src/server/data/pixabay-cache.json');
+const geonamesAPI = require('./geonames-api');
+geonamesAPI.countryInfoService = countryInfoService;
 const pictureAPI = require('./picture-api');
 const pixabay = pictureAPI.createAPI(cacheService);
 /* Global Variables */
-
-const geonamesBaseURL = 'http://api.geonames.org/search?';
-const geonamesUsername = process.env.GEONAMES_USERNAME;
 const weatherbitBaseURL = 'https://api.weatherbit.io/v2.0/';
 const weatherbitApiKey = process.env.WEATHERBIT_API_KEY;
 // Setup empty JS object to act as endpoint for all routes
@@ -54,27 +53,6 @@ app.post('/addData', (request, response) => {
     projectData['temperature'] = data.temperature;
     projectData['userResponse'] = data.userResponse;
     response.send(projectData);
-});
-
-app.get('/location', (request, response) => {
-    const url =
-        geonamesBaseURL +
-        'name=' +
-        request.query.placename +
-        '&type=json&username=' +
-        geonamesUsername;
-    axios
-        .get(url)
-        .then((geonamesResponse) => {
-            const places = geonamesResponse.data;
-            response.send(places.geonames[0]);
-        })
-        .catch((error) => {
-            console.log(error);
-            response.send({
-                placeName: 'No location was found under this name. Try again!',
-            });
-        });
 });
 
 app.get('/currentWeather', (request, response) => {
@@ -181,46 +159,7 @@ app.get('/forecast', (request, response) => {
 
 app.get('/pictures', pixabay.retrievePicture);
 
-app.get('/listCities', (request, response) => {
-    const url = `${geonamesBaseURL}name_startsWith=${request.query.city}${
-        request.query.secondParameter
-            ? '&q=' + request.query.secondParameter
-            : ''
-    }${
-        request.query.thirdParameter ? '&q=' + request.query.thirdParameter : ''
-    }&cities=cities15000&type=json&maxRows=5&lang&=en&orderby=relevance&username=${geonamesUsername}`;
-    axios
-        .get(url)
-        .then((geonamesResponse) => {
-            const places = geonamesResponse.data.geonames;
-            const result = {
-                cities: [],
-            };
-            if (places && places.length > 0) {
-                for (const city of places) {
-                    result.cities.push({
-                        name: city.name,
-                        province: city.adminName1,
-                        countryCode: city.countryCode,
-                        country: countryInfoService.getCountryName(
-                            city.countryCode
-                        ),
-                        lng: city.lng,
-                        lat: city.lat,
-                    });
-                }
-            } else {
-                result.cities.push({ error: 'No results' });
-            }
-            response.send(result);
-        })
-        .catch((error) => {
-            console.log(error);
-            response.send({
-                cities: { error: 'No results' },
-            });
-        });
-});
+app.get('/listCities', geonamesAPI.fetchCityList);
 
 function getWeatherbitQuery(request) {
     let query = '';
