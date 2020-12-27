@@ -53,12 +53,8 @@ const apiService = (function () {
         let query = '';
         if (city) {
             query = `?city=${encodeURIComponent(city)}${
-                province
-                    ? '&secondParameter=' + encodeURIComponent(province)
-                    : ''
-            }${
-                country ? '&thirdParameter=' + encodeURIComponent(country) : ''
-            }`;
+                province ? '&province=' + encodeURIComponent(province) : ''
+            }${country ? '&country=' + encodeURIComponent(country) : ''}`;
         }
         return query;
     }

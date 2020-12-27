@@ -142,12 +142,12 @@ const cityController = (function () {
     }
 
     function updateState(city) {
-        _applicationState.city = city.name;
+        _applicationState.city = city.city;
         _applicationState.province = city.province;
         _applicationState.country = city.country;
         _applicationState.countryCode = city.countryCode;
-        _applicationState.latitude = city.lat;
-        _applicationState.longitude = city.lng;
+        _applicationState.latitude = city.latitude;
+        _applicationState.longitude = city.longitude;
     }
 
     function setActiveCity(cities) {

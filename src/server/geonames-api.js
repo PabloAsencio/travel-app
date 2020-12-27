@@ -28,12 +28,12 @@ const geonamesAPI = (function () {
                                         ? ', ' + city.adminName1
                                         : ''
                                 }, ${country}`,
-                                name: city.name,
+                                city: city.name,
                                 province: city.adminName1,
                                 countryCode: city.countryCode,
                                 country: country,
-                                lng: city.lng,
-                                lat: city.lat,
+                                longitude: city.lng,
+                                latitude: city.lat,
                             });
                         }
                     } else {
@@ -58,16 +58,13 @@ const geonamesAPI = (function () {
         const city = request.query.city;
         let query = '';
         if (city) {
+            // The province and country parameters are expected to be a province/state name and a country respectively
+            // but there is no guarantee that they actually are. Province could be a country and vice versa. That's why
+            // they are sent to the api as a q parameter instead of a more specific one.
             query = `${exact ? 'name' : 'name_startsWith'}=${
                 request.query.city
-            }${
-                request.query.secondParameter
-                    ? '&q=' + request.query.secondParameter
-                    : ''
-            }${
-                request.query.thirdParameter
-                    ? '&q=' + request.query.thirdParameter
-                    : ''
+            }${request.query.province ? '&q=' + request.query.province : ''}${
+                request.query.country ? '&q=' + request.query.country : ''
             }&cities=cities15000&type=json&maxRows=5&lang&=en&orderby=relevance&username=${geonamesUsername}`;
         }
         return query;
