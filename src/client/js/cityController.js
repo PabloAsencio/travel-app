@@ -73,15 +73,9 @@ const cityController = (function () {
                     if (!city.error) {
                         // Using an IIFE to prevent appState from being updated with the wrong data
                         (function () {
-                            // TODO: Make the server return the complete name as part of the city object
-                            const completeName = `${city.name}${
-                                city.name != city.province
-                                    ? ', ' + city.province
-                                    : ''
-                            }, ${city.country}`;
                             const cityData = city;
                             listItem.addEventListener('click', () => {
-                                inputElement.value = completeName;
+                                inputElement.value = cityData.completeName;
                                 updateState(cityData);
                                 _viewUpdater.clearCityList();
                             });
@@ -148,12 +142,12 @@ const cityController = (function () {
     }
 
     function updateState(city) {
-        _applicationState.city = city.name;
+        _applicationState.city = city.city;
         _applicationState.province = city.province;
         _applicationState.country = city.country;
         _applicationState.countryCode = city.countryCode;
-        _applicationState.latitude = city.lat;
-        _applicationState.longitude = city.lng;
+        _applicationState.latitude = city.latitude;
+        _applicationState.longitude = city.longitude;
     }
 
     function setActiveCity(cities) {
