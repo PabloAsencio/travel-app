@@ -1,13 +1,13 @@
 const axios = require('axios');
-const pixabayAPIKey = process.env.PIXABAY_API_KEY;
-const pixabayBaseURL = `https://pixabay.com/api/?key=${pixabayAPIKey}`;
+const apiKey = process.env.PIXABAY_API_KEY;
+const apiBaseURL = `https://pixabay.com/api/?key=${apiKey}`;
 
-const pictureAPI = (function () {
+const picturesAPI = (function () {
     function createAPI(cacheService) {
         const cache = cacheService;
         const suffix = '-picture';
 
-        function retrievePicture(request, response) {
+        function fetchPictures(request, response) {
             if (request.query.city && request.query.country) {
                 const city = `${request.query.city} ${request.query.country}`;
                 if (cache.hasKey(city + suffix)) {
@@ -69,7 +69,7 @@ const pictureAPI = (function () {
         }
 
         function makeURL(query) {
-            return `${pixabayBaseURL}&q=${encodeURIComponent(
+            return `${apiBaseURL}&q=${encodeURIComponent(
                 query
             )}&image_type=photo&category=travel+places+building&per_page=3&safesearch=true&orientation=horizontal`;
         }
@@ -99,7 +99,7 @@ const pictureAPI = (function () {
         }
 
         return {
-            retrievePicture,
+            fetchPictures: fetchPictures,
         };
     }
 
@@ -108,4 +108,4 @@ const pictureAPI = (function () {
     };
 })();
 
-module.exports = pictureAPI;
+module.exports = picturesAPI;

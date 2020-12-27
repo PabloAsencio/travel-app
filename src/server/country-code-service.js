@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const countryInfoService = (function () {
+const countryCodeService = (function () {
     const countryCodesFile = fs.readFileSync(
         'src/server/data/country-codes.json'
     );
@@ -14,4 +14,4 @@ const countryInfoService = (function () {
     };
 })();
 
-module.exports = countryInfoService;
+module.exports = countryCodeService;

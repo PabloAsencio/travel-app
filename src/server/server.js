@@ -4,14 +4,14 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 dotenv.config();
 // *** COMPONENT INITIALIZATION AND SETUP ***
-const countryInfoService = require('./country-info-service');
+const countryCodeService = require('./country-code-service');
 const cacheService = require('./cache-service');
-const geonamesAPI = require('./geonames-api');
+const citiesAPI = require('./cities-api');
 const weatherAPI = require('./weather-api');
-const pictureAPI = require('./picture-api');
+const picturesAPI = require('./pictures-api');
 cacheService.load('src/server/data/pixabay-cache.json');
-const pixabay = pictureAPI.createAPI(cacheService);
-geonamesAPI.countryInfoService = countryInfoService;
+const pixabay = picturesAPI.createAPI(cacheService);
+citiesAPI.countryCodeService = countryCodeService;
 
 // *** APPLICATION SETUP ***
 const app = express();
@@ -35,9 +35,9 @@ app.get('/currentWeather', weatherAPI.fetchCurrentWeather);
 
 app.get('/forecast', weatherAPI.fetchWeatherForecast);
 
-app.get('/pictures', pixabay.retrievePicture);
+app.get('/pictures', pixabay.fetchPictures);
 
-app.get('/listCities', geonamesAPI.fetchCityList);
+app.get('/listCities', citiesAPI.fetchCityList);
 
 // *** SERVER SHUTDOWN ***
 // Gracefully close the system and save cache when termination signal is received

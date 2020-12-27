@@ -1,25 +1,25 @@
 const axios = require('axios');
-const geonamesBaseURL = 'http://api.geonames.org/search?';
-const geonamesUsername = process.env.GEONAMES_USERNAME;
+const apiBaseURL = 'http://api.geonames.org/search?';
+const apiUsername = process.env.GEONAMES_USERNAME;
 
-const geonamesAPI = (function () {
-    let _countryInfoService;
+const citiesAPI = (function () {
+    let _countryCodeService;
 
     function fetchCityList(request, response) {
         const query = getCityQuery(request);
 
         if (query) {
-            const url = geonamesBaseURL + query;
+            const url = apiBaseURL + query;
             axios
                 .get(url)
                 .then((geonamesResponse) => {
-                    const places = geonamesResponse.data.geonames;
+                    const cities = geonamesResponse.data.geonames;
                     const result = {
                         cities: [],
                     };
-                    if (places && places.length > 0) {
-                        for (const city of places) {
-                            const country = _countryInfoService.getCountryName(
+                    if (cities && cities.length > 0) {
+                        for (const city of cities) {
+                            const country = _countryCodeService.getCountryName(
                                 city.countryCode
                             );
                             result.cities.push({
@@ -65,17 +65,17 @@ const geonamesAPI = (function () {
                 request.query.city
             }${request.query.province ? '&q=' + request.query.province : ''}${
                 request.query.country ? '&q=' + request.query.country : ''
-            }&cities=cities15000&type=json&maxRows=5&lang&=en&orderby=relevance&username=${geonamesUsername}`;
+            }&cities=cities15000&type=json&maxRows=5&lang&=en&orderby=relevance&username=${apiUsername}`;
         }
         return query;
     }
 
     return {
-        set countryInfoService(countryInfoService) {
-            _countryInfoService = countryInfoService;
+        set countryCodeService(countryCodeService) {
+            _countryCodeService = countryCodeService;
         },
         fetchCityList,
     };
 })();
 
-module.exports = geonamesAPI;
+module.exports = citiesAPI;

@@ -1,18 +1,18 @@
 const axios = require('axios');
-const weatherbitBaseURL = 'https://api.weatherbit.io/v2.0/';
-const weatherbitApiKey = process.env.WEATHERBIT_API_KEY;
+const weatherBaseURL = 'https://api.weatherbit.io/v2.0/';
+const weatherApiKey = process.env.WEATHERBIT_API_KEY;
 
 const weatherAPI = (function () {
     function fetchCurrentWeather(request, response) {
-        const query = getWeatherbitQuery(request);
+        const query = getWeatherQuery(request);
 
         if (query) {
-            const url = weatherbitBaseURL + 'current?' + query;
+            const url = weatherBaseURL + 'current?' + query;
             axios
                 .get(url)
-                .then((weatherbitResponse) => {
-                    if (weatherbitResponse.data.count > 0) {
-                        const weatherReport = weatherbitResponse.data.data[0];
+                .then((apiResponse) => {
+                    if (apiResponse.data.count > 0) {
+                        const weatherReport = apiResponse.data.data[0];
                         response.send({
                             code: weatherReport.weather.code,
                             description: weatherReport.weather.description,
@@ -43,10 +43,10 @@ const weatherAPI = (function () {
     }
 
     function fetchWeatherForecast(request, response) {
-        const query = getWeatherbitQuery(request);
+        const query = getWeatherQuery(request);
 
         if (query) {
-            const url = weatherbitBaseURL + 'forecast/daily?' + query;
+            const url = weatherBaseURL + 'forecast/daily?' + query;
             axios
                 .get(url)
                 .then((weatherbitResponse) => {
@@ -91,7 +91,7 @@ const weatherAPI = (function () {
         }
     }
 
-    function getWeatherbitQuery(request) {
+    function getWeatherQuery(request) {
         let query = '';
         const latitude = request.query.latitude;
         const longitude = request.query.longitude;
@@ -99,13 +99,13 @@ const weatherAPI = (function () {
             query += `lat=${encodeURIComponent(
                 latitude
             )}&lon=${encodeURIComponent(longitude)}`;
-            const timeToTrip = request.query.timeToTrip;
+            const daysToTrip = request.query.daysToTrip;
             const duration = request.query.duration;
-            if (timeToTrip && duration) {
-                const days = parseInt(timeToTrip, 10) + parseInt(duration, 10);
+            if (daysToTrip && duration) {
+                const days = parseInt(daysToTrip, 10) + parseInt(duration, 10);
                 query += `&days=${encodeURIComponent(days)}`;
             }
-            query += `&key=${weatherbitApiKey}`;
+            query += `&key=${weatherApiKey}`;
         }
         return query;
     }

@@ -79,7 +79,7 @@ const apiService = (function () {
 
         if (latitude && longitude && daysToTrip && duration) {
             query = `${prepareCurrentWeatherQuery(latitude, longitude)}
-                &timeToTrip=${encodeURIComponent(
+                &daysToTrip=${encodeURIComponent(
                     daysToTrip
                 )}&duration=${encodeURIComponent(duration)}`;
         }
