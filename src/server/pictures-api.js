@@ -18,7 +18,7 @@ const picturesAPI = (function () {
                         if (cityAPIResponse.data.total > 0) {
                             handleSuccess(
                                 cityAPIResponse,
-                                makeSubject(
+                                makeSubjectLine(
                                     request.query.country,
                                     request.query.city
                                 ),
@@ -32,7 +32,9 @@ const picturesAPI = (function () {
                                     if (countryAPIResponse.data.total > 0) {
                                         handleSuccess(
                                             countryAPIResponse,
-                                            makeSubject(request.query.country),
+                                            makeSubjectLine(
+                                                request.query.country
+                                            ),
                                             city,
                                             response
                                         );
@@ -71,7 +73,7 @@ const picturesAPI = (function () {
         )}&image_type=photo&category=travel+places+building&per_page=3&safesearch=true&orientation=horizontal`;
     }
 
-    function makeSubject(country, city = '') {
+    function makeSubjectLine(country, city = '') {
         return `${city ? city + ', ' : ''}${country}`;
     }
 
@@ -83,15 +85,15 @@ const picturesAPI = (function () {
         };
     }
 
-    function makePictureObject(rawObject, subject) {
+    function makePictureObject(picture, subject) {
         return {
             subject,
-            pageURL: rawObject.pageURL,
-            imageURL: rawObject.webformatURL,
-            largeImageURL: rawObject.largeImageURL,
-            user: rawObject.user,
-            userURL: `https://pixabay.com/users/${rawObject.user}-${rawObject.user_id}/`,
-            userImageURL: rawObject.userImageURL,
+            pageURL: picture.pageURL,
+            imageURL: picture.webformatURL,
+            largeImageURL: picture.largeImageURL,
+            user: picture.user,
+            userURL: `https://pixabay.com/users/${picture.user}-${picture.user_id}/`,
+            userImageURL: picture.userImageURL,
         };
     }
 
