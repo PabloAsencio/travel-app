@@ -9,8 +9,8 @@ const cacheService = require('./cache-service');
 const citiesAPI = require('./cities-api');
 const weatherAPI = require('./weather-api');
 const picturesAPI = require('./pictures-api');
-cacheService.load('src/server/data/pixabay-cache.json');
-const pixabay = picturesAPI.createAPI(cacheService);
+cacheService.load('src/server/data/pictures-cache.json');
+picturesAPI.cache = cacheService;
 citiesAPI.countryCodeService = countryCodeService;
 
 // *** APPLICATION SETUP ***
@@ -35,7 +35,7 @@ app.get('/currentWeather', weatherAPI.fetchCurrentWeather);
 
 app.get('/forecast', weatherAPI.fetchWeatherForecast);
 
-app.get('/pictures', pixabay.fetchPictures);
+app.get('/pictures', picturesAPI.fetchPictures);
 
 app.get('/listCities', citiesAPI.fetchCityList);
 
