@@ -44,7 +44,18 @@ const cityController = (function () {
     async function fetchCity() {
         const userInput = inputElement.value.trim();
         if (userInput) {
-            const city = (await fetchCities(userInput))[0];
+            let city;
+            const [cityName, province, country] = userInput
+                .split(',')
+                .map((item) => item.trim());
+            city = (
+                await _apiService
+                    .fetchCity(cityName, province, country)
+                    .then((response) => response.json())
+                    .then((data) => data.cities)
+                    .catch((error) => [{ error: error.message }])
+            )[0];
+
             if (city.error) {
                 return false;
             } else {

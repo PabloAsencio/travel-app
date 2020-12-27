@@ -2,6 +2,7 @@ const apiService = (function () {
     // TODO: Remove references to localhost from final version
     const server = 'http://localhost:8082/';
     const citiesEndpoint = 'listCities';
+    const singleCityEndpoint = 'city';
     const currentWeatherEndpoint = 'currentWeather';
     const weatherForecastEndpoint = 'forecast';
     const pictureEndpoint = 'pictures';
@@ -10,6 +11,15 @@ const apiService = (function () {
         const query = prepareCitiesQuery(city, province, country);
         if (query) {
             return fetch(server + citiesEndpoint + query);
+        } else {
+            return createErrorPromise('No results');
+        }
+    }
+
+    function fetchCity(city, province = '', country = '') {
+        const query = prepareCitiesQuery(city, province, country);
+        if (query) {
+            return fetch(server + singleCityEndpoint + query);
         } else {
             return createErrorPromise('No results');
         }
@@ -105,6 +115,7 @@ const apiService = (function () {
 
     return {
         fetchCities,
+        fetchCity,
         fetchCurrentWeather,
         fetchWeatherForecast,
         fetchPictures,

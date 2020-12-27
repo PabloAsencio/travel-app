@@ -5,9 +5,19 @@ const apiUsername = process.env.GEONAMES_USERNAME;
 const citiesAPI = (function () {
     let _countryCodeService;
 
-    function fetchCityList(request, response) {
+    function fetchCitiesStartingWith(request, response) {
         const query = getCityQuery(request);
 
+        fetchCities(query, request, response);
+    }
+
+    function fetchCitiesWithExactName(request, response) {
+        const query = getCityQuery(request, true);
+
+        fetchCities(query, request, response, true);
+    }
+
+    function fetchCities(query, request, response, exact = false) {
         if (query) {
             const url = apiBaseURL + query;
             axios
@@ -19,7 +29,13 @@ const citiesAPI = (function () {
                     };
                     if (cities && cities.length > 0) {
                         for (const city of cities) {
-                            result.cities.push(createCityObject(city));
+                            if (
+                                !exact ||
+                                city.name.toLowerCase() ==
+                                    request.query.city.toLowerCase()
+                            ) {
+                                result.cities.push(createCityObject(city));
+                            }
                         }
                     } else {
                         result.cities.push({ error: 'No results' });
@@ -50,7 +66,7 @@ const citiesAPI = (function () {
                 request.query.city
             }${request.query.province ? '&q=' + request.query.province : ''}${
                 request.query.country ? '&q=' + request.query.country : ''
-            }&cities=cities15000&type=json&maxRows=5&lang&=en&orderby=relevance&username=${apiUsername}`;
+            }&cities=cities1000&type=json&maxRows=5&lang=en&searchlang=en&orderby=relevance&username=${apiUsername}`;
         }
         return query;
     }
@@ -85,7 +101,8 @@ const citiesAPI = (function () {
         set countryCodeService(countryCodeService) {
             _countryCodeService = countryCodeService;
         },
-        fetchCityList,
+        fetchCitiesStartingWith,
+        fetchCitiesWithExactName,
     };
 })();
 

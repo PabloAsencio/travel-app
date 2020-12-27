@@ -37,7 +37,9 @@ app.get('/forecast', weatherAPI.fetchWeatherForecast);
 
 app.get('/pictures', picturesAPI.fetchPictures);
 
-app.get('/listCities', citiesAPI.fetchCityList);
+app.get('/listCities', citiesAPI.fetchCitiesStartingWith);
+
+app.get('/city', citiesAPI.fetchCitiesWithExactName);
 
 // *** SERVER SHUTDOWN ***
 // Gracefully close the system and save cache when termination signal is received
