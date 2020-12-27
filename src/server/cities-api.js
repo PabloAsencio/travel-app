@@ -12,29 +12,14 @@ const citiesAPI = (function () {
             const url = apiBaseURL + query;
             axios
                 .get(url)
-                .then((geonamesResponse) => {
-                    const cities = geonamesResponse.data.geonames;
+                .then((apiResponse) => {
+                    const cities = apiResponse.data.geonames;
                     const result = {
                         cities: [],
                     };
                     if (cities && cities.length > 0) {
                         for (const city of cities) {
-                            const country = _countryCodeService.getCountryName(
-                                city.countryCode
-                            );
-                            result.cities.push({
-                                completeName: `${city.name}${
-                                    city.name != city.adminName1
-                                        ? ', ' + city.adminName1
-                                        : ''
-                                }, ${country}`,
-                                city: city.name,
-                                province: city.adminName1,
-                                countryCode: city.countryCode,
-                                country: country,
-                                longitude: city.lng,
-                                latitude: city.lat,
-                            });
+                            result.cities.push(createCityObject(city));
                         }
                     } else {
                         result.cities.push({ error: 'No results' });
@@ -68,6 +53,21 @@ const citiesAPI = (function () {
             }&cities=cities15000&type=json&maxRows=5&lang&=en&orderby=relevance&username=${apiUsername}`;
         }
         return query;
+    }
+
+    function createCityObject(city) {
+        const country = _countryCodeService.getCountryName(city.countryCode);
+        return {
+            completeName: `${city.name}${
+                city.name != city.adminName1 ? ', ' + city.adminName1 : ''
+            }, ${country}`,
+            city: city.name,
+            province: city.adminName1,
+            countryCode: city.countryCode,
+            country: country,
+            longitude: city.lng,
+            latitude: city.lat,
+        };
     }
 
     return {
