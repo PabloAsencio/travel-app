@@ -73,15 +73,9 @@ const cityController = (function () {
                     if (!city.error) {
                         // Using an IIFE to prevent appState from being updated with the wrong data
                         (function () {
-                            // TODO: Make the server return the complete name as part of the city object
-                            const completeName = `${city.name}${
-                                city.name != city.province
-                                    ? ', ' + city.province
-                                    : ''
-                            }, ${city.country}`;
                             const cityData = city;
                             listItem.addEventListener('click', () => {
-                                inputElement.value = completeName;
+                                inputElement.value = cityData.completeName;
                                 updateState(cityData);
                                 _viewUpdater.clearCityList();
                             });

@@ -26,9 +26,7 @@ const viewUpdater = (function () {
         function createListItem(city, length) {
             const listItem = document.createElement('DIV');
             if (!city.error) {
-                const completeName = `${city.name}${
-                    city.name != city.province ? ', ' + city.province : ''
-                }, ${city.country}`;
+                const completeName = city.completeName;
                 const typedText = document.createElement('SPAN');
                 typedText.classList.add('typedText');
                 typedText.textContent = completeName.substr(0, length);

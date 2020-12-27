@@ -19,13 +19,19 @@ const geonamesAPI = (function () {
                     };
                     if (places && places.length > 0) {
                         for (const city of places) {
+                            const country = _countryInfoService.getCountryName(
+                                city.countryCode
+                            );
                             result.cities.push({
+                                completeName: `${city.name}${
+                                    city.name != city.adminName1
+                                        ? ', ' + city.adminName1
+                                        : ''
+                                }, ${country}`,
                                 name: city.name,
                                 province: city.adminName1,
                                 countryCode: city.countryCode,
-                                country: _countryInfoService.getCountryName(
-                                    city.countryCode
-                                ),
+                                country: country,
                                 lng: city.lng,
                                 lat: city.lat,
                             });
