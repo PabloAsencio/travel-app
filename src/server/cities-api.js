@@ -56,18 +56,29 @@ const citiesAPI = (function () {
     }
 
     function createCityObject(city) {
+        const cityName = capitalize(city.name);
+        const province = capitalize(city.adminName1);
         const country = _countryCodeService.getCountryName(city.countryCode);
         return {
-            completeName: `${city.name}${
-                city.name != city.adminName1 ? ', ' + city.adminName1 : ''
+            completeName: `${cityName}${
+                city.name != city.adminName1 ? ', ' + province : ''
             }, ${country}`,
-            city: city.name,
-            province: city.adminName1,
+            city: cityName,
+            province,
             countryCode: city.countryCode,
-            country: country,
+            country,
             longitude: city.lng,
             latitude: city.lat,
         };
+    }
+
+    // See https://www.digitalocean.com/community/tutorials/js-capitalizing-strings
+    function capitalize(name) {
+        return name.replace(/\w[^\s\-]*/g, (word) =>
+            word.replace(/^\w/, (firstCharacter) =>
+                firstCharacter.toUpperCase()
+            )
+        );
     }
 
     return {
