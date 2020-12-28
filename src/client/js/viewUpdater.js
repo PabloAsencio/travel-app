@@ -69,8 +69,11 @@ const viewUpdater = (function () {
         const autocompleteLists = document.getElementsByClassName(
             'autocomplete-items'
         );
-        for (const list of autocompleteLists) {
-            list.parentNode.removeChild(list);
+
+        for (let index = 0; index < autocompleteLists.length; index++) {
+            autocompleteLists[index].parentNode.removeChild(
+                autocompleteLists[index]
+            );
         }
     }
 
@@ -78,7 +81,7 @@ const viewUpdater = (function () {
         const photo = photos['pictures'][0]; // In the future all pictures should be shown in a carrousel
         const figure = document.getElementById('photo');
         const picture = figure.getElementsByTagName('picture')[0];
-        const img = picture.getElementsByTagName('img')[0];
+        const img = document.createElement('IMG');
         const caption = document.getElementById('caption');
         const source = document.createElement('SOURCE');
         source.setAttribute(
@@ -86,9 +89,11 @@ const viewUpdater = (function () {
             `${photo.imageURL} 1x, ${photo.largeImageURL} 2x`
         );
         source.setAttribute('type', 'image/jpeg');
-        img.parentNode.prepend(source);
+        picture.appendChild(source);
         img.setAttribute('src', photo.imageURL);
         img.setAttribute('alt', photo.subject);
+        img.setAttribute('type', 'image/jpeg');
+        picture.appendChild(img);
         caption.innerHTML = `${photo.subject}. Photo by <a href="${photo.userURL}">${photo.user}</a> at <a href="${photo.pageURL}"><img src="${logo}" alt="Pixabay"></a>`;
     }
     const weatherSection = document.getElementById('weather');

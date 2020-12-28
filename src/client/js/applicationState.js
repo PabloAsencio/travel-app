@@ -52,7 +52,7 @@ const applicationState = (function () {
 
     function setCountryCode(countryCode) {
         if (validateCountryCode(countryCode)) {
-            _countryCode = country;
+            _countryCode = countryCode;
         } else {
             _countryCode = '';
         }
