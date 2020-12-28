@@ -5,9 +5,19 @@ const apiUsername = process.env.GEONAMES_USERNAME;
 const citiesAPI = (function () {
     let _countryCodeService;
 
-    function fetchCityList(request, response) {
+    function fetchCitiesStartingWith(request, response) {
         const query = getCityQuery(request);
 
+        fetchCities(query, request, response);
+    }
+
+    function fetchCitiesWithExactName(request, response) {
+        const query = getCityQuery(request, true);
+
+        fetchCities(query, request, response, true);
+    }
+
+    function fetchCities(query, request, response, exact = false) {
         if (query) {
             const url = apiBaseURL + query;
             axios
@@ -19,7 +29,13 @@ const citiesAPI = (function () {
                     };
                     if (cities && cities.length > 0) {
                         for (const city of cities) {
-                            result.cities.push(createCityObject(city));
+                            if (
+                                !exact ||
+                                city.name.toLowerCase() ==
+                                    request.query.city.toLowerCase()
+                            ) {
+                                result.cities.push(createCityObject(city));
+                            }
                         }
                     } else {
                         result.cities.push({ error: 'No results' });
@@ -50,31 +66,43 @@ const citiesAPI = (function () {
                 request.query.city
             }${request.query.province ? '&q=' + request.query.province : ''}${
                 request.query.country ? '&q=' + request.query.country : ''
-            }&cities=cities15000&type=json&maxRows=5&lang&=en&orderby=relevance&username=${apiUsername}`;
+            }&cities=cities1000&type=json&maxRows=5&lang=en&searchlang=en&orderby=relevance&username=${apiUsername}`;
         }
         return query;
     }
 
     function createCityObject(city) {
+        const cityName = capitalize(city.name);
+        const province = capitalize(city.adminName1);
         const country = _countryCodeService.getCountryName(city.countryCode);
         return {
-            completeName: `${city.name}${
-                city.name != city.adminName1 ? ', ' + city.adminName1 : ''
+            completeName: `${cityName}${
+                city.name != city.adminName1 ? ', ' + province : ''
             }, ${country}`,
-            city: city.name,
-            province: city.adminName1,
+            city: cityName,
+            province,
             countryCode: city.countryCode,
-            country: country,
+            country,
             longitude: city.lng,
             latitude: city.lat,
         };
+    }
+
+    // See https://www.digitalocean.com/community/tutorials/js-capitalizing-strings
+    function capitalize(name) {
+        return name.replace(/\w[^\s\-]*/g, (word) =>
+            word.replace(/^\w/, (firstCharacter) =>
+                firstCharacter.toUpperCase()
+            )
+        );
     }
 
     return {
         set countryCodeService(countryCodeService) {
             _countryCodeService = countryCodeService;
         },
-        fetchCityList,
+        fetchCitiesStartingWith,
+        fetchCitiesWithExactName,
     };
 })();
 

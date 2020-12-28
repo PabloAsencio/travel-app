@@ -1,3 +1,14 @@
+// *** DEPENDENCIES ***
+// These are needed to make sure the application works on IE 11,
+// Which in turn is needed to be able to test the application on a
+// browser that does not support the date input element
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+// TODO: Review handling of http status codes returned from fetch
+// See https://www.npmjs.com/package/whatwg-fetch#handling-http-error-statuses
+import 'whatwg-fetch';
+
+// *** COMPONENTS ***
 import { app } from './js/app';
 import { applicationState } from './js/applicationState';
 import { apiService } from './js/apiService';
@@ -5,9 +16,11 @@ import { dateController } from './js/dateController';
 import { viewUpdater } from './js/viewUpdater';
 import { cityController } from './js/cityController';
 
+// *** STYLESHEETS ***
 import './styles/style.scss';
 import './styles/form.scss';
 
+// *** CONFIGURE COMPONENTS ***
 // Configure dependencies for the viewUpdater
 viewUpdater.applicationState = applicationState;
 
