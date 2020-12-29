@@ -15,6 +15,7 @@ import { apiService } from './js/apiService';
 import { dateController } from './js/dateController';
 import { viewUpdater } from './js/viewUpdater';
 import { cityController } from './js/cityController';
+import { dateInputFactory } from './js/dateInputFactory';
 
 // *** STYLESHEETS ***
 import './styles/style.scss';
@@ -24,9 +25,13 @@ import './styles/form.scss';
 // Configure dependencies for the viewUpdater
 viewUpdater.applicationState = applicationState;
 
+// Configure dependencies for the dateInputFactory
+dateInputFactory.viewUpdater = viewUpdater;
+
 // Configure dependencies for the date controller
 dateController.applicationState = applicationState;
 dateController.viewUpdater = viewUpdater;
+dateController.dateInputFactory = dateInputFactory;
 
 // Configure dependencies for the dropdown list
 cityController.apiService = apiService;

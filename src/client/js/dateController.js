@@ -1,8 +1,9 @@
 const dateController = (function () {
     let _applicationState;
     let _viewUpdater;
-    const startDateInput = document.getElementById('startDate');
-    const endDateInput = document.getElementById('endDate');
+    let _dateInputFactory;
+    let startDateInput;
+    let endDateInput;
     const millisecondsInOneDay = 24 * 3600 * 1000;
     const today = getTodaysDate();
     const tomorrow = new Date(today.getTime() + millisecondsInOneDay);
@@ -22,17 +23,22 @@ const dateController = (function () {
     }
 
     function initializeState() {
+        startDateInput = _dateInputFactory.createDateInput(
+            'startDate',
+            'Start Date'
+        );
         startDateInput.value = getDateAsString(today);
         _applicationState.startDate = startDateInput.value;
+        endDateInput = _dateInputFactory.createDateInput('endDate', 'End Date');
         endDateInput.value = getDateAsString(tomorrow);
         _applicationState.endDate = endDateInput.value;
-        _applicationState.duration = 1;
+        _applicationState.duration = 2;
         _applicationState.daysToTrip = 0;
     }
 
     function getValidatedDates() {
-        let startDate = new Date(startDateInput.value.split('-'));
-        let endDate = new Date(endDateInput.value.split('-'));
+        let startDate = new Date(startDateInput.value);
+        let endDate = new Date(endDateInput.value);
         const result = { startDate, endDate };
 
         if (startDate.getTime() < today.getTime()) {
@@ -53,10 +59,8 @@ const dateController = (function () {
     function updateState(newState) {
         if (!newState.error) {
             const daysToTrip = getDifferenceInDays(today, newState.startDate);
-            const duration = getDifferenceInDays(
-                newState.startDate,
-                newState.endDate
-            );
+            const duration =
+                getDifferenceInDays(newState.startDate, newState.endDate) + 1;
             _applicationState.startDate = getDateAsString(newState.startDate);
             _applicationState.endDate = getDateAsString(newState.startDate);
             _applicationState.daysToTrip = daysToTrip;
@@ -107,6 +111,9 @@ const dateController = (function () {
         },
         set viewUpdater(viewUpdater) {
             _viewUpdater = viewUpdater;
+        },
+        set dateInputFactory(dateInputFactory) {
+            _dateInputFactory = dateInputFactory;
         },
         start: () => {
             setDateFields();
