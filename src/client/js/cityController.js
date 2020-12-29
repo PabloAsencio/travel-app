@@ -42,6 +42,7 @@ const cityController = (function () {
     }
 
     async function fetchCity() {
+        _viewUpdater.clearCityError();
         const userInput = inputElement.value.trim();
         if (userInput) {
             let city;
@@ -57,12 +58,14 @@ const cityController = (function () {
             )[0];
 
             if (city.error) {
+                _viewUpdater.showCityError(city.error);
                 return false;
             } else {
                 updateState(city);
                 return isValidCity();
             }
         }
+        _viewUpdater.showCityError('Please enter the name of a city');
         return false;
     }
 
@@ -70,6 +73,7 @@ const cityController = (function () {
         const userInput = inputElement.value.trim();
         clearState();
         _viewUpdater.clearCityList();
+        _viewUpdater.clearCityError();
         if (userInput) {
             _currentFocus = -1;
             const cities = await fetchCities(userInput);
