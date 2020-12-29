@@ -16,8 +16,10 @@ const dateController = (function () {
     }
 
     function validateDates(event) {
+        _viewUpdater.clearDateErrors();
         const validatedDates = getValidatedDates(event);
         updateState(validatedDates);
+        updateErrorMessages(validatedDates);
         _viewUpdater.updateDateView();
         return !validatedDates.hasOwnProperty('error');
     }
@@ -42,13 +44,18 @@ const dateController = (function () {
         const result = { startDate, endDate };
 
         if (startDate.getTime() < today.getTime()) {
-            result.error = 'The start date cannot be in the past.';
+            result.error = {};
+            result.error.startDate = 'The start date cannot be in the past.';
             result.startDate = '';
-        } else if (
+        }
+        if (
             endDate.getTime() < startDate.getTime() ||
             endDate.getTime() < today.getTime()
         ) {
-            result.error =
+            if (!result.error) {
+                result.error = {};
+            }
+            result.error.endDate =
                 'The end date cannot be earlier than the start date.';
             result.endDate = '';
         }
@@ -74,6 +81,20 @@ const dateController = (function () {
                 : '';
             _applicationState.daysToTrip = 0;
             _applicationState.duration = 1;
+        }
+    }
+
+    function updateErrorMessages(newState) {
+        if (newState.error) {
+            if (!newState.startDate) {
+                _viewUpdater.showDateError(
+                    'startDate',
+                    newState.error.startDate
+                );
+            }
+            if (!newState.endDate) {
+                _viewUpdater.showDateError('endDate', newState.error.endDate);
+            }
         }
     }
 

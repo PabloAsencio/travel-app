@@ -174,9 +174,11 @@ const viewUpdater = (function () {
         errorContainer.textContent = message;
     }
 
-    function clearDateError(id) {
-        const errorContainer = document.getElementById(id + '-error');
-        errorContainer.textContent = '';
+    function clearDateErrors() {
+        const startDateError = document.getElementById('startDate-error');
+        const endDateError = document.getElementById('endDate-error');
+        startDateError.textContent = '';
+        endDateError.textContent = '';
     }
 
     function createNewCityList() {
@@ -368,7 +370,7 @@ const viewUpdater = (function () {
         populateDays,
         updateDateView,
         showDateError,
-        clearDateError,
+        clearDateErrors,
         createNewCityList,
         setActiveCity,
         clearCityList,
