@@ -169,6 +169,16 @@ const viewUpdater = (function () {
             (_applicationState.duration != 1 ? 's' : '');
     }
 
+    function showDateError(id, message) {
+        const errorContainer = document.getElementById(id + '-error');
+        errorContainer.textContent = message;
+    }
+
+    function clearDateError(id) {
+        const errorContainer = document.getElementById(id + '-error');
+        errorContainer.textContent = '';
+    }
+
     function createNewCityList() {
         const listFragment = document.createDocumentFragment();
         const cityList = document.createElement('DIV');
@@ -228,6 +238,16 @@ const viewUpdater = (function () {
                 autocompleteLists[index]
             );
         }
+    }
+
+    function showCityError(message) {
+        const errorContainer = document.getElementById('city-error');
+        errorContainer.textContent = message;
+    }
+
+    function clearCityError() {
+        const errorContainer = document.getElementById('city-error');
+        errorContainer.textContent = '';
     }
 
     function updatePicture(photos) {
@@ -346,10 +366,14 @@ const viewUpdater = (function () {
         renderFallbackDateInput,
         populateYears,
         populateDays,
+        updateDateView,
+        showDateError,
+        clearDateError,
         createNewCityList,
         setActiveCity,
         clearCityList,
-        updateDateView,
+        clearCityError,
+        showCityError,
         updatePicture,
         updateCurrentWeather,
         updateWeatherForecast,
