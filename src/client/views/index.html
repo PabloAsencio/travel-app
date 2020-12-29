@@ -13,6 +13,7 @@
             <div class="holder headline">Travel App</div>
             <!-- This autocomplete form is based on https://www.w3schools.com/howto/howto_js_autocomplete.asp-->
             <form id="tripInfo" action="#" autocomplete="off">
+                <p id="city-error"></p>
                 <div class="autocomplete">
                     <label for="city">Destination</label>
                     <input
@@ -23,8 +24,12 @@
                         placeholder="City"
                     />
                 </div>
-                <div class="date" id="startDate__container"></div>
-                <div class="date" id="endDate__container"></div>
+                <div class="date" id="startDate__container">
+                    <p id="startDate-error"></p>
+                </div>
+                <div class="date" id="endDate__container">
+                    <p id="endDate-error"></p>
+                </div>
                 <input type="submit" value="Submit" id="submit" />
             </form>
             <div>Your trip is in <span id="daysToTrip">0 days</span></div>
