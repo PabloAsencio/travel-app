@@ -30,6 +30,7 @@ const app = (function () {
             );
             const pictures = _apiService.fetchPictures(
                 _applicationState.city,
+                _applicationState.province,
                 _applicationState.country
             );
 
