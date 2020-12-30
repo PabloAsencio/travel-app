@@ -253,9 +253,11 @@ const viewUpdater = (function () {
     }
 
     function updatePicture(photos) {
+        clearPictureError();
         const photo = photos['pictures'][0]; // In the future all pictures should be shown in a carrousel
         const figure = document.getElementById('photo');
         const picture = figure.getElementsByTagName('picture')[0];
+        picture.innerHTML = '';
         const img = document.createElement('IMG');
         const caption = document.getElementById('caption');
         const source = document.createElement('SOURCE');
@@ -271,6 +273,17 @@ const viewUpdater = (function () {
         picture.appendChild(img);
         caption.innerHTML = `${photo.subject}. Photo by <a href="${photo.userURL}">${photo.user}</a> at <a href="${photo.pageURL}"><img src="${logo}" alt="Pixabay"></a>`;
     }
+
+    function showPictureError(message) {
+        const error = document.getElementById('photo-error');
+        error.textContent = message;
+    }
+
+    function clearPictureError() {
+        const error = document.getElementById('photo-error');
+        error.textContent = '';
+    }
+
     const weatherSection = document.getElementById('weather');
 
     function updateCurrentWeather(currentWeather) {
@@ -377,6 +390,7 @@ const viewUpdater = (function () {
         clearCityError,
         showCityError,
         updatePicture,
+        showPictureError,
         updateCurrentWeather,
         updateWeatherForecast,
         clearWeatherSection,

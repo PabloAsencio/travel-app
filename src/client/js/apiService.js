@@ -48,8 +48,8 @@ const apiService = (function () {
         }
     }
 
-    function fetchPictures(city, country) {
-        const query = preparePicturesQuery(city, country);
+    function fetchPictures(city, province, country) {
+        const query = preparePicturesQuery(city, province, country);
         if (query) {
             return fetch(server + pictureEndpoint + query);
         } else {
@@ -97,11 +97,13 @@ const apiService = (function () {
         return query;
     }
 
-    function preparePicturesQuery(city, country) {
+    function preparePicturesQuery(city, province, country) {
         let query = '';
-        if (city && country) {
+        if (city && province && country) {
             query = `?city=${encodeURIComponent(
                 city
+            )}&province=${encodeURIComponent(
+                province
             )}&country=${encodeURIComponent(country)}`;
         }
         return query;

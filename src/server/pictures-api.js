@@ -6,65 +6,115 @@ const picturesAPI = (function () {
     let _cache;
     const suffix = '-picture';
 
-    function fetchPictures(request, response) {
-        if (request.query.city && request.query.country) {
-            const city = `${request.query.city} ${request.query.country}`;
-            if (_cache.hasKey(city + suffix)) {
-                response.send(_cache.get(city + suffix));
-            } else {
-                axios
-                    .get(makeURL(city))
-                    .then((cityAPIResponse) => {
-                        if (cityAPIResponse.data.total > 0) {
-                            handleSuccess(
-                                cityAPIResponse,
-                                makeSubjectLine(
-                                    request.query.country,
-                                    request.query.city
-                                ),
-                                city,
-                                response
-                            );
-                        } else {
-                            axios
-                                .get(makeURL(request.query.country))
-                                .then((countryAPIResponse) => {
-                                    if (countryAPIResponse.data.total > 0) {
-                                        handleSuccess(
-                                            countryAPIResponse,
-                                            makeSubjectLine(
-                                                request.query.country
-                                            ),
-                                            city,
-                                            response
-                                        );
-                                    } else {
-                                        response.status(404).send({
-                                            error:
-                                                'No results found for the given location',
-                                        });
-                                    }
-                                });
-                        }
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                        response.status(500).send({
-                            error: 'Internal Server Error',
-                        });
-                    });
-            }
+    async function fetchPictures(request, response) {
+        const threshold = 5;
+        const city = request.query.city;
+        const province = request.query.province;
+        const country = request.query.country;
+        const searchKey = `${city} ${province} ${country}`;
+        let pictures = [];
+        let newPictures = [];
+        const queries = [
+            [city, province, country],
+            [city, province],
+            [city, country],
+            [province, country],
+            [country],
+        ];
+
+        if (_cache.hasKey(searchKey + suffix)) {
+            response.send(_cache.get(searchKey + suffix));
         } else {
-            response.status(400).send({
-                error: 'Bad Request: missing parameters',
-            });
+            try {
+                for (const query of queries) {
+                    if (pictures.length < threshold) {
+                        const queryKey = query.join(' ') + suffix;
+                        if (_cache.hasKey(queryKey)) {
+                            newPictures = _cache.get(queryKey).pictures;
+                            pictures = pictures.concat(newPictures);
+                        } else {
+                            newPictures = await queryAPI(query);
+                            _cache.set(queryKey, { pictures: newPictures });
+                            pictures = pictures.concat(newPictures);
+                        }
+                    } else {
+                        break;
+                    }
+                }
+
+                if (pictures.length > 0) {
+                    if (pictures.length > threshold) {
+                        pictures = pictures.slice(0, threshold);
+                    }
+                    _cache.set(searchKey + suffix, { pictures });
+                    response.send({ pictures });
+                } else {
+                    response.status(404).send({
+                        error: 'We found no pictures for this city. Sorry!',
+                    });
+                }
+            } catch (error) {
+                handleError(error);
+            }
+
+            function queryAPI(query) {
+                const pictures = axios
+                    .get(makeURL(query.join(' ')))
+                    .then((apiResponse) => {
+                        return handleSuccess(
+                            apiResponse,
+                            makeSubjectLine(query)
+                        );
+                    });
+                return pictures;
+            }
+
+            function handleError(error) {
+                let status;
+                let message;
+                // See https://github.com/axios/axios#handling-errors
+                if (error.response) {
+                    // The request was made and the server responded with a status code
+                    // that falls out of the range of 2xx
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                    if (error.response.status == 429) {
+                        status = 429;
+                        message =
+                            'We have reached our limit of pictures to show. Please try again tomorrow.';
+                    } else {
+                        status = 500;
+                        message =
+                            'Something went wrong fetching your picture. Please try again later.';
+                    }
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                    // http.ClientRequest in node.js
+                    status = 504;
+                    message =
+                        'The picture server did not respond. Please try again later.';
+                    console.log(error.request);
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log('Error', error.message);
+                    status = 500;
+                    message =
+                        'Something went wrong fetching your picture. Please try again later.';
+                }
+                console.log(error.config);
+
+                response.status(status).send({ error: message });
+            }
         }
     }
 
-    function handleSuccess(apiResponse, subject, key, response) {
-        const result = makeResponseObject(apiResponse.data, subject);
-        _cache.set(key + suffix, result);
-        response.send(result);
+    function handleSuccess(apiResponse, subject) {
+        const pictures = apiResponse.data.hits.map((hit) =>
+            makePictureObject(hit, subject)
+        );
+        return pictures;
     }
 
     function makeURL(query) {
@@ -73,16 +123,8 @@ const picturesAPI = (function () {
         )}&image_type=photo&category=travel+places+building&per_page=3&safesearch=true&orientation=horizontal`;
     }
 
-    function makeSubjectLine(country, city = '') {
-        return `${city ? city + ', ' : ''}${country}`;
-    }
-
-    function makeResponseObject(responseData, subject) {
-        return {
-            pictures: responseData.hits.map((hit) =>
-                makePictureObject(hit, subject)
-            ),
-        };
+    function makeSubjectLine(query) {
+        return query.join(', ');
     }
 
     function makePictureObject(picture, subject) {
