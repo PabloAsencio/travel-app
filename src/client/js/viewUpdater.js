@@ -256,6 +256,7 @@ const viewUpdater = (function () {
         const photo = photos['pictures'][0]; // In the future all pictures should be shown in a carrousel
         const figure = document.getElementById('photo');
         const picture = figure.getElementsByTagName('picture')[0];
+        picture.innerHTML = '';
         const img = document.createElement('IMG');
         const caption = document.getElementById('caption');
         const source = document.createElement('SOURCE');
