@@ -50,7 +50,7 @@ const picturesAPI = (function () {
                     response.send({ pictures });
                 } else {
                     response.status(404).send({
-                        error: 'No results found for the given location',
+                        error: 'We found no pictures for this city. Sorry!',
                     });
                 }
             } catch (error) {
@@ -70,6 +70,8 @@ const picturesAPI = (function () {
             }
 
             function handleError(error) {
+                let status;
+                let message;
                 // See https://github.com/axios/axios#handling-errors
                 if (error.response) {
                     // The request was made and the server responded with a status code
@@ -77,16 +79,33 @@ const picturesAPI = (function () {
                     console.log(error.response.data);
                     console.log(error.response.status);
                     console.log(error.response.headers);
+                    if (error.response.status == 429) {
+                        status = 429;
+                        message =
+                            'We have reached our limit of pictures to show. Please try again tomorrow.';
+                    } else {
+                        status = 500;
+                        message =
+                            'Something went wrong fetching your picture. Please try again later.';
+                    }
                 } else if (error.request) {
                     // The request was made but no response was received
                     // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
                     // http.ClientRequest in node.js
+                    status = 504;
+                    message =
+                        'The picture server did not respond. Please try again later.';
                     console.log(error.request);
                 } else {
                     // Something happened in setting up the request that triggered an Error
                     console.log('Error', error.message);
+                    status = 500;
+                    message =
+                        'Something went wrong fetching your picture. Please try again later.';
                 }
                 console.log(error.config);
+
+                response.status(status).send({ error: message });
             }
         }
     }
