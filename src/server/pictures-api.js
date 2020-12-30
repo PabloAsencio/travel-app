@@ -13,6 +13,7 @@ const picturesAPI = (function () {
         const country = request.query.country;
         const searchKey = `${city} ${province} ${country}`;
         let pictures = [];
+        let newPictures = [];
         const queries = [
             [city, province, country],
             [city, province],
@@ -27,7 +28,15 @@ const picturesAPI = (function () {
             try {
                 for (const query of queries) {
                     if (pictures.length < threshold) {
-                        pictures = pictures.concat(await queryAPI(query));
+                        const queryKey = query.join(' ') + suffix;
+                        if (_cache.hasKey(queryKey)) {
+                            newPictures = _cache.get(queryKey).pictures;
+                            pictures = pictures.concat(newPictures);
+                        } else {
+                            newPictures = await queryAPI(query);
+                            _cache.set(queryKey, { pictures: newPictures });
+                            pictures = pictures.concat(newPictures);
+                        }
                     } else {
                         break;
                     }
