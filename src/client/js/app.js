@@ -48,9 +48,16 @@ const app = (function () {
                 )
                 .catch((error) => console.log(error.message));
             pictures
-                .then((response) => response.json())
+                .then(async (response) => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        const data = await response.json();
+                        throw new Error(data.error);
+                    }
+                })
                 .then((pictures) => _viewUpdater.updatePicture(pictures))
-                .catch((error) => console.log(error.message));
+                .catch((error) => _viewUpdater.showPictureError(error.message));
         } else {
             console.log('Something went wrong!');
         }
