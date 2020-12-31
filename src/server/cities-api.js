@@ -90,8 +90,8 @@ const citiesAPI = (function () {
 
     // See https://www.digitalocean.com/community/tutorials/js-capitalizing-strings
     function capitalize(name) {
-        return name.replace(/\w[^\s\-]*/g, (word) =>
-            word.replace(/^\w/, (firstCharacter) =>
+        return name.replace(/\p{Script_Extensions=Latin}[^\s\-]*/gu, (word) =>
+            word.replace(/^\p{Script_Extensions=Latin}/u, (firstCharacter) =>
                 firstCharacter.toUpperCase()
             )
         );
