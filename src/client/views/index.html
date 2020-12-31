@@ -9,37 +9,55 @@
         />
     </head>
     <body>
-        <div id="app">
-            <div class="holder headline">Travel App</div>
-            <!-- This autocomplete form is based on https://www.w3schools.com/howto/howto_js_autocomplete.asp-->
-            <form id="tripInfo" action="#" autocomplete="off">
-                <p id="city-error"></p>
-                <div class="autocomplete">
-                    <label for="city">Destination</label>
-                    <input
-                        class="form__city"
-                        type="text"
-                        id="city"
-                        name="city"
-                        placeholder="City"
-                    />
-                </div>
-                <div class="date" id="startDate__container">
-                    <p id="startDate-error"></p>
-                </div>
-                <div class="date" id="endDate__container">
-                    <p id="endDate-error"></p>
-                </div>
-                <input type="submit" value="Submit" id="submit" />
-            </form>
-            <div>Your trip is in <span id="daysToTrip">0 days</span></div>
-            <div>Duration of the trip: <span id="duration">1 day</span></div>
-            <section id="weather" class="weather"></section>
-            <p id="photo-error"></p>
-            <figure id="photo">
-                <picture></picture>
-                <figcaption id="caption"></figcaption>
-            </figure>
-        </div>
+        <header>
+            <h1>Travel App</h1>
+        </header>
+        <main>
+            <header>
+                <h2>Where do you want to travel next?</h2>
+            </header>
+            <section>
+                <form id="tripInfo" action="#" autocomplete="off">
+                    <p id="city-error"></p>
+                    <!-- This input element with autocomplete functionality is based on https://www.w3schools.com/howto/howto_js_autocomplete.asp-->
+                    <div class="autocomplete">
+                        <label for="city">Destination</label>
+                        <input
+                            class="form__city"
+                            type="text"
+                            id="city"
+                            name="city"
+                            placeholder="City"
+                        />
+                    </div>
+                    <div class="date" id="startDate__container">
+                        <p id="startDate-error"></p>
+                    </div>
+                    <div class="date" id="endDate__container">
+                        <p id="endDate-error"></p>
+                    </div>
+                    <input type="submit" value="Submit" id="submit" />
+                </form>
+            </section>
+            <section>
+                <article>
+                    <div>
+                        Your trip is in <span id="daysToTrip">0 days</span>
+                    </div>
+                    <div>
+                        Duration of the trip: <span id="duration">1 day</span>
+                    </div>
+                    <section id="weather" class="weather"></section>
+                    <p id="photo-error"></p>
+                    <figure id="photo">
+                        <picture></picture>
+                        <figcaption id="caption"></figcaption>
+                    </figure>
+                </article>
+            </section>
+        </main>
+        <footer>
+            <p>&copy; Pablo Asencio Sánchez</p>
+        </footer>
     </body>
 </html>
