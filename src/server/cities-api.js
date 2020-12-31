@@ -62,10 +62,16 @@ const citiesAPI = (function () {
             // The province and country parameters are expected to be a province/state name and a country respectively
             // but there is no guarantee that they actually are. Province could be a country and vice versa. That's why
             // they are sent to the api as a q parameter instead of a more specific one.
-            query = `${exact ? 'name' : 'name_startsWith'}=${
+            query = `${exact ? 'name' : 'name_startsWith'}=${encodeURIComponent(
                 request.query.city
-            }${request.query.province ? '&q=' + request.query.province : ''}${
-                request.query.country ? '&q=' + request.query.country : ''
+            )}${
+                request.query.province
+                    ? '&q=' + encodeURIComponent(request.query.province)
+                    : ''
+            }${
+                request.query.country
+                    ? '&q=' + encodeURIComponent(request.query.country)
+                    : ''
             }&cities=cities1000&type=json&maxRows=5&lang=en&searchlang=en&orderby=relevance&username=${apiUsername}`;
         }
         return query;
