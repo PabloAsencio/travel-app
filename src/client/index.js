@@ -50,8 +50,8 @@ app.start();
 // Logically this should actually be setup inside the app.start method called above
 // It is here to satisfy the requirement that at least one event listener
 // must be added in index.js
-const form = document.getElementById('tripInfo');
-const submitButton = document.getElementById('submit');
+const form = document.getElementById('tripSelection__form');
+const submitButton = document.getElementById('tripSelection__submit');
 form.addEventListener('submit', app.handleSubmit);
 submitButton.addEventListener('submit', app.handleSubmit);
 submitButton.addEventListener('click', app.handleSubmit);

@@ -14,14 +14,22 @@
             <h1>Travel App</h1>
         </header>
         <main>
-            <section>
-                <header>
+            <section class="tripSelection">
+                <header class="tripSelection__header">
                     <h2>Where do you want to travel next?</h2>
                 </header>
-                <form id="tripInfo" action="#" autocomplete="off">
-                    <p id="city-error"></p>
+                <form
+                    class="form"
+                    id="tripSelection__form"
+                    action="#"
+                    autocomplete="off"
+                >
                     <!-- This input element with autocomplete functionality is based on https://www.w3schools.com/howto/howto_js_autocomplete.asp-->
                     <div class="autocomplete">
+                        <p
+                            class="form__error error"
+                            id="tripSelection__error--city"
+                        ></p>
                         <label for="city">Destination</label>
                         <input
                             class="form__city"
@@ -31,31 +39,73 @@
                             placeholder="City"
                         />
                     </div>
-                    <div class="date" id="startDate__container">
-                        <p id="startDate-error"></p>
+                    <div
+                        class="form__date"
+                        id="tripSelection__container--startDate"
+                    >
+                        <p
+                            class="form__error error"
+                            id="tripSelection__error--startDate"
+                        ></p>
                     </div>
-                    <div class="date" id="endDate__container">
-                        <p id="endDate-error"></p>
+                    <div
+                        class="form__date"
+                        id="tripSelection__container--endDate"
+                    >
+                        <p
+                            class="form__error error"
+                            id="tripSelection__error--endDate"
+                        ></p>
                     </div>
-                    <input type="submit" value="Submit" id="submit" />
+                    <input
+                        type="submit"
+                        value="Submit"
+                        id="tripSelection__submit"
+                    />
                 </form>
             </section>
-            <section>
-                <h2>Your next trip</h2>
-                <article>
-                    <h3>Destination</h3>
-                    <div>
-                        Your trip is in <span id="daysToTrip">0 days</span>
+            <section id="newTrip" class="newTrip">
+                <header class="newTrip__header">
+                    <h2>Your new trip</h2>
+                </header>
+                <article class="trip">
+                    <header class="trip__header">
+                        <h3
+                            class="trip__header--destination"
+                            id="newTrip__destination"
+                        >
+                            Destination
+                        </h3>
+                        <p class="trip__header--country" id="newTrip__country">
+                            Province, COUNTRY
+                        </p>
+                    </header>
+                    <section class="time">
+                        <p class="time__date" id="newTrip__startDate">From:</p>
+                        <p class="time__date" id="newTrip__endDate">To:</p>
+                        <p class="time__duration">
+                            Duration of the trip:
+                            <span id="newTrip__duration">1 day</span>
+                        </p>
+                        <p class="time__daysToTrip">
+                            Your trip is in
+                            <span id="newTrip__daysToTrip">0 days</span>
+                        </p>
+                    </section>
+                    <section id="newTrip__weather" class="weather"></section>
+                    <div class="photo" id="newTrip__photo">
+                        <p
+                            class="photo__error error"
+                            id="newTrip__photo--error"
+                        ></p>
+                        <figure class="photo__figure">
+                            <picture class="photo__picture"></picture>
+                            <figcaption
+                                class="photo__caption"
+                                id="newTrip__photo--caption"
+                            ></figcaption>
+                        </figure>
                     </div>
-                    <div>
-                        Duration of the trip: <span id="duration">1 day</span>
-                    </div>
-                    <section id="weather" class="weather"></section>
-                    <p id="photo-error"></p>
-                    <figure id="photo">
-                        <picture></picture>
-                        <figcaption id="caption"></figcaption>
-                    </figure>
                 </article>
             </section>
         </main>

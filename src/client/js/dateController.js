@@ -69,7 +69,7 @@ const dateController = (function () {
             const duration =
                 getDifferenceInDays(newState.startDate, newState.endDate) + 1;
             _applicationState.startDate = getDateAsString(newState.startDate);
-            _applicationState.endDate = getDateAsString(newState.startDate);
+            _applicationState.endDate = getDateAsString(newState.endDate);
             _applicationState.daysToTrip = daysToTrip;
             _applicationState.duration = duration;
         } else {

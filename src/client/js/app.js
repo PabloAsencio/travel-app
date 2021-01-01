@@ -58,6 +58,7 @@ const app = (function () {
                 })
                 .then((pictures) => _viewUpdater.updatePicture(pictures))
                 .catch((error) => _viewUpdater.showPictureError(error.message));
+            _viewUpdater.updateNewTrip();
         } else {
             console.log('Something went wrong!');
         }

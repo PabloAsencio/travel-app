@@ -19,7 +19,7 @@ const dateInputFactory = (function () {
 
     function createNativeDateInput(id, labelText) {
         _viewUpdater.renderNativeDateInput(id, labelText);
-        const input = document.getElementById(id);
+        const input = document.getElementById('tripSelection__' + id);
 
         function addEventListener(event, callback) {
             input.addEventListener(event, callback);
@@ -40,10 +40,18 @@ const dateInputFactory = (function () {
     function createFallbackDateInput(id, labelText) {
         _viewUpdater.renderFallbackDateInput(id, labelText);
         // define variables
-        const fallBackDateInput = document.getElementById(id);
-        const yearSelect = document.getElementById(id + '__year');
-        const monthSelect = document.getElementById(id + '__month');
-        const daySelect = document.getElementById(id + '__day');
+        const fallBackDateInput = document.getElementById(
+            'tripSelection__' + id
+        );
+        const yearSelect = document.getElementById(
+            'tripSelection__' + id + '--year'
+        );
+        const monthSelect = document.getElementById(
+            'tripSelection__' + id + '--month'
+        );
+        const daySelect = document.getElementById(
+            'tripSelection__' + id + '--day'
+        );
         let previousDay = 1;
 
         // populate the days and years dynamically
