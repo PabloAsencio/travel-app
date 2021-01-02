@@ -32,13 +32,14 @@ const viewUpdater = (function () {
         fragment.appendChild(label);
         const fallBackDateInput = document.createElement('DIV');
         fallBackDateInput.id = 'tripSelection__' + id;
+        fallBackDateInput.classList.add('form__date--fallback');
         fallBackDateInput.innerHTML = `
-          <span>
+          <span class="form__select">
             <label for="tripSelection__${id}--day">Day:</label>
             <select id="tripSelection__${id}--day"" name="tripSelection__${id}--day"">
             </select>
           </span>
-          <span>
+          <span class="form__select">
             <label for="tripSelection__${id}--month">Month:</label>
             <select id="tripSelection__${id}--month" name="tripSelection__${id}--month">
               <option value="01" selected>January</option>
@@ -55,7 +56,7 @@ const viewUpdater = (function () {
               <option value="12">December</option>
             </select>
           </span>
-          <span>
+          <span class="form__select">
             <label for="tripSelection__${id}--year">Year:</label>
             <select id="tripSelection__${id}--year" name="tripSelection__${id}--year">
             </select>

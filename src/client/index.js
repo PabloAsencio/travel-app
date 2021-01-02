@@ -19,6 +19,7 @@ import { dateInputFactory } from './js/dateInputFactory';
 
 // *** STYLESHEETS ***
 import './styles/resets.scss';
+import './styles/layout.scss';
 import './styles/form.scss';
 
 // *** CONFIGURE COMPONENTS ***

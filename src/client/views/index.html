@@ -25,22 +25,23 @@
                     autocomplete="off"
                 >
                     <!-- This input element with autocomplete functionality is based on https://www.w3schools.com/howto/howto_js_autocomplete.asp-->
-                    <div class="autocomplete">
+                    <div class="form__field form__city">
                         <p
                             class="form__error error"
                             id="tripSelection__error--city"
                         ></p>
                         <label for="city">Destination</label>
-                        <input
-                            class="form__city"
-                            type="text"
-                            id="city"
-                            name="city"
-                            placeholder="City"
-                        />
+                        <div class="autocomplete">
+                            <input
+                                type="text"
+                                id="city"
+                                name="city"
+                                placeholder="City"
+                            />
+                        </div>
                     </div>
                     <div
-                        class="form__date"
+                        class="form__date form__field form__date--start"
                         id="tripSelection__container--startDate"
                     >
                         <p
@@ -49,7 +50,7 @@
                         ></p>
                     </div>
                     <div
-                        class="form__date"
+                        class="form__date form__field form__date--end"
                         id="tripSelection__container--endDate"
                     >
                         <p
@@ -58,6 +59,7 @@
                         ></p>
                     </div>
                     <input
+                        class="form__submit"
                         type="submit"
                         value="Submit"
                         id="tripSelection__submit"
