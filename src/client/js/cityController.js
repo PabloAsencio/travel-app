@@ -131,7 +131,7 @@ const cityController = (function () {
                     if (_currentFocus > -1 && cities.length > _currentFocus) {
                         cities[_currentFocus].click();
                     } else {
-                        document.forms['tripInfo'].requestSubmit(
+                        document.forms['tripSelection__form'].requestSubmit(
                             document.getElementById('submit')
                         );
                         _viewUpdater.clearCityList();

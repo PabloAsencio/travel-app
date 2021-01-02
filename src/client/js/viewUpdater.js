@@ -5,16 +5,17 @@ const viewUpdater = (function () {
     const cityInputElement = document.getElementById('city');
 
     function renderNativeDateInput(id, labelText) {
-        const container = document.getElementById(id + '__container');
+        const container = document.getElementById(
+            'tripSelection__container--' + id
+        );
         const fragment = document.createDocumentFragment();
         const label = document.createElement('LABEL');
-        label.setAttribute('for', id);
+        label.setAttribute('for', 'tripSelection__' + id);
         label.textContent = labelText;
         fragment.appendChild(label);
         const input = document.createElement('INPUT');
         input.type = 'date';
-        input.id = id;
-        input.name = id;
+        input.id = 'tripSelection__' + id;
         fragment.appendChild(input);
         container.appendChild(fragment);
     }
@@ -22,22 +23,24 @@ const viewUpdater = (function () {
     // This fallback date input is based on
     // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date#Handling_browser_support
     function renderFallbackDateInput(id, labelText) {
-        const container = document.getElementById(id + '__container');
+        const container = document.getElementById(
+            'tripSelection__container--' + id
+        );
         const fragment = document.createDocumentFragment();
         const label = document.createElement('P');
         label.textContent = labelText;
         fragment.appendChild(label);
         const fallBackDateInput = document.createElement('DIV');
-        fallBackDateInput.id = id;
+        fallBackDateInput.id = 'tripSelection__' + id;
         fallBackDateInput.innerHTML = `
           <span>
-            <label for="${id}__day">Day:</label>
-            <select id="${id}__day" name="${id}__day">
+            <label for="tripSelection__${id}--day">Day:</label>
+            <select id="tripSelection__${id}--day"" name="tripSelection__${id}--day"">
             </select>
           </span>
           <span>
-            <label for="${id}__month">Month:</label>
-            <select id="${id}__month" name="${id}__month">
+            <label for="tripSelection__${id}--month">Month:</label>
+            <select id="tripSelection__${id}--month" name="tripSelection__${id}--month">
               <option value="01" selected>January</option>
               <option value="02">February</option>
               <option value="03">March</option>
@@ -53,8 +56,8 @@ const viewUpdater = (function () {
             </select>
           </span>
           <span>
-            <label for="${id}__year">Year:</label>
-            <select id="${id}__year" name="${id}__year">
+            <label for="tripSelection__${id}--year">Year:</label>
+            <select id="tripSelection__${id}--year" name="tripSelection__${id}--year">
             </select>
           </span>`;
 
@@ -63,7 +66,9 @@ const viewUpdater = (function () {
     }
 
     function populateYears(id) {
-        const yearSelect = document.getElementById(id + '__year');
+        const yearSelect = document.getElementById(
+            `tripSelection__${id}--year`
+        );
         const date = new Date();
         const year = date.getFullYear();
         const fragment = document.createDocumentFragment();
@@ -80,9 +85,11 @@ const viewUpdater = (function () {
     }
 
     function populateDays(id, previousDay) {
-        const year = document.getElementById(id + '__year').value;
-        const month = document.getElementById(id + '__month').value;
-        const daySelect = document.getElementById(id + '__day');
+        const year = document.getElementById(`tripSelection__${id}--year`)
+            .value;
+        const month = document.getElementById(`tripSelection__${id}--month`)
+            .value;
+        const daySelect = document.getElementById(`tripSelection__${id}--day`);
         clearDayList(daySelect);
 
         const daysInMonth = computeDaysInMonth(month, year);
@@ -159,24 +166,44 @@ const viewUpdater = (function () {
     }
 
     function updateDateView() {
-        document.getElementById('daysToTrip').textContent =
+        const startDate = new Date(_applicationState.startDate);
+        const endDate = new Date(_applicationState.endDate);
+        const options = {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        };
+        document.getElementById(
+            'newTrip__startDate'
+        ).textContent = startDate.toLocaleDateString('en-US', options);
+        document.getElementById(
+            'newTrip__endDate'
+        ).textContent = endDate.toLocaleDateString('en-US', options);
+        document.getElementById('newTrip__daysToTrip').textContent =
             _applicationState.daysToTrip +
             ' day' +
             (_applicationState.daysToTrip != 1 ? 's' : '');
-        document.getElementById('duration').textContent =
+        document.getElementById('newTrip__duration').textContent =
             _applicationState.duration +
             ' day' +
             (_applicationState.duration != 1 ? 's' : '');
     }
 
     function showDateError(id, message) {
-        const errorContainer = document.getElementById(id + '-error');
+        const errorContainer = document.getElementById(
+            'tripSelection__error--' + id
+        );
         errorContainer.textContent = message;
     }
 
     function clearDateErrors() {
-        const startDateError = document.getElementById('startDate-error');
-        const endDateError = document.getElementById('endDate-error');
+        const startDateError = document.getElementById(
+            'tripSelection__error--startDate'
+        );
+        const endDateError = document.getElementById(
+            'tripSelection__error--endDate'
+        );
         startDateError.textContent = '';
         endDateError.textContent = '';
     }
@@ -243,23 +270,27 @@ const viewUpdater = (function () {
     }
 
     function showCityError(message) {
-        const errorContainer = document.getElementById('city-error');
+        const errorContainer = document.getElementById(
+            'tripSelection__error--city'
+        );
         errorContainer.textContent = message;
     }
 
     function clearCityError() {
-        const errorContainer = document.getElementById('city-error');
+        const errorContainer = document.getElementById(
+            'tripSelection__error--city'
+        );
         errorContainer.textContent = '';
     }
 
     function updatePicture(photos) {
         clearPictureError();
         const photo = photos['pictures'][0]; // In the future all pictures should be shown in a carrousel
-        const figure = document.getElementById('photo');
-        const picture = figure.getElementsByTagName('picture')[0];
+        const photoContainer = document.getElementById('newTrip__photo');
+        const picture = photoContainer.getElementsByTagName('picture')[0];
         picture.innerHTML = '';
         const img = document.createElement('IMG');
-        const caption = document.getElementById('caption');
+        const caption = document.getElementById('newTrip__photo--caption');
         const source = document.createElement('SOURCE');
         source.setAttribute(
             'srcset',
@@ -275,16 +306,16 @@ const viewUpdater = (function () {
     }
 
     function showPictureError(message) {
-        const error = document.getElementById('photo-error');
+        const error = document.getElementById('newTrip__photo--error');
         error.textContent = message;
     }
 
     function clearPictureError() {
-        const error = document.getElementById('photo-error');
+        const error = document.getElementById('newTrip__photo--error');
         error.textContent = '';
     }
 
-    const weatherSection = document.getElementById('weather');
+    const weatherSection = document.getElementById('newTrip__weather');
 
     function updateCurrentWeather(currentWeather) {
         if (currentWeather.error) {
@@ -373,10 +404,21 @@ const viewUpdater = (function () {
         fragment.appendChild(card);
         weatherSection.appendChild(fragment);
     }
+
+    function updateNewTrip() {
+        const destination = document.getElementById('newTrip__destination');
+        const provinceAndCountry = document.getElementById('newTrip__country');
+        destination.textContent = _applicationState.city.toUpperCase();
+        provinceAndCountry.textContent =
+            _applicationState.province +
+            ', ' +
+            _applicationState.country.toUpperCase();
+    }
     return {
         set applicationState(applicationState) {
             _applicationState = applicationState;
         },
+        updateNewTrip,
         renderNativeDateInput,
         renderFallbackDateInput,
         populateYears,
