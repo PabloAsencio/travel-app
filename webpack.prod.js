@@ -24,7 +24,27 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
-                use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            postcssOptions: {
+                                plugins: [
+                                    [
+                                        'postcss-preset-env',
+                                        {
+                                            // Options
+                                        },
+                                    ],
+                                ],
+                            },
+                        },
+                    },
+                    ,
+                    'sass-loader',
+                ],
             },
             {
                 // See https://webpack.js.org/loaders/url-loader/

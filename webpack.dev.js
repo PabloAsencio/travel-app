@@ -20,7 +20,26 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
-                use: ['style-loader', 'css-loader', 'sass-loader'],
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            postcssOptions: {
+                                plugins: [
+                                    [
+                                        'postcss-preset-env',
+                                        {
+                                            autoprefixer: { grid: true },
+                                        },
+                                    ],
+                                ],
+                            },
+                        },
+                    },
+                    'sass-loader',
+                ],
             },
             {
                 // See https://webpack.js.org/loaders/url-loader/

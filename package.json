@@ -39,6 +39,7 @@
   "devDependencies": {
     "@babel/core": "^7.5.4",
     "@babel/preset-env": "^7.5.4",
+    "autoprefixer": "^10.1.0",
     "babel-loader": "^8.0.6",
     "browserslist": "^4.16.0",
     "clean-webpack-plugin": "^3.0.0",
@@ -49,6 +50,9 @@
     "mini-svg-data-uri": "^1.2.3",
     "node-sass": "^5.0.0",
     "optimize-css-assets-webpack-plugin": "^5.0.4",
+    "postcss": "^8.2.1",
+    "postcss-loader": "^4.1.0",
+    "postcss-preset-env": "^6.7.0",
     "sass-loader": "^10.1.0",
     "style-loader": "^2.0.0",
     "terser-webpack-plugin": "^1.4.5",
