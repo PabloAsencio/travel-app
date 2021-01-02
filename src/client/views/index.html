@@ -24,7 +24,6 @@
                     action="#"
                     autocomplete="off"
                 >
-                    <!-- This input element with autocomplete functionality is based on https://www.w3schools.com/howto/howto_js_autocomplete.asp-->
                     <div class="form__field form__city">
                         <p
                             class="form__error error"
@@ -32,6 +31,7 @@
                         ></p>
                         <label for="city">Destination</label>
                         <div class="autocomplete">
+                            <!-- This input element with autocomplete functionality is based on https://www.w3schools.com/howto/howto_js_autocomplete.asp-->
                             <input
                                 type="text"
                                 id="city"
@@ -82,19 +82,6 @@
                             Province, COUNTRY
                         </p>
                     </header>
-                    <section class="time">
-                        <p class="time__date" id="newTrip__startDate">From:</p>
-                        <p class="time__date" id="newTrip__endDate">To:</p>
-                        <p class="time__duration">
-                            Duration of the trip:
-                            <span id="newTrip__duration">1 day</span>
-                        </p>
-                        <p class="time__daysToTrip">
-                            Your trip is in
-                            <span id="newTrip__daysToTrip">0 days</span>
-                        </p>
-                    </section>
-                    <section id="newTrip__weather" class="weather"></section>
                     <div class="photo" id="newTrip__photo">
                         <p
                             class="photo__error error"
@@ -108,6 +95,19 @@
                             ></figcaption>
                         </figure>
                     </div>
+                    <section class="time">
+                        <p class="time__date" id="newTrip__startDate">From:</p>
+                        <p class="time__date" id="newTrip__endDate">To:</p>
+                        <p class="time__duration">
+                            Duration of the trip:
+                            <span id="newTrip__duration">1 day</span>
+                        </p>
+                        <p class="time__daysToTrip">
+                            Your trip is in
+                            <span id="newTrip__daysToTrip">0 days</span>
+                        </p>
+                    </section>
+                    <section id="newTrip__weather" class="weather"></section>
                 </article>
             </section>
         </main>
