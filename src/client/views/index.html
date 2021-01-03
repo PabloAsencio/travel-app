@@ -24,15 +24,26 @@
                     action="#"
                     autocomplete="off"
                 >
-                    <div class="form__field form__city">
+                    <div class="form__errors">
                         <p
                             class="form__error error"
                             id="tripSelection__error--city"
                         ></p>
+                        <p
+                            class="form__error error"
+                            id="tripSelection__error--startDate"
+                        ></p>
+                        <p
+                            class="form__error error"
+                            id="tripSelection__error--endDate"
+                        ></p>
+                    </div>
+                    <div class="form__field form__city">
                         <label for="city">Destination</label>
                         <div class="autocomplete">
                             <!-- This input element with autocomplete functionality is based on https://www.w3schools.com/howto/howto_js_autocomplete.asp-->
                             <input
+                                class="autocomplete__input"
                                 type="text"
                                 id="city"
                                 name="city"
@@ -43,21 +54,11 @@
                     <div
                         class="form__date form__field form__date--start"
                         id="tripSelection__container--startDate"
-                    >
-                        <p
-                            class="form__error error"
-                            id="tripSelection__error--startDate"
-                        ></p>
-                    </div>
+                    ></div>
                     <div
                         class="form__date form__field form__date--end"
                         id="tripSelection__container--endDate"
-                    >
-                        <p
-                            class="form__error error"
-                            id="tripSelection__error--endDate"
-                        ></p>
-                    </div>
+                    ></div>
                     <input
                         class="form__submit"
                         type="submit"
