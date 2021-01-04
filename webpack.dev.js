@@ -44,12 +44,27 @@ module.exports = {
             {
                 // See https://webpack.js.org/loaders/url-loader/
                 test: /\.svg$/,
+                exclude: /fonts/,
                 use: [
                     {
                         loader: 'url-loader',
                         options: {
                             generator: (content) =>
                                 svgToMiniDataURI(content.toString()),
+                        },
+                    },
+                ],
+            },
+            {
+                // See https://chriscourses.com/blog/loading-fonts-webpack
+                test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+                exclude: /images/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[ext]',
+                            outputPath: 'fonts/',
                         },
                     },
                 ],
