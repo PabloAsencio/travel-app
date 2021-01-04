@@ -1,15 +1,63 @@
-.tripSelection {
-    max-width: 50rem;
-    margin: 1rem 1rem auto 5rem;
+.grid {
+    display: grid;
+    grid-template:
+        'header'
+        'main'
+        'footer';
+}
+
+.header {
+    grid-area: header;
+    height: 10vh;
+}
+
+main {
+    grid-area: main;
+    min-height: 180vh;
+}
+
+.footer {
+    grid-area: footer;
+    height: 10vh;
+}
+
+.tripSelection,
+.newTrip {
+    min-width: 20rem;
+    max-width: 80%;
+    margin: 1rem auto;
     display: flex;
     flex-flow: column nowrap;
     align-items: flex-start;
+}
+
+.tripSelection {
+    height: 90vh;
+    &__header {
+        margin: 0 auto;
+        transform: translateX(-25%);
+    }
+}
+
+.photo {
+    width: 100%;
+
+    &__img {
+        width: 100%;
+    }
+
+    &__logo {
+        position: relative;
+        height: 1em;
+        top: 0.2em;
+    }
 }
 
 .form {
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
+    margin: 0 auto;
 
     &__field {
         display: flex;
@@ -45,8 +93,34 @@
     }
 }
 
+.newTrip {
+    &__header {
+        margin: 0 auto;
+        width: 100%;
+    }
+}
+
+.trip {
+    margin: 0 auto;
+    width: 100%;
+}
+
 @media only screen and (min-width: 768px) {
+    main {
+        min-height: 80vh;
+    }
+
+    .tripSelection {
+        height: auto;
+
+        &__header {
+            margin: 0;
+            transform: translateX(0);
+        }
+    }
+
     .form {
+        margin: 0;
         display: grid;
         grid-template:
             'errors      errors' 1fr
@@ -79,16 +153,44 @@
             justify-self: center;
         }
     }
+
+    .trip {
+        display: grid;
+        grid-template:
+            'destination destination' 0.5fr
+            'photo    photo' 4fr
+            'time     weather' 3fr / 1fr 3fr;
+        gap: 1rem;
+
+        &__header {
+            grid-area: destination;
+        }
+    }
+
+    .photo {
+        grid-area: photo;
+    }
+
+    .time {
+        grid-area: time;
+    }
+
+    .weather {
+        grid-area: weather;
+    }
 }
 
 @media only screen and (min-width: 1024px) {
-    .tripSelection {
-        max-width: 60rem;
-    }
-
     .form {
         grid-template:
             'errors      errors    errors  errors' 1fr
             'destination startDate endDate submit' 1fr / 2fr 1fr 1fr 1fr;
+    }
+
+    .trip {
+        grid-template:
+            'destination destination destination' 0.5fr
+            'photo       photo       time' 4fr
+            'weather     weather     weather' 3fr / 1fr 3fr 1fr;
     }
 }

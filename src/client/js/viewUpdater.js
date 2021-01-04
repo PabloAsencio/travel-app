@@ -291,6 +291,7 @@ const viewUpdater = (function () {
         const picture = photoContainer.getElementsByTagName('picture')[0];
         picture.innerHTML = '';
         const img = document.createElement('IMG');
+        img.classList.add('photo__img');
         const caption = document.getElementById('newTrip__photo--caption');
         const source = document.createElement('SOURCE');
         source.setAttribute(
@@ -303,7 +304,7 @@ const viewUpdater = (function () {
         img.setAttribute('alt', photo.subject);
         img.setAttribute('type', 'image/jpeg');
         picture.appendChild(img);
-        caption.innerHTML = `${photo.subject}. Photo by <a href="${photo.userURL}">${photo.user}</a> at <a href="${photo.pageURL}"><img src="${logo}" alt="Pixabay"></a>`;
+        caption.innerHTML = `${photo.subject}. Photo by <a href="${photo.userURL}">${photo.user}</a> at <a href="${photo.pageURL}"><img src="${logo}" alt="Pixabay" class="photo__logo"></a>`;
     }
 
     function showPictureError(message) {
