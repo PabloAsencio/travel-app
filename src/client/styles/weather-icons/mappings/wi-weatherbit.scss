@@ -1,0 +1,89 @@
+.#{$wi-css-prefix}-wb-200:before {
+    content: $storm-showers;
+}
+.#{$wi-css-prefix}-wb-t01d:before {
+    content: $day-storm-showers;
+}
+.#{$wi-css-prefix}-wb-t01n:before {
+    content: $night-alt-storm-showers;
+}
+.#{$wi-css-prefix}-wb-201:before,
+.#{$wi-css-prefix}-wb-202:before {
+    content: $thunderstorm;
+}
+.#{$wi-css-prefix}-wb-t02d:before,
+.#{$wi-css-prefix}-wb-t03d:before {
+    content: $day-thunderstorm;
+}
+.#{$wi-css-prefix}-wb-t02n:before,
+.#{$wi-css-prefix}-wb-t03n:before {
+    content: $night-alt-thunderstorm;
+}
+.#{$wi-css-prefix}-wb-230:before,
+.#{$wi-css-prefix}-wb-231:before,
+.#{$wi-css-prefix}-wb-232:before,
+.#{$wi-css-prefix}-wb-233:before {
+    content: $lightning;
+}
+.#{$wi-css-prefix}-wb-t04d:before,
+.#{$wi-css-prefix}-wb-t05d:before {
+    content: $day-lightning;
+}
+.#{$wi-css-prefix}-wb-t04n:before,
+.#{$wi-css-prefix}-wb-t05n:before {
+    content: $night-alt-lightning;
+}
+.#{$wi-css-prefix}-wb-300:before,
+.#{$wi-css-prefix}-wb-301:before,
+.#{$wi-css-prefix}-wb-302:before {
+    content: $rain-mix;
+}
+.#{$wi-css-prefix}-wb-d01d:before,
+.#{$wi-css-prefix}-wb-d02d:before,
+.#{$wi-css-prefix}-wb-d03d:before {
+    content: $day-rain-mix;
+}
+.#{$wi-css-prefix}-wb-d01n:before,
+.#{$wi-css-prefix}-wb-d02n:before,
+.#{$wi-css-prefix}-wb-d03n:before {
+    content: $night-alt-rain-mix;
+}
+.#{$wi-css-prefix}-wb-500:before,
+.#{$wi-css-prefix}-wb-501:before,
+.#{$wi-css-prefix}-wb-511:before {
+    content: $rain;
+}
+.#{$wi-css-prefix}-wb-r01d:before,
+.#{$wi-css-prefix}-wb-r02d:before,
+.#{$wi-css-prefix}-wb-f01d:before {
+    content: $day-rain;
+}
+.#{$wi-css-prefix}-wb-r01n:before,
+.#{$wi-css-prefix}-wb-r02n:before,
+.#{$wi-css-prefix}-wb-f01n:before {
+    content: $night-alt-rain;
+}
+.#{$wi-css-prefix}-wb-502:before,
+.#{$wi-css-prefix}-wb-522:before {
+    content: $rain-wind;
+}
+.#{$wi-css-prefix}-wb-r03d:before,
+.#{$wi-css-prefix}-wb-r06d:before {
+    content: $day-rain-wind;
+}
+.#{$wi-css-prefix}-wb-r03n:before,
+.#{$wi-css-prefix}-wb-r06n:before {
+    content: $night-alt-rain-wind;
+}
+.#{$wi-css-prefix}-wb-520:before,
+.#{$wi-css-prefix}-wb-521:before {
+    content: $showers;
+}
+.#{$wi-css-prefix}-wb-r04d:before,
+.#{$wi-css-prefix}-wb-r05d:before {
+    content: $day-showers;
+}
+.#{$wi-css-prefix}-wb-r04n:before,
+.#{$wi-css-prefix}-wb-r05n:before {
+    content: $night-alt-showers;
+}

@@ -323,6 +323,7 @@ const viewUpdater = (function () {
         if (currentWeather.error) {
             showErrorMessage(currentWeather.error);
         } else {
+            console.log(currentWeather);
             createLocationCard();
             createCurrentWeatherCard(currentWeather);
         }
