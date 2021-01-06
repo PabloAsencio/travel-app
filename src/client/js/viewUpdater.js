@@ -358,7 +358,7 @@ const viewUpdater = (function () {
         card.classList.add('weather__card--current');
         card.innerHTML = `<dl>
             <dt>Weather Description</dt>
-            <dd>${currentWeather.description}</dd>
+            <dd>${currentWeather.description} <i class="wi wi-wb-${currentWeather.code}"></i></dd>
             <dt>Temperature</dt>
             <dd>${currentWeather.temperature}</dd>
             <dt>Feels Like</dt>
