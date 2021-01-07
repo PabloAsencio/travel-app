@@ -87,3 +87,110 @@
 .#{$wi-css-prefix}-wb-r05n:before {
     content: $night-alt-showers;
 }
+.#{$wi-css-prefix}-wb-600:before,
+.#{$wi-css-prefix}-wb-601:before,
+.#{$wi-css-prefix}-wb-621:before,
+.#{$wi-css-prefix}-wb-622:before,
+.#{$wi-css-prefix}-wb-623:before {
+    content: $snow;
+}
+.#{$wi-css-prefix}-wb-s01d:before,
+.#{$wi-css-prefix}-wb-s02d:before,
+.#{$wi-css-prefix}-wb-s06d:before {
+    content: $day-snow;
+}
+.#{$wi-css-prefix}-wb-s01n:before,
+.#{$wi-css-prefix}-wb-s02n:before,
+.#{$wi-css-prefix}-wb-s06n:before {
+    content: $night-alt-snow;
+}
+.#{$wi-css-prefix}-wb-602:before {
+    content: $snow-wind;
+}
+.#{$wi-css-prefix}-wb-s03d:before {
+    content: $day-snow-wind;
+}
+.#{$wi-css-prefix}-wb-s03n:before {
+    content: $night-alt-snow-wind;
+}
+.#{$wi-css-prefix}-wb-610:before {
+    content: $rain-mix;
+}
+.#{$wi-css-prefix}-wb-s04d:before {
+    content: $day-rain-mix;
+}
+.#{$wi-css-prefix}-wb-s04n:before {
+    content: $night-alt-rain-mix;
+}
+.#{$wi-css-prefix}-wb-611:before,
+.#{$wi-css-prefix}-wb-612:before {
+    content: $sleet;
+}
+.#{$wi-css-prefix}-wb-s05d:before {
+    content: $day-sleet;
+}
+.#{$wi-css-prefix}-wb-s05n:before {
+    content: $night-alt-sleet;
+}
+.#{$wi-css-prefix}-wb-700:before,
+.#{$wi-css-prefix}-wb-741:before,
+.#{$wi-css-prefix}-wb-751:before {
+    content: $fog;
+}
+.#{$wi-css-prefix}-wb-a01d:before,
+.#{$wi-css-prefix}-wb-a05d:before,
+.#{$wi-css-prefix}-wb-a06d:before {
+    content: $day-fog;
+}
+.#{$wi-css-prefix}-wb-a01n:before,
+.#{$wi-css-prefix}-wb-a05n:before,
+.#{$wi-css-prefix}-wb-a06n:before {
+    content: $night-fog;
+}
+.#{$wi-css-prefix}-wb-711:before,
+.#{$wi-css-prefix}-wb-a02d:before,
+.#{$wi-css-prefix}-wb-a02n:before {
+    content: $smoke;
+}
+.#{$wi-css-prefix}-wb-721:before,
+.#{$wi-css-prefix}-wb-a03d:before,
+.#{$wi-css-prefix}-wb-a03n:before {
+    content: $day-haze;
+}
+.#{$wi-css-prefix}-wb-731:before,
+.#{$wi-css-prefix}-wb-a04d:before,
+.#{$wi-css-prefix}-wb-a04n:before {
+    content: $dust;
+}
+.#{$wi-css-prefix}-wb-800:before,
+.#{$wi-css-prefix}-wb-c01d:before {
+    content: $day-sunny;
+}
+.#{$wi-css-prefix}-wb-c01n:before {
+    content: $night-clear;
+}
+.#{$wi-css-prefix}-wb-801:before,
+.#{$wi-css-prefix}-wb-802:before,
+.#{$wi-css-prefix}-wb-c02d:before {
+    content: $day-sunny-overcast;
+}
+.#{$wi-css-prefix}-wb-c02n:before {
+    content: $night-alt-partly-cloudy;
+}
+.#{$wi-css-prefix}-wb-803:before,
+.#{$wi-css-prefix}-wb-c03d:before {
+    content: $day-cloudy;
+}
+.#{$wi-css-prefix}-wb-c03n:before {
+    content: $night-alt-cloudy;
+}
+.#{$wi-css-prefix}-wb-804:before,
+.#{$wi-css-prefix}-wb-c04d:before,
+.#{$wi-css-prefix}-wb-c04n:before {
+    content: $cloudy;
+}
+.#{$wi-css-prefix}-wb-900:before,
+.#{$wi-css-prefix}-wb-u00d:before,
+.#{$wi-css-prefix}-wb-u00n:before {
+    content: $na;
+}
