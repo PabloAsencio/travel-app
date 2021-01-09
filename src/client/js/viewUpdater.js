@@ -358,15 +358,25 @@ const viewUpdater = (function () {
         card.classList.add('weather__card--current');
         card.innerHTML = `<dl>
             <dt>Weather Description</dt>
-            <dd>${currentWeather.description} <i class="wi wi-wb-${currentWeather.code}"></i></dd>
+            <dd><i class="wi wi-wb-${currentWeather.code}"></i> ${
+            currentWeather.description
+        }</dd>
             <dt>Temperature</dt>
-            <dd>${currentWeather.temperature}</dd>
+            <dd>${
+                currentWeather.temperature
+            } <i class="wi wi-celsius"></i> | <i class="wi wi-fahrenheit"></i></dd>
             <dt>Feels Like</dt>
-            <dd>${currentWeather.feelsLike}</dd>
+            <dd>${
+                currentWeather.feelsLike
+            } <i class="wi wi-celsius"></i> | <i class="wi wi-fahrenheit"></i></dd>
             <dt>Wind Speed</dt>
-            <dd>${currentWeather.windSpeed}</dd>
+            <dd>${currentWeather.windSpeed * 3.6} km/h</dd>
             <dt>Wind Direction</dt>
-            <dd>${currentWeather.windDirectionAsText}</dd>
+            <dd>${
+                currentWeather.windDirectionAsText
+            } <i class="wi wi-wind from-${
+            currentWeather.windDirectionInDegrees
+        }-deg"></i></dd>
         </dl>`;
         fragment.appendChild(card);
         weatherSection.appendChild(fragment);
@@ -375,7 +385,7 @@ const viewUpdater = (function () {
     function createForecastCard(forecastedWeather) {
         const fragment = document.createDocumentFragment();
         const card = document.createElement('ARTICLE');
-        card.classList.add('weather__card--current');
+        card.classList.add('weather__card--forecast');
         card.innerHTML = `<dl>
             <dt>Weather Description</dt>
             <dd>${forecastedWeather.description}</dd>
