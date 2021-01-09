@@ -132,7 +132,7 @@ const cityController = (function () {
                         cities[_currentFocus].click();
                     } else {
                         document.forms['tripSelection__form'].requestSubmit(
-                            document.getElementById('submit')
+                            document.getElementById('tripSelection__submit')
                         );
                         _viewUpdater.clearCityList();
                     }
