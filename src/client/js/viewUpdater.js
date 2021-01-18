@@ -1,3 +1,4 @@
+import { loadConfig } from 'browserslist';
 import logo from '../../assets/images/pixabay-logo.svg';
 
 const viewUpdater = (function () {
@@ -495,23 +496,94 @@ const viewUpdater = (function () {
     }
 
     function createForecastCard(forecastedWeather) {
+        const date = new Date(forecastedWeather.date);
+        const options = {
+            month: 'long',
+            day: 'numeric',
+        };
+        if (date.getFullYear() != new Date().getFullYear()) {
+            options.year = 'numeric';
+        }
         const fragment = document.createDocumentFragment();
         const card = document.createElement('ARTICLE');
+        card.classList.add('weather__card');
         card.classList.add('weather__card--forecast');
-        card.innerHTML = `<dl>
-            <dt>Weather Description</dt>
-            <dd>${forecastedWeather.description}</dd>
-            <dt>Max Temperature</dt>
-            <dd>${forecastedWeather.maxTemperature}</dd>
-            <dt>Min Temperature</dt>
-            <dd>${forecastedWeather.minTemperature}</dd>
-            <dt>Wind Speed</dt>
-            <dd>${forecastedWeather.windSpeed}</dd>
-            <dt>Wind Direction</dt>
-            <dd>${forecastedWeather.windDirectionAsText}</dd>
-        </dl>`;
+        const weatherDescription = document.createElement('HEADER');
+        weatherDescription.classList.add('weather__header');
+        weatherDescription.innerHTML = `
+            <div class="weather__descriptionIcon">
+                <i class="wi wi-wb-${
+                    forecastedWeather.code
+                }" aria-hidden="true"></i>
+            </div>
+            <h4 class="weather__description">${
+                forecastedWeather.description
+            }</h4>
+            <p>${date.toLocaleDateString('en-US', options)}</p>`;
+        card.appendChild(weatherDescription);
+        const temperature = document.createElement('SECTION');
+        temperature.classList.add('weather__temperature');
+        temperature.innerHTML = `
+            <h5>Temperature</h5>
+            <div class="weather__temperature--real">
+                <h6>Low</h6>
+                <p>
+                    <span class="weather__temperature--celsius">${
+                        forecastedWeather.minTemperature
+                    }</span>
+                    <span class="weather__temperature--fahrenheit" hidden aria-hidden="true">${convertCelsiusToFahrenheit(
+                        forecastedWeather.minTemperature
+                    )}</span>
+                    <span><i class="wi wi-celsius" aria-label="degrees Celsius"></i></span> | <span><i class="wi wi-fahrenheit icon--active" aria-label="switch to degrees Fahrenheit"></i></span>
+                </p>
+            </div>
+            <div class="weather__temperature--feels">
+                <h6>High</h6>
+                <p>
+                    <span class="weather__temperature--celsius">${
+                        forecastedWeather.maxTemperature
+                    }</span>
+                    <span class="weather__temperature--fahrenheit" hidden aria-hidden="true">${convertCelsiusToFahrenheit(
+                        forecastedWeather.maxTemperature
+                    )}</span>
+                    <span><i class="wi wi-celsius" aria-label="degrees Celsius"></i></span> | <span><i class="wi wi-fahrenheit icon--active" aria-label="switch to degrees Fahrenheit"></i></span>
+                </p>
+            </div>
+        `;
+        card.appendChild(temperature);
+        const wind = document.createElement('SECTION');
+        wind.classList.add('weather__wind');
+        wind.innerHTML = `
+            <h5>Wind</h5>
+            <div class="weather__windDirection">
+                <p>
+                    <i class="wi wi-wind from-${
+                        forecastedWeather.windDirectionInDegrees
+                    }-deg" aria-label="${
+            forecastedWeather.windDirectionAsText
+        }"></i>
+                </p>
+            </div>
+            <div class="weather__windSpeed">
+                <p>
+                    <span class="weather__windSpeed--kmh">${getSpeedInKmH(
+                        forecastedWeather.windSpeed
+                    )} <span aria-label="kilometers per hour">km/h</span></span>
+                    <span class="weather__windSpeed--mph" hidden aria-hidden="true">${getSpeedInMPH(
+                        forecastedWeather.windSpeed
+                    )} <span aria-label="miles per hour">mph</span></span>
+                </p>
+            </div>
+        `;
+        card.appendChild(wind);
         fragment.appendChild(card);
         weatherSection.appendChild(fragment);
+        const fahrenheitIcons = document.getElementsByClassName(
+            'wi-fahrenheit'
+        );
+        for (let i = 0; i < fahrenheitIcons.length; i++) {
+            fahrenheitIcons[i].addEventListener('click', switchUnits);
+        }
     }
 
     function createLocationCard() {
