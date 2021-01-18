@@ -14,13 +14,13 @@ const weatherAPI = (function () {
                     if (apiResponse.data.count > 0) {
                         const weatherReport = apiResponse.data.data[0];
                         response.send({
-                            code: weatherReport.weather.code,
+                            code: weatherReport.weather.icon,
                             description: weatherReport.weather.description,
                             temperature: weatherReport.temp,
                             feelsLike: weatherReport.app_temp,
                             windSpeed: weatherReport.wind_spd,
                             windDirectionInDegrees: weatherReport.wind_dir,
-                            windDirectionAsText: weatherReport.wind_cdir,
+                            windDirectionAsText: weatherReport.wind_cdir_full,
                         });
                     } else {
                         response.send({
@@ -60,7 +60,7 @@ const weatherAPI = (function () {
                                     description: report.weather.description,
                                     windSpeed: report.wind_spd,
                                     windDirectionInDegrees: report.wind_dir,
-                                    windDirectionAsText: report.wind_cdir,
+                                    windDirectionAsText: report.wind_cdir_full,
                                     maxTemperature: report.max_temp,
                                     minTemperature: report.min_temp,
                                     maxfeelsLike: report.app_max_temp,
