@@ -22,6 +22,7 @@ import './styles/resets.scss';
 import './styles/base.scss';
 import './styles/layout.scss';
 import './styles/form.scss';
+import './styles/weather.scss';
 import './styles/weather-icons/weather-icons.scss';
 import './styles/weather-icons/weather-icons-wind.scss';
 

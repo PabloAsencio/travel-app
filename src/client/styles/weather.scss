@@ -1,0 +1,108 @@
+.weather {
+    padding: 1rem;
+
+    &__card {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        padding: 1rem;
+        margin: 1rem 0;
+        box-shadow: 0.5rem 0.5rem 0.5rem #ccc;
+
+        &--current {
+        }
+
+        &--forecast {
+        }
+    }
+
+    &__header {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+    }
+
+    &__descriptionIcon {
+        font-size: 3em;
+        padding: 0.5rem;
+    }
+
+    &__description {
+    }
+
+    &__temperature {
+        display: grid;
+        grid-template:
+            'header header' 1fr
+            'left   right' 3fr / 1fr 1fr;
+        column-gap: 3rem;
+
+        h5 {
+            grid-area: header;
+        }
+
+        &--real {
+            grid-area: left;
+        }
+
+        &--feels {
+            grid-area: right;
+        }
+
+        &--celsius {
+        }
+
+        &--fahrenheit {
+        }
+    }
+
+    &__wind {
+        display: grid;
+        grid-template:
+            'header header' 1fr
+            'left   right' 3fr / 1fr 1fr;
+        column-gap: 3rem;
+
+        h5 {
+            grid-area: header;
+        }
+
+        &Direction {
+            grid-area: left;
+
+            i {
+                font-size: 2em;
+            }
+        }
+
+        &Speed {
+            grid-area: right;
+            &--kmh {
+            }
+
+            &--mph {
+            }
+        }
+    }
+}
+
+.icon--active {
+    color: red;
+    cursor: pointer;
+}
+
+@media only screen and (min-width: 768px) {
+    .weather {
+        &__card {
+            max-width: 50%;
+        }
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    .weather {
+        &__card {
+            max-width: 30rem;
+        }
+    }
+}

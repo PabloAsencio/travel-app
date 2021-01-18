@@ -354,6 +354,7 @@ const viewUpdater = (function () {
     function createCurrentWeatherCard(currentWeather) {
         const fragment = document.createDocumentFragment();
         const card = document.createElement('ARTICLE');
+        card.classList.add('weather__card');
         card.classList.add('weather__card--current');
         const weatherDescription = document.createElement('HEADER');
         weatherDescription.classList.add('weather__header');
