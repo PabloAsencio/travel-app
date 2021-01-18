@@ -399,7 +399,6 @@ const viewUpdater = (function () {
         wind.innerHTML = `
             <h5>Wind</h5>
             <div class="weather__windDirection">
-                <h6>Direction</h6>
                 <p>
                     <i class="wi wi-wind from-${
                         currentWeather.windDirectionInDegrees
@@ -409,14 +408,13 @@ const viewUpdater = (function () {
                 </p>
             </div>
             <div class="weather__windSpeed">
-                <h6>Speed</h6>
                 <p>
                     <span class="weather__windSpeed--kmh">${getSpeedInKmH(
                         currentWeather.windSpeed
-                    )} km/h</span>
+                    )} <span aria-label="kilometers per hour">km/h</span></span>
                     <span class="weather__windSpeed--mph" hidden aria-hidden="true">${getSpeedInMPH(
                         currentWeather.windSpeed
-                    )} mph</span>
+                    )} <span aria-label="miles per hour">mph</span></span>
                 </p>
             </div>
         `;
