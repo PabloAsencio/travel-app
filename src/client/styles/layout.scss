@@ -157,9 +157,10 @@ main {
     .trip {
         display: grid;
         grid-template:
-            'destination destination' 0.5fr
-            'photo    photo' 4fr
-            'time     weather' 3fr / 1fr 3fr;
+            'destination destination' 0.1fr
+            'photo    photo' 2fr
+            'time     weather' 1fr
+            'forecast forecast' minmax(min-content, max-content) / 1fr 3fr;
         gap: 1rem;
 
         &__header {
@@ -176,7 +177,16 @@ main {
     }
 
     .weather {
-        grid-area: weather;
+        &--current {
+            grid-area: weather;
+        }
+        &--forecast {
+            grid-area: forecast;
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
     }
 }
 
@@ -189,8 +199,10 @@ main {
 
     .trip {
         grid-template:
-            'destination destination destination' 0.5fr
-            'photo       photo       time' 4fr
-            'weather     weather     weather' 3fr / 1fr 3fr 1fr;
+            'destination destination destination' 0.1fr
+            'photo       photo       time' 1fr
+            'photo       photo       weather' 1fr
+            'forecast    forecast     forecast' minmax(min-content, max-content)
+            / 1fr 3fr 1fr;
     }
 }

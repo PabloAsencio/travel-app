@@ -95,6 +95,26 @@
     .weather {
         &__card {
             max-width: 50%;
+            &--current {
+                max-width: 100%;
+                min-height: 66%;
+                display: grid;
+                grid-template:
+                    'header temperature' 1fr
+                    'header wind' 1fr / 1fr 1fr;
+            }
+        }
+
+        &__header {
+            grid-area: header;
+        }
+
+        &__temperature {
+            grid-area: temperature;
+        }
+
+        &__wind {
+            grid-area: wind;
         }
     }
 }
@@ -103,6 +123,11 @@
     .weather {
         &__card {
             max-width: 30rem;
+            &--current {
+                display: flex;
+                flex-flow: column nowrap;
+                align-items: center;
+            }
         }
     }
 }

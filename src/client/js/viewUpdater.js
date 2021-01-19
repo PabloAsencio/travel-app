@@ -318,20 +318,23 @@ const viewUpdater = (function () {
         error.textContent = '';
     }
 
-    const weatherSection = document.getElementById('newTrip__weather');
-
     function updateCurrentWeather(currentWeather) {
         if (currentWeather.error) {
-            showErrorMessage(currentWeather.error);
+            showErrorMessage(
+                currentWeather.error,
+                document.getElementById('newTrip__weather--current')
+            );
         } else {
-            createLocationCard();
             createCurrentWeatherCard(currentWeather);
         }
     }
 
     function updateWeatherForecast(weatherForecast) {
         if (weatherForecast.error) {
-            showErrorMessage(weatherForecast.error);
+            showErrorMessage(
+                weatherForecast.error,
+                document.getElementById('newTrip__weather--forecast')
+            );
         } else {
             const dailyForecasts = weatherForecast.dailyForecasts;
             for (const day of dailyForecasts) {
@@ -340,7 +343,7 @@ const viewUpdater = (function () {
         }
     }
 
-    function showErrorMessage(errorMessage) {
+    function showErrorMessage(errorMessage, weatherSection) {
         const fragment = document.createDocumentFragment();
         const error = document.createElement('P');
         error.textContent = errorMessage;
@@ -349,10 +352,20 @@ const viewUpdater = (function () {
     }
 
     function clearWeatherSection() {
-        weatherSection.innerHTML = '';
+        const currentWeatherSection = document.getElementById(
+            'newTrip__weather--current'
+        );
+        const weatherForecastSection = document.getElementById(
+            'newTrip__weather--forecast'
+        );
+        currentWeatherSection.innerHTML = '';
+        weatherForecastSection.innerHTML = '';
     }
 
     function createCurrentWeatherCard(currentWeather) {
+        const weatherSection = document.getElementById(
+            'newTrip__weather--current'
+        );
         const fragment = document.createDocumentFragment();
         const card = document.createElement('ARTICLE');
         card.classList.add('weather__card');
@@ -496,6 +509,9 @@ const viewUpdater = (function () {
     }
 
     function createForecastCard(forecastedWeather) {
+        const weatherSection = document.getElementById(
+            'newTrip__weather--forecast'
+        );
         const date = new Date(forecastedWeather.date);
         const options = {
             month: 'long',
@@ -584,22 +600,6 @@ const viewUpdater = (function () {
         for (let i = 0; i < fahrenheitIcons.length; i++) {
             fahrenheitIcons[i].addEventListener('click', switchUnits);
         }
-    }
-
-    function createLocationCard() {
-        const fragment = document.createDocumentFragment();
-        const card = document.createElement('ARTICLE');
-        card.setAttribute('id', 'weather__location');
-        card.classList.add('weather__location');
-        const city = document.createElement('P');
-        city.textContent = _applicationState.city;
-        card.appendChild(city);
-        const provinceAndCountry = document.createElement('P');
-        provinceAndCountry.textContent =
-            _applicationState.province + ', ' + _applicationState.country;
-        card.appendChild(provinceAndCountry);
-        fragment.appendChild(card);
-        weatherSection.appendChild(fragment);
     }
 
     function updateNewTrip() {
