@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.5em;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: 'Alfa Slab One', cursive;
+}
+
+h1 {
+    font-size: 3.6rem;
+    line-height: 1.5em;
+}
+
+h2 {
+    font-size: 1.6rem;
+    line-height: 1.5em;
+}
+
+h3 {
+    font-size: 2.4rem;
+    line-height: 1.5em;
+    font-weight: 600;
+    letter-spacing: 0.1rem;
+}
+
+label {
+    font-size: 1.6rem;
+    font-weight: 500;
+    line-height: 1.5em;
+    letter-spacing: 0.1rem;
+}
+
+input {
+    font-size: 1.6rem;
+    line-height: 1.5em;
+}

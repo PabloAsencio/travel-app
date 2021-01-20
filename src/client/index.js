@@ -20,6 +20,7 @@ import { dateInputFactory } from './js/dateInputFactory';
 // *** STYLESHEETS ***
 import './styles/resets.scss';
 import './styles/base.scss';
+import './styles/typography.scss';
 import './styles/layout.scss';
 import './styles/header.scss';
 import './styles/footer.scss';
