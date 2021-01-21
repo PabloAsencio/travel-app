@@ -1,42 +1,40 @@
 .grid {
     display: grid;
+    min-height: 100%;
     grid-template:
-        'header'
-        'main'
-        'footer';
+        'header' auto
+        'main' 1fr
+        'footer' auto / 100%;
 }
 
 .header {
     grid-area: header;
-    height: 10vh;
 }
 
 main {
     grid-area: main;
-    min-height: 180vh;
 }
 
 .footer {
     grid-area: footer;
-    height: 10vh;
 }
 
 .tripSelection,
 .newTrip {
     min-width: 20rem;
     max-width: 80%;
-    margin: 1rem auto;
+    margin: 1rem auto 3rem auto;
     display: flex;
     flex-flow: column nowrap;
     align-items: flex-start;
 }
 
 .tripSelection {
-    height: 90vh;
     &__header {
         margin: 0 auto;
 
         h2 {
+            margin-left: 0.5rem;
             width: 20rem;
         }
     }
@@ -53,46 +51,6 @@ main {
         position: relative;
         height: 1em;
         top: 0.2em;
-    }
-}
-
-.form {
-    display: flex;
-    flex-flow: column nowrap;
-    align-items: center;
-    margin: 0 auto;
-
-    &__field {
-        display: flex;
-        flex-flow: column nowrap;
-        margin: 0.5rem 0;
-        width: 100%;
-        min-width: 20rem;
-        max-width: 30rem;
-    }
-
-    &__errors {
-        height: 3.2rem;
-        align-self: flex-start;
-        max-width: 30rem;
-    }
-
-    &__error {
-        max-width: 30rem;
-    }
-
-    &__date--fallback {
-        display: flex;
-        flex-flow: row nowrap;
-    }
-
-    &__select {
-        display: flex;
-        flex-flow: column nowrap;
-    }
-
-    &__submit {
-        flex-basis: content;
     }
 }
 
@@ -117,43 +75,10 @@ main {
         height: auto;
 
         &__header {
-            margin: 0;
-            transform: translateX(0);
-        }
-    }
-
-    .form {
-        margin: 0;
-        display: grid;
-        grid-template:
-            'errors      errors' 1fr
-            'destination destination' 1fr
-            'startDate   endDate' 1fr
-            'submit      submit' 1fr / 1fr 1fr;
-        gap: 1rem 1rem;
-
-        &__errors {
-            grid-area: errors;
-        }
-
-        &__city {
-            grid-area: destination;
-            max-width: 62rem;
-        }
-
-        &__date {
-            &--start {
-                grid-area: startDate;
+            margin: 0 3.7rem;
+            h2 {
+                width: 100%;
             }
-
-            &--end {
-                grid-area: endDate;
-            }
-        }
-
-        &__submit {
-            grid-area: submit;
-            justify-self: center;
         }
     }
 
@@ -193,13 +118,7 @@ main {
     }
 }
 
-@media only screen and (min-width: 1024px) {
-    .form {
-        grid-template:
-            'errors      errors    errors  errors' 1fr
-            'destination startDate endDate submit' 1fr / 2fr 1fr 1fr 1fr;
-    }
-
+@media only screen and (min-width: 1124px) {
     .trip {
         grid-template:
             'destination destination destination' 0.1fr

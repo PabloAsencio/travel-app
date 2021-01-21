@@ -1,22 +1,124 @@
-.tripSelection {
-}
-
 .form {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    margin: 0 auto;
     background-color: $magnolia;
     border-radius: 0.5rem;
+    padding: 0 3.2rem 4rem 3.2rem;
+    margin-top: 1.6rem;
+
+    &__field {
+        display: flex;
+        flex-flow: column nowrap;
+        margin: 0.5rem 0;
+        width: 100%;
+        min-width: 20rem;
+        max-width: 30rem;
+
+        label {
+            margin-left: 0.5rem;
+        }
+
+        input {
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+        }
+    }
 
     &__errors {
+        margin: 0.2rem 0 0 0.5rem;
         color: $french-raspberry;
+        font-size: 1.067rem;
+        line-height: 1.2em;
+        height: 4rem;
+        align-self: flex-start;
+        max-width: 30rem;
+    }
+
+    &__error {
+        max-width: 30rem;
+    }
+
+    &__date--fallback {
+        display: flex;
+        flex-flow: row nowrap;
+    }
+
+    &__select {
+        display: flex;
+        flex-flow: column nowrap;
     }
 
     &__submit {
         -webkit-appearance: none;
+        font-weight: 700;
         background-color: $french-raspberry;
         color: $magnolia;
         transition: transform 0.3s;
+        margin-top: 1.6rem;
+        padding: 1rem;
+        border-radius: 0.5rem;
 
         &:hover {
-            transform: translateY(-0.2rem) scale(1.03);
+            transform: translateY(-0.2rem) translateZ(0) scale(1.03);
+            backface-visibility: hidden;
+        }
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .form {
+        margin: 1.6rem 0;
+        display: grid;
+        grid-template:
+            'errors      errors      errors' 1fr
+            'destination destination destination' 1fr
+            'startDate   .           endDate' 1fr
+            '.           submit      .' 1fr / 1fr 1fr 1fr;
+        gap: 1rem 1rem;
+
+        &__field {
+            input {
+                width: calc(100% - 1rem);
+            }
+        }
+
+        &__errors {
+            grid-area: errors;
+            font-size: 1.6rem;
+            line-height: 1.5em;
+        }
+
+        &__city {
+            grid-area: destination;
+            max-width: 62rem;
+        }
+
+        &__date {
+            &--start {
+                grid-area: startDate;
+            }
+
+            &--end {
+                grid-area: endDate;
+            }
+        }
+
+        &__submit {
+            grid-area: submit;
+        }
+    }
+}
+
+@media only screen and (min-width: 1124px) {
+    .form {
+        grid-template:
+            'errors      errors    errors  errors' 1fr
+            'destination startDate endDate submit' 1fr / 2fr 1fr 1fr 1fr;
+
+        &__submit {
+            align-self: end;
         }
     }
 }
