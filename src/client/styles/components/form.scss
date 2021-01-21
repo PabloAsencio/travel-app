@@ -1,3 +1,26 @@
+.tripSelection {
+}
+
+.form {
+    background-color: $magnolia;
+    border-radius: 0.5rem;
+
+    &__errors {
+        color: $french-raspberry;
+    }
+
+    &__submit {
+        -webkit-appearance: none;
+        background-color: $french-raspberry;
+        color: $magnolia;
+        transition: transform 0.3s;
+
+        &:hover {
+            transform: translateY(-0.2rem) scale(1.03);
+        }
+    }
+}
+
 .autocomplete {
     position: relative;
     display: inline-block;
@@ -16,6 +39,24 @@
         top: 100%;
         left: 0;
         right: 0;
+
+        .autocomplete-active {
+            /*when navigating through the items using the arrow keys:*/
+            background-color: $french-raspberry;
+
+            .typedText,
+            .completedText {
+                color: $magnolia;
+            }
+
+            &:hover {
+                background-color: $french-raspberry;
+                .typedText,
+                .completedText {
+                    color: $orange-yellow-crayola;
+                }
+            }
+        }
     }
     .autocomplete-items div {
         padding: 10px;
@@ -27,9 +68,14 @@
         /*when hovering an item:*/
         background-color: #e9e9e9;
     }
-    .autocomplete-active {
-        /*when navigating through the items using the arrow keys:*/
-        background-color: DodgerBlue !important;
-        color: #ffffff;
+
+    .typedText {
+        color: $oxford-blue;
+        font-weight: 900;
+    }
+
+    .completedText {
+        color: $cadet-blue;
+        font-weight: 300;
     }
 }

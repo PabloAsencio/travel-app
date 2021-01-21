@@ -15,9 +15,11 @@ h4 {
 h1 {
     font-size: 3.6rem;
     line-height: 1.5em;
+    color: $french-raspberry;
 }
 
-h2 {
+h2,
+h5 {
     font-size: 1.6rem;
     line-height: 1.5em;
 }
@@ -27,6 +29,10 @@ h3 {
     line-height: 1.5em;
     font-weight: 600;
     letter-spacing: 0.1rem;
+}
+
+h5 {
+    font-weight: 500;
 }
 
 label {

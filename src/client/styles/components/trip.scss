@@ -1,0 +1,41 @@
+.trip {
+    &__header {
+        &--destination {
+            color: $french-raspberry;
+        }
+
+        &--country {
+            font-size: 1.6rem;
+            line-height: 1.5em;
+            font-weight: 300;
+            letter-spacing: 0.2rem;
+        }
+    }
+}
+
+.time {
+    background-color: $magnolia;
+    border-radius: 0.5rem;
+    font-size: 1.6rem;
+    line-height: 1.5em;
+}
+
+.photo {
+    &__caption {
+        a {
+            text-decoration: underline dotted;
+            &:hover {
+                color: $french-raspberry;
+                text-decoration: underline solid;
+            }
+        }
+    }
+
+    &__logo {
+        width: auto;
+        fill: $oxford-blue;
+        &:hover {
+            fill: $french-raspberry;
+        }
+    }
+}

@@ -1,5 +1,14 @@
 .footer {
     background-color: $oxford-blue;
-    color: $magnolia;
+    color: $cadet-blue;
     text-align: center;
+
+    a {
+        text-decoration: underline dotted;
+
+        &:hover {
+            color: $magnolia;
+            text-decoration: underline solid;
+        }
+    }
 }

@@ -7,7 +7,7 @@
         align-items: center;
         padding: 1rem;
         margin: 1rem 0;
-        box-shadow: 0.5rem 0.5rem 0.5rem #ccc;
+        background-color: $magnolia;
 
         &--current {
         }
@@ -20,6 +20,9 @@
         display: flex;
         flex-flow: column nowrap;
         align-items: center;
+        color: $french-raspberry;
+        font-size: 1.6rem;
+        line-height: 1.5em;
     }
 
     &__descriptionIcon {
@@ -36,6 +39,8 @@
             'header header' 1fr
             'left   right' 3fr / 1fr 1fr;
         column-gap: 3rem;
+        font-size: 1.6rem;
+        line-height: 1.2em;
 
         h5 {
             grid-area: header;
@@ -87,8 +92,12 @@
 }
 
 .icon--active {
-    color: red;
+    color: $cadet-blue;
     cursor: pointer;
+
+    &:hover {
+        color: $french-raspberry;
+    }
 }
 
 @media only screen and (min-width: 768px) {
