@@ -46,18 +46,9 @@ module.exports = {
                 ],
             },
             {
-                // See https://webpack.js.org/loaders/url-loader/
                 test: /\.svg$/,
                 exclude: /fonts/,
-                use: [
-                    {
-                        loader: 'url-loader',
-                        options: {
-                            generator: (content) =>
-                                svgToMiniDataURI(content.toString()),
-                        },
-                    },
-                ],
+                use: 'raw-loader',
             },
             {
                 // See https://chriscourses.com/blog/loading-fonts-webpack

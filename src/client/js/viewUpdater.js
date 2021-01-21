@@ -305,7 +305,7 @@ const viewUpdater = (function () {
         img.setAttribute('alt', photo.subject);
         img.setAttribute('type', 'image/jpeg');
         picture.appendChild(img);
-        caption.innerHTML = `${photo.subject}. Photo by <a href="${photo.userURL}">${photo.user}</a> at <a href="${photo.pageURL}"><img src="${logo}" alt="Pixabay" class="photo__logo"></a>`;
+        caption.innerHTML = `${photo.subject}. Photo by <a href="${photo.userURL}">${photo.user}</a> at <a href="${photo.pageURL}" aria-labelledby="pixabay">${logo}</a>`;
     }
 
     function showPictureError(message) {
