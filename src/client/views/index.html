@@ -10,152 +10,145 @@
         />
     </head>
     <body>
-        <div class="grid">
-            <header class="header">
-                <h1>Travel App</h1>
-            </header>
-            <main>
-                <section class="tripSelection">
-                    <header class="tripSelection__header">
-                        <h2>Where do you want to travel next?</h2>
+        <header class="header">
+            <h1>Travel App</h1>
+        </header>
+        <main>
+            <section class="tripSelection">
+                <header class="tripSelection__header">
+                    <h2>Where do you want to travel next?</h2>
+                </header>
+                <form
+                    class="form"
+                    id="tripSelection__form"
+                    action="#"
+                    autocomplete="off"
+                >
+                    <div class="form__errors">
+                        <p
+                            class="form__error error"
+                            id="tripSelection__error--city"
+                        ></p>
+                        <p
+                            class="form__error error"
+                            id="tripSelection__error--startDate"
+                        ></p>
+                        <p
+                            class="form__error error"
+                            id="tripSelection__error--endDate"
+                        ></p>
+                    </div>
+                    <div class="form__field form__city">
+                        <label for="city" class="form__label"
+                            >Destination</label
+                        >
+                        <div class="autocomplete">
+                            <!-- This input element with autocomplete functionality is based on https://www.w3schools.com/howto/howto_js_autocomplete.asp-->
+                            <input
+                                class="autocomplete__input"
+                                type="text"
+                                id="city"
+                                name="city"
+                                placeholder="City"
+                            />
+                        </div>
+                    </div>
+                    <div
+                        class="form__date form__field form__date--start"
+                        id="tripSelection__container--startDate"
+                    ></div>
+                    <div
+                        class="form__date form__field form__date--end"
+                        id="tripSelection__container--endDate"
+                    ></div>
+                    <input
+                        class="form__submit"
+                        type="submit"
+                        value="Submit"
+                        id="tripSelection__submit"
+                    />
+                </form>
+            </section>
+            <section id="newTrip" class="newTrip">
+                <header class="newTrip__header">
+                    <h2>Your new trip</h2>
+                </header>
+                <article class="trip">
+                    <header class="trip__header">
+                        <h3
+                            class="trip__header--destination"
+                            id="newTrip__destination"
+                        >
+                            Destination
+                        </h3>
+                        <p class="trip__header--country" id="newTrip__country">
+                            Province, COUNTRY
+                        </p>
                     </header>
-                    <form
-                        class="form"
-                        id="tripSelection__form"
-                        action="#"
-                        autocomplete="off"
-                    >
-                        <div class="form__errors">
-                            <p
-                                class="form__error error"
-                                id="tripSelection__error--city"
-                            ></p>
-                            <p
-                                class="form__error error"
-                                id="tripSelection__error--startDate"
-                            ></p>
-                            <p
-                                class="form__error error"
-                                id="tripSelection__error--endDate"
-                            ></p>
-                        </div>
-                        <div class="form__field form__city">
-                            <label for="city" class="form__label"
-                                >Destination</label
-                            >
-                            <div class="autocomplete">
-                                <!-- This input element with autocomplete functionality is based on https://www.w3schools.com/howto/howto_js_autocomplete.asp-->
-                                <input
-                                    class="autocomplete__input"
-                                    type="text"
-                                    id="city"
-                                    name="city"
-                                    placeholder="City"
-                                />
-                            </div>
-                        </div>
+                    <div class="photo" id="newTrip__photo">
+                        <p
+                            class="photo__error error"
+                            id="newTrip__photo--error"
+                        ></p>
+                        <figure class="photo__figure">
+                            <img class="photo__img" src="" alt="" />
+                            <figcaption
+                                class="photo__caption"
+                                id="newTrip__photo--caption"
+                            ></figcaption>
+                        </figure>
+                    </div>
+                    <section class="time">
                         <div
-                            class="form__date form__field form__date--start"
-                            id="tripSelection__container--startDate"
+                            class="time__icon time__icon--calendar"
+                            aria-hidden="true"
+                            focusable="false"
                         ></div>
+                        <p class="time__daysToTrip">
+                            Your trip is
+                            <span id="newTrip__daysToTrip">in 0 days</span>
+                        </p>
+                        <p class="time__date time__date--start">
+                            <span class="time__label">From: </span
+                            ><span id="newTrip__startDate"></span>
+                        </p>
+                        <p class="time__date time__date--end">
+                            <span class="time__label">To: </span
+                            ><span id="newTrip__endDate"></span>
+                        </p>
+                        <p class="time__duration">
+                            <span class="time__label"
+                                >Duration of the trip:</span
+                            >
+                            <span id="newTrip__duration">1 day</span>
+                        </p>
                         <div
-                            class="form__date form__field form__date--end"
-                            id="tripSelection__container--endDate"
+                            class="time__icon--airplane time__icon"
+                            aria-hidden="true"
+                            focusable="false"
                         ></div>
-                        <input
-                            class="form__submit"
-                            type="submit"
-                            value="Submit"
-                            id="tripSelection__submit"
-                        />
-                    </form>
-                </section>
-                <section id="newTrip" class="newTrip">
-                    <header class="newTrip__header">
-                        <h2>Your new trip</h2>
-                    </header>
-                    <article class="trip">
-                        <header class="trip__header">
-                            <h3
-                                class="trip__header--destination"
-                                id="newTrip__destination"
-                            >
-                                Destination
-                            </h3>
-                            <p
-                                class="trip__header--country"
-                                id="newTrip__country"
-                            >
-                                Province, COUNTRY
-                            </p>
-                        </header>
-                        <div class="photo" id="newTrip__photo">
-                            <p
-                                class="photo__error error"
-                                id="newTrip__photo--error"
-                            ></p>
-                            <figure class="photo__figure">
-                                <img class="photo__img" src="" alt="" />
-                                <figcaption
-                                    class="photo__caption"
-                                    id="newTrip__photo--caption"
-                                ></figcaption>
-                            </figure>
-                        </div>
-                        <section class="time">
-                            <div
-                                class="time__icon time__icon--calendar"
-                                aria-hidden="true"
-                                focusable="false"
-                            ></div>
-                            <p class="time__daysToTrip">
-                                Your trip is
-                                <span id="newTrip__daysToTrip">in 0 days</span>
-                            </p>
-                            <p class="time__date time__date--start">
-                                <span class="time__label">From: </span
-                                ><span id="newTrip__startDate"></span>
-                            </p>
-                            <p class="time__date time__date--end">
-                                <span class="time__label">To: </span
-                                ><span id="newTrip__endDate"></span>
-                            </p>
-                            <p class="time__duration">
-                                <span class="time__label"
-                                    >Duration of the trip:</span
-                                >
-                                <span id="newTrip__duration">1 day</span>
-                            </p>
-                            <div
-                                class="time__icon--airplane time__icon"
-                                aria-hidden="true"
-                                focusable="false"
-                            ></div>
-                        </section>
-                        <section
-                            id="newTrip__weather--current"
-                            class="weather weather--current"
-                        ></section>
-                        <section
-                            id="newTrip__weather--forecast"
-                            class="weather weather--forecast"
-                        ></section>
-                    </article>
-                </section>
-            </main>
-            <footer class="footer">
-                <p>
-                    Airplane icon made by
-                    <a href="https://www.freepik.com" title="Freepik"
-                        >Freepik</a
-                    >
-                    from
-                    <a href="https://www.flaticon.com/" title="Flaticon"
-                        >www.flaticon.com</a
-                    >
-                </p>
-                <p>&copy; Pablo Asencio Sánchez</p>
-            </footer>
-        </div>
+                    </section>
+                    <section
+                        id="newTrip__weather--current"
+                        class="weather weather--current"
+                    ></section>
+                    <section
+                        id="newTrip__weather--forecast"
+                        class="weather weather--forecast"
+                    ></section>
+                </article>
+            </section>
+        </main>
+        <footer class="footer">
+            <p>
+                Airplane icon made by
+                <a href="https://www.freepik.com" title="Freepik">Freepik</a>
+                from
+                <a href="https://www.flaticon.com/" title="Flaticon"
+                    >www.flaticon.com</a
+                >
+            </p>
+            <p>&copy; Pablo Asencio Sánchez</p>
+        </footer>
     </body>
 </html>
