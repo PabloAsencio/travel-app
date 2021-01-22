@@ -1,5 +1,6 @@
-import { loadConfig } from 'browserslist';
 import logo from '../../assets/images/pixabay-logo.svg';
+import airplane from '../../assets/images/airplane.svg';
+import calendar from '../../assets/images/calendar.svg';
 
 const viewUpdater = (function () {
     let _applicationState;
@@ -12,6 +13,7 @@ const viewUpdater = (function () {
         const fragment = document.createDocumentFragment();
         const label = document.createElement('LABEL');
         label.setAttribute('for', 'tripSelection__' + id);
+        label.classList.add('form__label');
         label.textContent = labelText;
         fragment.appendChild(label);
         const input = document.createElement('INPUT');
@@ -29,6 +31,8 @@ const viewUpdater = (function () {
         );
         const fragment = document.createDocumentFragment();
         const label = document.createElement('P');
+        label.classList.add('form__label');
+        label.classList.add('form__label--fallback');
         label.textContent = labelText;
         fragment.appendChild(label);
         const fallBackDateInput = document.createElement('DIV');
@@ -36,12 +40,12 @@ const viewUpdater = (function () {
         fallBackDateInput.classList.add('form__date--fallback');
         fallBackDateInput.innerHTML = `
           <span class="form__select">
-            <label for="tripSelection__${id}--day">Day:</label>
+            <label for="tripSelection__${id}--day" class="screen-reader-only">Day:</label>
             <select id="tripSelection__${id}--day"" name="tripSelection__${id}--day"">
             </select>
           </span>
           <span class="form__select">
-            <label for="tripSelection__${id}--month">Month:</label>
+            <label for="tripSelection__${id}--month" class="screen-reader-only">Month:</label>
             <select id="tripSelection__${id}--month" name="tripSelection__${id}--month">
               <option value="01" selected>January</option>
               <option value="02">February</option>
@@ -58,7 +62,7 @@ const viewUpdater = (function () {
             </select>
           </span>
           <span class="form__select">
-            <label for="tripSelection__${id}--year">Year:</label>
+            <label for="tripSelection__${id}--year" class="screen-reader-only">Year:</label>
             <select id="tripSelection__${id}--year" name="tripSelection__${id}--year">
             </select>
           </span>`;
@@ -171,7 +175,6 @@ const viewUpdater = (function () {
         const startDate = new Date(_applicationState.startDate);
         const endDate = new Date(_applicationState.endDate);
         const options = {
-            weekday: 'long',
             year: 'numeric',
             month: 'long',
             day: 'numeric',
@@ -183,13 +186,18 @@ const viewUpdater = (function () {
             'newTrip__endDate'
         ).textContent = endDate.toLocaleDateString('en-US', options);
         document.getElementById('newTrip__daysToTrip').textContent =
-            _applicationState.daysToTrip +
-            ' day' +
-            (_applicationState.daysToTrip != 1 ? 's' : '');
+            _applicationState.daysToTrip == 0
+                ? 'today! Get Ready!'
+                : 'in ' +
+                  _applicationState.daysToTrip +
+                  ' day' +
+                  (_applicationState.daysToTrip != 1 ? 's' : '');
         document.getElementById('newTrip__duration').textContent =
             _applicationState.duration +
             ' day' +
             (_applicationState.duration != 1 ? 's' : '');
+        document.querySelector('.time__icon--calendar').innerHTML = calendar;
+        document.querySelector('.time__icon--airplane').innerHTML = airplane;
     }
 
     function showDateError(id, message) {
@@ -288,23 +296,28 @@ const viewUpdater = (function () {
     function updatePicture(photos) {
         clearPictureError();
         const photo = photos['pictures'][0]; // In the future all pictures should be shown in a carrousel
-        const photoContainer = document.getElementById('newTrip__photo');
-        const picture = photoContainer.getElementsByTagName('picture')[0];
-        picture.innerHTML = '';
-        const img = document.createElement('IMG');
-        img.classList.add('photo__img');
-        const caption = document.getElementById('newTrip__photo--caption');
-        const source = document.createElement('SOURCE');
-        source.setAttribute(
-            'srcset',
-            `${photo.imageURL} 1x, ${photo.largeImageURL} 2x`
+        console.log(photo.imageURL);
+        const noSuffixImageURL = photo.imageURL.substring(
+            0,
+            photo.imageURL.length - 8
         );
-        source.setAttribute('type', 'image/jpeg');
-        picture.appendChild(source);
-        img.setAttribute('src', photo.imageURL);
+        console.log(noSuffixImageURL);
+        const photoContainer = document.getElementById('newTrip__photo');
+        const img = photoContainer.getElementsByTagName('IMG')[0];
+        const caption = document.getElementById('newTrip__photo--caption');
+        img.setAttribute(
+            'srcset',
+            `${noSuffixImageURL + '_340.jpg'} 340w, ${photo.imageURL} 640w, ${
+                photo.largeImageURL
+            } 1280w`
+        );
+        img.setAttribute(
+            'sizes',
+            '(min-width:1444px) calc(2 * (80vw - 1rem) / 3), 80vw'
+        );
+        img.setAttribute('src', photo.largeImageURL);
         img.setAttribute('alt', photo.subject);
         img.setAttribute('type', 'image/jpeg');
-        picture.appendChild(img);
         caption.innerHTML = `${photo.subject}. Photo by <a href="${photo.userURL}">${photo.user}</a> at <a href="${photo.pageURL}" aria-labelledby="pixabay">${logo}</a>`;
     }
 

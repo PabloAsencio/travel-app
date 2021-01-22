@@ -40,30 +40,15 @@ main {
     }
 }
 
-.photo {
-    width: 100%;
-
-    &__img {
-        width: 100%;
-    }
-
-    &__logo {
-        position: relative;
-        height: 1em;
-        top: 0.2em;
-    }
-}
-
 .newTrip {
     &__header {
         margin: 0 auto;
         width: 100%;
-    }
-}
 
-.trip {
-    margin: 0 auto;
-    width: 100%;
+        h2 {
+            margin-left: 1.5rem;
+        }
+    }
 }
 
 @media only screen and (min-width: 768px) {
@@ -80,51 +65,5 @@ main {
                 width: 100%;
             }
         }
-    }
-
-    .trip {
-        display: grid;
-        grid-template:
-            'destination destination' 0.1fr
-            'photo    photo' 2fr
-            'time     weather' 1fr
-            'forecast forecast' minmax(min-content, max-content) / 1fr 3fr;
-        gap: 1rem;
-
-        &__header {
-            grid-area: destination;
-        }
-    }
-
-    .photo {
-        grid-area: photo;
-    }
-
-    .time {
-        grid-area: time;
-    }
-
-    .weather {
-        &--current {
-            grid-area: weather;
-        }
-        &--forecast {
-            grid-area: forecast;
-            display: flex;
-            flex-flow: row wrap;
-            justify-content: flex-start;
-            align-items: flex-start;
-        }
-    }
-}
-
-@media only screen and (min-width: 1124px) {
-    .trip {
-        grid-template:
-            'destination destination destination' 0.1fr
-            'photo       photo       time' 1fr
-            'photo       photo       weather' 1fr
-            'forecast    forecast     forecast' minmax(min-content, max-content)
-            / 1fr 3fr 1fr;
     }
 }

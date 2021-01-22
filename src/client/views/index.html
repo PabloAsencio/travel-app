@@ -40,7 +40,9 @@
                             ></p>
                         </div>
                         <div class="form__field form__city">
-                            <label for="city">Destination</label>
+                            <label for="city" class="form__label"
+                                >Destination</label
+                            >
                             <div class="autocomplete">
                                 <!-- This input element with autocomplete functionality is based on https://www.w3schools.com/howto/howto_js_autocomplete.asp-->
                                 <input
@@ -93,7 +95,7 @@
                                 id="newTrip__photo--error"
                             ></p>
                             <figure class="photo__figure">
-                                <picture class="photo__picture"></picture>
+                                <img class="photo__img" src="" alt="" />
                                 <figcaption
                                     class="photo__caption"
                                     id="newTrip__photo--caption"
@@ -101,18 +103,34 @@
                             </figure>
                         </div>
                         <section class="time">
-                            <p class="time__date" id="newTrip__startDate">
-                                From:
+                            <div
+                                class="time__icon time__icon--calendar"
+                                aria-hidden="true"
+                                focusable="false"
+                            ></div>
+                            <p class="time__daysToTrip">
+                                Your trip is
+                                <span id="newTrip__daysToTrip">in 0 days</span>
                             </p>
-                            <p class="time__date" id="newTrip__endDate">To:</p>
+                            <p class="time__date time__date--start">
+                                <span class="time__label">From: </span
+                                ><span id="newTrip__startDate"></span>
+                            </p>
+                            <p class="time__date time__date--end">
+                                <span class="time__label">To: </span
+                                ><span id="newTrip__endDate"></span>
+                            </p>
                             <p class="time__duration">
-                                Duration of the trip:
+                                <span class="time__label"
+                                    >Duration of the trip:</span
+                                >
                                 <span id="newTrip__duration">1 day</span>
                             </p>
-                            <p class="time__daysToTrip">
-                                Your trip is in
-                                <span id="newTrip__daysToTrip">0 days</span>
-                            </p>
+                            <div
+                                class="time__icon--airplane time__icon"
+                                aria-hidden="true"
+                                focusable="false"
+                            ></div>
                         </section>
                         <section
                             id="newTrip__weather--current"
@@ -126,6 +144,16 @@
                 </section>
             </main>
             <footer class="footer">
+                <p>
+                    Airplane icon made by
+                    <a href="https://www.freepik.com" title="Freepik"
+                        >Freepik</a
+                    >
+                    from
+                    <a href="https://www.flaticon.com/" title="Flaticon"
+                        >www.flaticon.com</a
+                    >
+                </p>
                 <p>&copy; Pablo Asencio Sánchez</p>
             </footer>
         </div>
