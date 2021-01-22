@@ -1,6 +1,6 @@
 const apiService = (function () {
-    // TODO: Remove references to localhost from final version
-    const server = 'http://localhost:8082/';
+    const server = '//' + window.location.hostname + ':8082/';
+    console.log(server);
     const citiesEndpoint = 'listCities';
     const singleCityEndpoint = 'city';
     const currentWeatherEndpoint = 'currentWeather';

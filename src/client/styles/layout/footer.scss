@@ -1,0 +1,21 @@
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 9.6rem;
+    background-color: $oxford-blue;
+    color: $cadet-blue;
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 1.067rem;
+    line-height: 1.5em;
+
+    a {
+        text-decoration: underline dotted;
+
+        &:hover {
+            color: $magnolia;
+            text-decoration: underline solid;
+        }
+    }
+}

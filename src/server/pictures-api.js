@@ -111,9 +111,9 @@ const picturesAPI = (function () {
     }
 
     function handleSuccess(apiResponse, subject) {
-        const pictures = apiResponse.data.hits.map((hit) =>
-            makePictureObject(hit, subject)
-        );
+        const pictures = apiResponse.data.hits
+            .filter((hit) => checkAspectRatio(hit))
+            .map((hit) => makePictureObject(hit, subject));
         return pictures;
     }
 
@@ -137,6 +137,13 @@ const picturesAPI = (function () {
             userURL: `https://pixabay.com/users/${picture.user}-${picture.user_id}/`,
             userImageURL: picture.userImageURL,
         };
+    }
+
+    function checkAspectRatio(picture) {
+        const aspectRatio =
+            Number.parseFloat(picture.imageWidth) /
+            Number.parseFloat(picture.imageHeight);
+        return aspectRatio > 1.2 && aspectRatio < 1.8;
     }
 
     return {

@@ -1,0 +1,15 @@
+@import 'base/resets.scss';
+@import 'base/colors.scss';
+@import 'base/base.scss';
+@import 'base/typography.scss';
+
+@import 'layout/layout.scss';
+@import 'layout/header.scss';
+@import 'layout/footer.scss';
+
+@import 'components/form.scss';
+@import 'components/trip.scss';
+@import 'components/weather.scss';
+
+@import 'weather-icons/weather-icons.scss';
+@import 'weather-icons/weather-icons-wind.scss';

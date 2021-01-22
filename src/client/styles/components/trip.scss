@@ -1,0 +1,175 @@
+.trip {
+    margin: 0 auto;
+    width: 100%;
+
+    &__header {
+        padding: 0 1.5rem;
+        &--destination {
+            color: $french-raspberry;
+        }
+
+        &--country {
+            font-size: 1.6rem;
+            line-height: 1.5em;
+            font-weight: 300;
+            letter-spacing: 0.2rem;
+            margin: -1rem 0 1rem 0;
+        }
+    }
+}
+
+.time {
+    background-color: $magnolia;
+    border-radius: 0.5rem;
+    font-size: 1.6rem;
+    line-height: 1.5em;
+    padding: 1.5rem;
+    display: grid;
+    grid-template:
+        'calendar daysToTrip' auto
+        '........ startDate' auto
+        '........ endDate' auto
+        '........ duration' auto
+        'airplane airplane' 1fr / 3.6rem 1fr;
+    column-gap: 1rem;
+    row-gap: 0.5rem;
+
+    &__daysToTrip {
+        grid-area: daysToTrip;
+        align-self: center;
+    }
+
+    &__date {
+        &--start {
+            grid-area: startDate;
+        }
+
+        &--end {
+            grid-area: endDate;
+        }
+    }
+
+    &__duration {
+        grid-area: duration;
+    }
+
+    &__daysToTrip,
+    &__label {
+        font-weight: 500;
+    }
+
+    &__icon {
+        & > svg {
+            fill: $oxford-blue;
+        }
+
+        &--calendar {
+            grid-area: calendar;
+
+            & > svg {
+                width: 3.6rem;
+                height: 3.6rem;
+            }
+        }
+
+        &--airplane {
+            grid-area: airplane;
+            display: none;
+        }
+    }
+}
+
+.photo {
+    width: 100%;
+    margin-bottom: 1.5rem;
+
+    &__img {
+        width: 100%;
+        border-radius: 0.5rem;
+    }
+
+    &__logo {
+        position: relative;
+        height: 1em;
+        top: 0.2em;
+        max-width: 6rem;
+        fill: $oxford-blue;
+        &:hover {
+            fill: $french-raspberry;
+        }
+    }
+
+    &__caption {
+        margin-left: 1.5rem;
+        a {
+            text-decoration: underline dotted;
+            &:hover {
+                color: $french-raspberry;
+                text-decoration: underline solid;
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .trip {
+        display: grid;
+        grid-template:
+            'destination destination' 0.1fr
+            'photo    photo' auto
+            'time     weather' auto
+            'forecast forecast' minmax(min-content, max-content) / 2fr 3fr;
+        gap: 1.5rem;
+
+        &__header {
+            grid-area: destination;
+        }
+    }
+
+    .photo {
+        grid-area: photo;
+
+        &__caption {
+            font-size: 1.067rem;
+            line-height: 1.2em;
+        }
+    }
+
+    .time {
+        grid-area: time;
+    }
+}
+
+@media only screen and (min-width: 1444px) {
+    .trip {
+        grid-template:
+            'destination destination destination' 0.1fr
+            'photo       photo       time' auto
+            'photo       photo       weather' auto
+            'forecast    forecast     forecast' minmax(min-content, max-content)
+            / 1fr 3fr 1fr;
+    }
+
+    .time {
+        &__icon {
+            &--airplane {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                & > svg {
+                    width: 8.1rem;
+                    height: 8.1rem;
+                }
+            }
+        }
+    }
+
+    .photo {
+        box-sizing: border-box;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        height: 100%;
+        background-color: $magnolia;
+    }
+}

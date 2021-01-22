@@ -1,4 +1,6 @@
 import logo from '../../assets/images/pixabay-logo.svg';
+import airplane from '../../assets/images/airplane.svg';
+import calendar from '../../assets/images/calendar.svg';
 
 const viewUpdater = (function () {
     let _applicationState;
@@ -11,6 +13,7 @@ const viewUpdater = (function () {
         const fragment = document.createDocumentFragment();
         const label = document.createElement('LABEL');
         label.setAttribute('for', 'tripSelection__' + id);
+        label.classList.add('form__label');
         label.textContent = labelText;
         fragment.appendChild(label);
         const input = document.createElement('INPUT');
@@ -28,18 +31,21 @@ const viewUpdater = (function () {
         );
         const fragment = document.createDocumentFragment();
         const label = document.createElement('P');
+        label.classList.add('form__label');
+        label.classList.add('form__label--fallback');
         label.textContent = labelText;
         fragment.appendChild(label);
         const fallBackDateInput = document.createElement('DIV');
         fallBackDateInput.id = 'tripSelection__' + id;
+        fallBackDateInput.classList.add('form__date--fallback');
         fallBackDateInput.innerHTML = `
-          <span>
-            <label for="tripSelection__${id}--day">Day:</label>
+          <span class="form__select">
+            <label for="tripSelection__${id}--day" class="screen-reader-only">Day:</label>
             <select id="tripSelection__${id}--day"" name="tripSelection__${id}--day"">
             </select>
           </span>
-          <span>
-            <label for="tripSelection__${id}--month">Month:</label>
+          <span class="form__select">
+            <label for="tripSelection__${id}--month" class="screen-reader-only">Month:</label>
             <select id="tripSelection__${id}--month" name="tripSelection__${id}--month">
               <option value="01" selected>January</option>
               <option value="02">February</option>
@@ -55,8 +61,8 @@ const viewUpdater = (function () {
               <option value="12">December</option>
             </select>
           </span>
-          <span>
-            <label for="tripSelection__${id}--year">Year:</label>
+          <span class="form__select">
+            <label for="tripSelection__${id}--year" class="screen-reader-only">Year:</label>
             <select id="tripSelection__${id}--year" name="tripSelection__${id}--year">
             </select>
           </span>`;
@@ -169,7 +175,6 @@ const viewUpdater = (function () {
         const startDate = new Date(_applicationState.startDate);
         const endDate = new Date(_applicationState.endDate);
         const options = {
-            weekday: 'long',
             year: 'numeric',
             month: 'long',
             day: 'numeric',
@@ -181,13 +186,18 @@ const viewUpdater = (function () {
             'newTrip__endDate'
         ).textContent = endDate.toLocaleDateString('en-US', options);
         document.getElementById('newTrip__daysToTrip').textContent =
-            _applicationState.daysToTrip +
-            ' day' +
-            (_applicationState.daysToTrip != 1 ? 's' : '');
+            _applicationState.daysToTrip == 0
+                ? 'today! Get Ready!'
+                : 'in ' +
+                  _applicationState.daysToTrip +
+                  ' day' +
+                  (_applicationState.daysToTrip != 1 ? 's' : '');
         document.getElementById('newTrip__duration').textContent =
             _applicationState.duration +
             ' day' +
             (_applicationState.duration != 1 ? 's' : '');
+        document.querySelector('.time__icon--calendar').innerHTML = calendar;
+        document.querySelector('.time__icon--airplane').innerHTML = airplane;
     }
 
     function showDateError(id, message) {
@@ -286,23 +296,29 @@ const viewUpdater = (function () {
     function updatePicture(photos) {
         clearPictureError();
         const photo = photos['pictures'][0]; // In the future all pictures should be shown in a carrousel
-        const photoContainer = document.getElementById('newTrip__photo');
-        const picture = photoContainer.getElementsByTagName('picture')[0];
-        picture.innerHTML = '';
-        const img = document.createElement('IMG');
-        const caption = document.getElementById('newTrip__photo--caption');
-        const source = document.createElement('SOURCE');
-        source.setAttribute(
-            'srcset',
-            `${photo.imageURL} 1x, ${photo.largeImageURL} 2x`
+        console.log(photo.imageURL);
+        const noSuffixImageURL = photo.imageURL.substring(
+            0,
+            photo.imageURL.length - 8
         );
-        source.setAttribute('type', 'image/jpeg');
-        picture.appendChild(source);
-        img.setAttribute('src', photo.imageURL);
+        console.log(noSuffixImageURL);
+        const photoContainer = document.getElementById('newTrip__photo');
+        const img = photoContainer.getElementsByTagName('IMG')[0];
+        const caption = document.getElementById('newTrip__photo--caption');
+        img.setAttribute(
+            'srcset',
+            `${noSuffixImageURL + '_340.jpg'} 340w, ${photo.imageURL} 640w, ${
+                photo.largeImageURL
+            } 1280w`
+        );
+        img.setAttribute(
+            'sizes',
+            '(min-width:1444px) calc(2 * (80vw - 1rem) / 3), 80vw'
+        );
+        img.setAttribute('src', photo.largeImageURL);
         img.setAttribute('alt', photo.subject);
         img.setAttribute('type', 'image/jpeg');
-        picture.appendChild(img);
-        caption.innerHTML = `${photo.subject}. Photo by <a href="${photo.userURL}">${photo.user}</a> at <a href="${photo.pageURL}"><img src="${logo}" alt="Pixabay"></a>`;
+        caption.innerHTML = `${photo.subject}. Photo by <a href="${photo.userURL}">${photo.user}</a> at <a href="${photo.pageURL}" aria-labelledby="pixabay">${logo}</a>`;
     }
 
     function showPictureError(message) {
@@ -315,20 +331,23 @@ const viewUpdater = (function () {
         error.textContent = '';
     }
 
-    const weatherSection = document.getElementById('newTrip__weather');
-
     function updateCurrentWeather(currentWeather) {
         if (currentWeather.error) {
-            showErrorMessage(currentWeather.error);
+            showErrorMessage(
+                currentWeather.error,
+                document.getElementById('newTrip__weather--current')
+            );
         } else {
-            createLocationCard();
             createCurrentWeatherCard(currentWeather);
         }
     }
 
     function updateWeatherForecast(weatherForecast) {
         if (weatherForecast.error) {
-            showErrorMessage(weatherForecast.error);
+            showErrorMessage(
+                weatherForecast.error,
+                document.getElementById('newTrip__weather--forecast')
+            );
         } else {
             const dailyForecasts = weatherForecast.dailyForecasts;
             for (const day of dailyForecasts) {
@@ -337,7 +356,7 @@ const viewUpdater = (function () {
         }
     }
 
-    function showErrorMessage(errorMessage) {
+    function showErrorMessage(errorMessage, weatherSection) {
         const fragment = document.createDocumentFragment();
         const error = document.createElement('P');
         error.textContent = errorMessage;
@@ -346,63 +365,254 @@ const viewUpdater = (function () {
     }
 
     function clearWeatherSection() {
-        weatherSection.innerHTML = '';
+        const currentWeatherSection = document.getElementById(
+            'newTrip__weather--current'
+        );
+        const weatherForecastSection = document.getElementById(
+            'newTrip__weather--forecast'
+        );
+        currentWeatherSection.innerHTML = '';
+        weatherForecastSection.innerHTML = '';
     }
 
     function createCurrentWeatherCard(currentWeather) {
+        const weatherSection = document.getElementById(
+            'newTrip__weather--current'
+        );
         const fragment = document.createDocumentFragment();
         const card = document.createElement('ARTICLE');
+        card.classList.add('weather__card');
         card.classList.add('weather__card--current');
-        card.innerHTML = `<dl>
-            <dt>Weather Description</dt>
-            <dd>${currentWeather.description}</dd>
-            <dt>Temperature</dt>
-            <dd>${currentWeather.temperature}</dd>
-            <dt>Feels Like</dt>
-            <dd>${currentWeather.feelsLike}</dd>
-            <dt>Wind Speed</dt>
-            <dd>${currentWeather.windSpeed}</dd>
-            <dt>Wind Direction</dt>
-            <dd>${currentWeather.windDirectionAsText}</dd>
-        </dl>`;
+        const weatherDescription = document.createElement('HEADER');
+        weatherDescription.classList.add('weather__header');
+        weatherDescription.innerHTML = `
+            <div class="weather__descriptionIcon">
+                <i class="wi wi-wb-${currentWeather.code}" aria-hidden="true"></i>
+            </div>
+            <h4 class="weather__description">${currentWeather.description}</h4>`;
+        card.appendChild(weatherDescription);
+        const temperature = document.createElement('SECTION');
+        temperature.classList.add('weather__temperature');
+        temperature.innerHTML = `
+            <h5>Temperature</h5>
+            <div class="weather__temperature--real">
+                <h6>Real</h6>
+                <p>
+                    <span class="weather__temperature--celsius">${
+                        currentWeather.temperature
+                    }</span>
+                    <span class="weather__temperature--fahrenheit" hidden aria-hidden="true">${convertCelsiusToFahrenheit(
+                        currentWeather.temperature
+                    )}</span>
+                    <span><i class="wi wi-celsius" aria-label="degrees Celsius"></i></span> | <span><i class="wi wi-fahrenheit icon--active" aria-label="switch to degrees Fahrenheit"></i></span>
+                </p>
+            </div>
+            <div class="weather__temperature--feels">
+                <h6>Feels like</h6>
+                <p>
+                    <span class="weather__temperature--celsius">${
+                        currentWeather.feelsLike
+                    }</span>
+                    <span class="weather__temperature--fahrenheit" hidden aria-hidden="true">${convertCelsiusToFahrenheit(
+                        currentWeather.feelsLike
+                    )}</span>
+                    <span><i class="wi wi-celsius" aria-label="degrees Celsius"></i></span> | <span><i class="wi wi-fahrenheit icon--active" aria-label="switch to degrees Fahrenheit"></i></span>
+                </p>
+            </div>
+        `;
+        card.appendChild(temperature);
+        const wind = document.createElement('SECTION');
+        wind.classList.add('weather__wind');
+        wind.innerHTML = `
+            <h5>Wind</h5>
+            <div class="weather__windDirection">
+                <p>
+                    <i class="wi wi-wind from-${
+                        currentWeather.windDirectionInDegrees
+                    }-deg" aria-label="${
+            currentWeather.windDirectionAsText
+        }"></i>
+                </p>
+            </div>
+            <div class="weather__windSpeed">
+                <p>
+                    <span class="weather__windSpeed--kmh">${getSpeedInKmH(
+                        currentWeather.windSpeed
+                    )} <span aria-label="kilometers per hour">km/h</span></span>
+                    <span class="weather__windSpeed--mph" hidden aria-hidden="true">${getSpeedInMPH(
+                        currentWeather.windSpeed
+                    )} <span aria-label="miles per hour">mph</span></span>
+                </p>
+            </div>
+        `;
+        card.appendChild(wind);
         fragment.appendChild(card);
         weatherSection.appendChild(fragment);
+        const fahrenheitIcons = document.getElementsByClassName(
+            'wi-fahrenheit'
+        );
+        for (let i = 0; i < fahrenheitIcons.length; i++) {
+            fahrenheitIcons[i].addEventListener('click', switchUnits);
+        }
+    }
+
+    function switchUnits(event) {
+        const switchToFahrenheit = event.target.classList.contains(
+            'wi-fahrenheit'
+        );
+        const celsiusIcons = document.getElementsByClassName('wi-celsius');
+        const fahrenheitIcons = document.getElementsByClassName(
+            'wi-fahrenheit'
+        );
+        const celsiusTemperatures = document.getElementsByClassName(
+            'weather__temperature--celsius'
+        );
+        const fahrenheitTemperatures = document.getElementsByClassName(
+            'weather__temperature--fahrenheit'
+        );
+        const speedsInKmH = document.getElementsByClassName(
+            'weather__windSpeed--kmh'
+        );
+        const speedsInMPH = document.getElementsByClassName(
+            'weather__windSpeed--mph'
+        );
+        for (let i = 0; i < celsiusTemperatures.length; i++) {
+            celsiusTemperatures[i].hidden = switchToFahrenheit;
+            celsiusTemperatures[i].setAttribute(
+                'aria-hidden',
+                switchToFahrenheit
+            );
+            fahrenheitTemperatures[i].hidden = !switchToFahrenheit;
+            fahrenheitTemperatures[i].setAttribute(
+                'aria-hidden',
+                !switchToFahrenheit
+            );
+        }
+        for (let j = 0; j < speedsInKmH.length; j++) {
+            speedsInKmH[j].hidden = switchToFahrenheit;
+            speedsInKmH[j].setAttribute('aria-hidden', switchToFahrenheit);
+            speedsInMPH[j].hidden = !switchToFahrenheit;
+            speedsInMPH[j].setAttribute('aria-hidden', !switchToFahrenheit);
+        }
+        for (let k = 0; k < celsiusIcons.length; k++) {
+            celsiusIcons[k].classList.toggle(
+                'icon--active',
+                switchToFahrenheit
+            );
+            celsiusIcons[k].setAttribute(
+                'aria-label',
+                `${switchToFahrenheit ? 'switch to ' : ''}degrees Celsius`
+            );
+            fahrenheitIcons[k].classList.toggle(
+                'icon--active',
+                !switchToFahrenheit
+            );
+            fahrenheitIcons[k].setAttribute(
+                'aria-label',
+                `${!switchToFahrenheit ? 'switch to ' : ''}degrees Fahrenheit`
+            );
+            if (switchToFahrenheit) {
+                celsiusIcons[k].addEventListener('click', switchUnits);
+                fahrenheitIcons[k].removeEventListener('click', switchUnits);
+            } else {
+                celsiusIcons[k].removeEventListener('click', switchUnits);
+                fahrenheitIcons[k].addEventListener('click', switchUnits);
+            }
+        }
     }
 
     function createForecastCard(forecastedWeather) {
+        const weatherSection = document.getElementById(
+            'newTrip__weather--forecast'
+        );
+        const date = new Date(forecastedWeather.date);
+        const options = {
+            month: 'long',
+            day: 'numeric',
+        };
+        if (date.getFullYear() != new Date().getFullYear()) {
+            options.year = 'numeric';
+        }
         const fragment = document.createDocumentFragment();
         const card = document.createElement('ARTICLE');
-        card.classList.add('weather__card--current');
-        card.innerHTML = `<dl>
-            <dt>Weather Description</dt>
-            <dd>${forecastedWeather.description}</dd>
-            <dt>Max Temperature</dt>
-            <dd>${forecastedWeather.maxTemperature}</dd>
-            <dt>Min Temperature</dt>
-            <dd>${forecastedWeather.minTemperature}</dd>
-            <dt>Wind Speed</dt>
-            <dd>${forecastedWeather.windSpeed}</dd>
-            <dt>Wind Direction</dt>
-            <dd>${forecastedWeather.windDirectionAsText}</dd>
-        </dl>`;
+        card.classList.add('weather__card');
+        card.classList.add('weather__card--forecast');
+        const weatherDescription = document.createElement('HEADER');
+        weatherDescription.classList.add('weather__header');
+        weatherDescription.innerHTML = `
+            <div class="weather__descriptionIcon">
+                <i class="wi wi-wb-${
+                    forecastedWeather.code
+                }" aria-hidden="true"></i>
+            </div>
+            <h4 class="weather__description">${
+                forecastedWeather.description
+            }</h4>
+            <p>${date.toLocaleDateString('en-US', options)}</p>`;
+        card.appendChild(weatherDescription);
+        const temperature = document.createElement('SECTION');
+        temperature.classList.add('weather__temperature');
+        temperature.innerHTML = `
+            <h5>Temperature</h5>
+            <div class="weather__temperature--real">
+                <h6>Low</h6>
+                <p>
+                    <span class="weather__temperature--celsius">${
+                        forecastedWeather.minTemperature
+                    }</span>
+                    <span class="weather__temperature--fahrenheit" hidden aria-hidden="true">${convertCelsiusToFahrenheit(
+                        forecastedWeather.minTemperature
+                    )}</span>
+                    <span><i class="wi wi-celsius" aria-label="degrees Celsius"></i></span> | <span><i class="wi wi-fahrenheit icon--active" aria-label="switch to degrees Fahrenheit"></i></span>
+                </p>
+            </div>
+            <div class="weather__temperature--feels">
+                <h6>High</h6>
+                <p>
+                    <span class="weather__temperature--celsius">${
+                        forecastedWeather.maxTemperature
+                    }</span>
+                    <span class="weather__temperature--fahrenheit" hidden aria-hidden="true">${convertCelsiusToFahrenheit(
+                        forecastedWeather.maxTemperature
+                    )}</span>
+                    <span><i class="wi wi-celsius" aria-label="degrees Celsius"></i></span> | <span><i class="wi wi-fahrenheit icon--active" aria-label="switch to degrees Fahrenheit"></i></span>
+                </p>
+            </div>
+        `;
+        card.appendChild(temperature);
+        const wind = document.createElement('SECTION');
+        wind.classList.add('weather__wind');
+        wind.innerHTML = `
+            <h5>Wind</h5>
+            <div class="weather__windDirection">
+                <p>
+                    <i class="wi wi-wind from-${
+                        forecastedWeather.windDirectionInDegrees
+                    }-deg" aria-label="${
+            forecastedWeather.windDirectionAsText
+        }"></i>
+                </p>
+            </div>
+            <div class="weather__windSpeed">
+                <p>
+                    <span class="weather__windSpeed--kmh">${getSpeedInKmH(
+                        forecastedWeather.windSpeed
+                    )} <span aria-label="kilometers per hour">km/h</span></span>
+                    <span class="weather__windSpeed--mph" hidden aria-hidden="true">${getSpeedInMPH(
+                        forecastedWeather.windSpeed
+                    )} <span aria-label="miles per hour">mph</span></span>
+                </p>
+            </div>
+        `;
+        card.appendChild(wind);
         fragment.appendChild(card);
         weatherSection.appendChild(fragment);
-    }
-
-    function createLocationCard() {
-        const fragment = document.createDocumentFragment();
-        const card = document.createElement('ARTICLE');
-        card.setAttribute('id', 'weather__location');
-        card.classList.add('weather__location');
-        const city = document.createElement('P');
-        city.textContent = _applicationState.city;
-        card.appendChild(city);
-        const provinceAndCountry = document.createElement('P');
-        provinceAndCountry.textContent =
-            _applicationState.province + ', ' + _applicationState.country;
-        card.appendChild(provinceAndCountry);
-        fragment.appendChild(card);
-        weatherSection.appendChild(fragment);
+        const fahrenheitIcons = document.getElementsByClassName(
+            'wi-fahrenheit'
+        );
+        for (let i = 0; i < fahrenheitIcons.length; i++) {
+            fahrenheitIcons[i].addEventListener('click', switchUnits);
+        }
     }
 
     function updateNewTrip() {
@@ -413,6 +623,19 @@ const viewUpdater = (function () {
             _applicationState.province +
             ', ' +
             _applicationState.country.toUpperCase();
+    }
+
+    function convertCelsiusToFahrenheit(celsius) {
+        return Math.round((celsius * 9) / 5 + 32);
+    }
+
+    function getSpeedInKmH(speed) {
+        return Math.round(speed * 3.6);
+    }
+
+    function getSpeedInMPH(speed) {
+        const metersPerMile = 1609.34;
+        return Math.round((speed * 3600) / metersPerMile);
     }
     return {
         set applicationState(applicationState) {

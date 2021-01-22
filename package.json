@@ -7,7 +7,7 @@
     "test": "jest",
     "start": "node src/server/server.js",
     "build": "webpack --config webpack.prod.js",
-    "dev": "node src/server/server.js & webpack-dev-server --config webpack.dev.js --open"
+    "dev": "node src/server/server.js & webpack-dev-server --config webpack.dev.js --host 0.0.0.0 --hot --open --useLocalIp"
   },
   "repository": {
     "type": "git",
@@ -39,16 +39,22 @@
   "devDependencies": {
     "@babel/core": "^7.5.4",
     "@babel/preset-env": "^7.5.4",
+    "autoprefixer": "^10.1.0",
     "babel-loader": "^8.0.6",
     "browserslist": "^4.16.0",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^5.0.1",
+    "file-loader": "^6.2.0",
     "html-webpack-plugin": "^4.5.0",
     "jest": "^26.6.3",
     "mini-css-extract-plugin": "^1.3.3",
     "mini-svg-data-uri": "^1.2.3",
     "node-sass": "^5.0.0",
     "optimize-css-assets-webpack-plugin": "^5.0.4",
+    "postcss": "^8.2.1",
+    "postcss-loader": "^4.1.0",
+    "postcss-preset-env": "^6.7.0",
+    "raw-loader": "^4.0.2",
     "sass-loader": "^10.1.0",
     "style-loader": "^2.0.0",
     "terser-webpack-plugin": "^1.4.5",

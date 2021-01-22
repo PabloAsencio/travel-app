@@ -1,0 +1,60 @@
+.container {
+    position: relative;
+    min-height: 100%;
+}
+
+main {
+    padding-bottom: 5.4rem;
+}
+
+.tripSelection,
+.newTrip {
+    min-width: 20rem;
+    max-width: 80%;
+    margin: 1rem auto 3rem auto;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-start;
+}
+
+.tripSelection {
+    &__header {
+        margin: 0 auto;
+
+        h2 {
+            margin-left: 0.5rem;
+            width: 20rem;
+        }
+    }
+}
+
+.newTrip {
+    padding-bottom: 8.1rem;
+
+    &__header {
+        margin: 0 auto;
+        width: 100%;
+
+        h2 {
+            margin-left: 1.5rem;
+        }
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    main {
+        min-height: 80vh;
+        padding-bottom: 8.1rem;
+    }
+
+    .tripSelection {
+        height: auto;
+
+        &__header {
+            margin: 0 3.7rem;
+            h2 {
+                width: 100%;
+            }
+        }
+    }
+}

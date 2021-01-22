@@ -24,17 +24,42 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
-                use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            postcssOptions: {
+                                plugins: [
+                                    [
+                                        'postcss-preset-env',
+                                        {
+                                            autoprefixer: { grid: true },
+                                        },
+                                    ],
+                                ],
+                            },
+                        },
+                    },
+                    'sass-loader',
+                ],
             },
             {
-                // See https://webpack.js.org/loaders/url-loader/
                 test: /\.svg$/,
+                exclude: /fonts/,
+                use: 'raw-loader',
+            },
+            {
+                // See https://chriscourses.com/blog/loading-fonts-webpack
+                test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+                exclude: /images/,
                 use: [
                     {
-                        loader: 'url-loader',
+                        loader: 'file-loader',
                         options: {
-                            generator: (content) =>
-                                svgToMiniDataURI(content.toString()),
+                            name: '[name].[ext]',
+                            outputPath: 'fonts/',
                         },
                     },
                 ],

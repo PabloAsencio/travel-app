@@ -1,0 +1,202 @@
+.weather {
+    &__card {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        padding: 1rem;
+        margin: 1rem 0;
+        background-color: $magnolia;
+        border-radius: 0.5rem;
+
+        &--current {
+        }
+
+        &--forecast {
+        }
+    }
+
+    &__header {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        color: $french-raspberry;
+        font-size: 1.6rem;
+        line-height: 1.5em;
+    }
+
+    &__descriptionIcon {
+        font-size: 3em;
+        padding: 0.5rem;
+    }
+
+    &__description {
+    }
+
+    &__temperature {
+        min-width: 17rem;
+        margin: 1.5rem 0 -2.5rem 0;
+        display: grid;
+        grid-template:
+            'header header' 1fr
+            'left   right' 3fr / 1fr 1fr;
+        column-gap: 3rem;
+        font-size: 1.6rem;
+        line-height: 1.2em;
+
+        h5 {
+            grid-area: header;
+            margin-bottom: 0.5rem;
+        }
+
+        &--real {
+            grid-area: left;
+        }
+
+        &--feels {
+            grid-area: right;
+        }
+
+        &--celsius {
+        }
+
+        &--fahrenheit {
+        }
+    }
+
+    &__wind {
+        min-width: 17rem;
+        display: grid;
+        grid-template:
+            'header header' 1fr
+            'left   right' 3fr / 1fr 1fr;
+        column-gap: 3rem;
+        font-size: 1.6rem;
+        line-height: 1.2em;
+
+        h5 {
+            grid-area: header;
+            margin-bottom: 0.5rem;
+        }
+
+        &Direction {
+            grid-area: left;
+
+            i {
+                font-size: 3em;
+            }
+        }
+
+        &Speed {
+            grid-area: right;
+            transform: translateY(15%);
+            &--kmh {
+            }
+
+            &--mph {
+            }
+        }
+    }
+}
+
+.icon--active {
+    color: $cadet-blue;
+    cursor: pointer;
+
+    &:hover {
+        color: $french-raspberry;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .weather {
+        &--current {
+            grid-area: weather;
+        }
+
+        &--forecast {
+            grid-area: forecast;
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
+
+        &__card {
+            max-width: 50%;
+            &--current {
+                max-width: 100%;
+                min-height: 100%;
+                padding: 0 1rem 0 0;
+                margin: 0;
+                display: grid;
+                grid-template:
+                    'header temperature' 1fr
+                    'header wind' 1fr / 1fr 1fr;
+            }
+            &--forecast {
+                padding-top: 2rem;
+                min-width: calc((100% - 5.5rem) / 2);
+                margin-top: 0;
+
+                &:nth-child(odd) {
+                    margin-right: 1.5rem;
+                }
+            }
+        }
+
+        &__header {
+            grid-area: header;
+        }
+
+        &__temperature {
+            grid-area: temperature;
+        }
+
+        &__wind {
+            grid-area: wind;
+        }
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    .weather {
+        &__card {
+            &--forecast {
+                min-width: calc((100% - 9rem) / 3);
+                margin-right: 1.5rem;
+
+                &:nth-child(3n + 0) {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 1444px) {
+    .weather {
+        &__card {
+            max-width: 100%;
+
+            &--current {
+                box-sizing: border-box;
+                padding-top: 1.5rem;
+                display: flex;
+                flex-flow: column nowrap;
+                align-items: center;
+                min-height: 100%;
+            }
+
+            &--forecast {
+                min-width: calc((100% - 12.5rem) / 4);
+                &:nth-child(3n + 0) {
+                    margin-right: 1.5rem;
+                }
+
+                &:nth-child(4n + 0) {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+}

@@ -18,8 +18,7 @@ import { cityController } from './js/cityController';
 import { dateInputFactory } from './js/dateInputFactory';
 
 // *** STYLESHEETS ***
-import './styles/style.scss';
-import './styles/form.scss';
+import './styles/main.scss';
 
 // *** CONFIGURE COMPONENTS ***
 // Configure dependencies for the viewUpdater
