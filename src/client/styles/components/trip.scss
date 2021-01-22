@@ -92,7 +92,13 @@
         position: relative;
         height: 1em;
         top: 0.2em;
+        max-width: 6rem;
+        fill: $oxford-blue;
+        &:hover {
+            fill: $french-raspberry;
+        }
     }
+
     &__caption {
         margin-left: 1.5rem;
         a {
@@ -103,14 +109,6 @@
             }
         }
     }
-
-    &__logo {
-        width: auto;
-        fill: $oxford-blue;
-        &:hover {
-            fill: $french-raspberry;
-        }
-    }
 }
 
 @media only screen and (min-width: 768px) {
@@ -119,7 +117,7 @@
         grid-template:
             'destination destination' 0.1fr
             'photo    photo' auto
-            'time     weather' 1fr
+            'time     weather' auto
             'forecast forecast' minmax(min-content, max-content) / 2fr 3fr;
         gap: 1.5rem;
 
@@ -146,8 +144,8 @@
     .trip {
         grid-template:
             'destination destination destination' 0.1fr
-            'photo       photo       time' 1fr
-            'photo       photo       weather' 1fr
+            'photo       photo       time' auto
+            'photo       photo       weather' auto
             'forecast    forecast     forecast' minmax(min-content, max-content)
             / 1fr 3fr 1fr;
     }
