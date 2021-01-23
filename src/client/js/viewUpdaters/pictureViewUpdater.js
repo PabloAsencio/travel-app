@@ -6,12 +6,10 @@ const pictureViewUpdater = (function () {
             showPictureError(photos.error);
         } else {
             const photo = photos['pictures'][0]; // In the future all pictures should be shown in a carrousel
-            console.log(photo.imageURL);
             const noSuffixImageURL = photo.imageURL.substring(
                 0,
                 photo.imageURL.length - 8
             );
-            console.log(noSuffixImageURL);
             const photoContainer = document.getElementById('newTrip__photo');
             const img = photoContainer.getElementsByTagName('IMG')[0];
             const caption = document.getElementById('newTrip__photo--caption');

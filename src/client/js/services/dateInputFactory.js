@@ -65,9 +65,6 @@ const dateInputFactory = (function () {
         });
 
         function getValue() {
-            console.log(
-                `${yearSelect.value}-${monthSelect.value}-${daySelect.value}`
-            );
             return `${yearSelect.value}-${monthSelect.value}-${daySelect.value}`;
         }
 

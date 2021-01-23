@@ -1,6 +1,5 @@
 const apiService = (function () {
     const server = '//' + window.location.hostname + ':8082/';
-    console.log(server);
     const citiesEndpoint = 'listCities';
     const singleCityEndpoint = 'city';
     const currentWeatherEndpoint = 'currentWeather';
