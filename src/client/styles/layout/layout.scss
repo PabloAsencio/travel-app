@@ -39,6 +39,23 @@ main {
             margin-left: 1.5rem;
         }
     }
+
+    &__button {
+        font-size: 1.6rem;
+        line-height: 1.5em;
+        font-weight: 700;
+        background-color: $french-raspberry;
+        color: $magnolia;
+        transition: transform 0.3s;
+        margin: 1.6rem auto 1.6rem auto;
+        padding: 1rem;
+        border-radius: 0.5rem;
+
+        &:hover {
+            transform: translateY(-0.2rem) translateZ(0) scale(1.03);
+            backface-visibility: hidden;
+        }
+    }
 }
 
 @media only screen and (min-width: 768px) {

@@ -115,7 +115,7 @@
     .trip {
         display: grid;
         grid-template:
-            'destination destination' 0.1fr
+            'destination destination' auto
             'photo    photo' auto
             'time     weather' auto
             'forecast forecast' minmax(min-content, max-content) / 2fr 3fr;

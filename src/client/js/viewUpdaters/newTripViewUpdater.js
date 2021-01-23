@@ -5,6 +5,10 @@ import { weatherViewUpdater } from './weatherViewUpdater';
 
 const newTripViewUpdater = (function () {
     let hasNewTripSection = false;
+    // Necessary to make scrolling compatible with old browsers
+    // See https://stackoverflow.com/questions/57354064/browser-native-scroll-function-how-to-check-compatibility
+    const isSmoothScrollSupported =
+        'scrollBehavior' in document.documentElement.style;
 
     function updateNewTrip(newTripData) {
         if (hasNewTripSection) {
@@ -90,7 +94,24 @@ const newTripViewUpdater = (function () {
                 id="newTrip__weather--forecast"
                 class="weather weather--forecast"
             ></section>
-        </article>`;
+            </article>
+            <button class="newTrip__button">Start over!</button>`;
+
+        const button = document.querySelector('.newTrip__button');
+        button.addEventListener('click', () => {
+            const title = document.querySelector('h1');
+            const rectangle = title.getBoundingClientRect();
+            const scrollOptions = {
+                left: 0,
+                top: rectangle.y,
+                behavior: 'smooth',
+            };
+            if (isSmoothScrollSupported) {
+                window.scrollBy(scrollOptions);
+            } else {
+                window.scroll(0, scrollOptions.top + window.scrollY);
+            }
+        });
     }
 
     function clearNewTrip() {
@@ -105,7 +126,11 @@ const newTripViewUpdater = (function () {
             top: rectangle.y,
             behavior: 'smooth',
         };
-        window.scrollBy(scrollOptions);
+        if (isSmoothScrollSupported) {
+            window.scrollBy(scrollOptions);
+        } else {
+            window.scroll(0, scrollOptions.top + window.scrollY);
+        }
     }
 
     function updateHeader(destinationData) {
