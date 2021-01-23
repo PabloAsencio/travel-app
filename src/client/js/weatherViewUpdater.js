@@ -6,7 +6,7 @@ const weatherViewUpdater = (function () {
                 document.getElementById('newTrip__weather--current')
             );
         } else {
-            createCurrentWeatherCard(currentWeather);
+            createWeatherCard(currentWeather, true);
         }
     }
 
@@ -19,7 +19,7 @@ const weatherViewUpdater = (function () {
         } else {
             const dailyForecasts = weatherForecast.dailyForecasts;
             for (const day of dailyForecasts) {
-                createForecastCard(day);
+                createWeatherCard(day, false);
             }
         }
     }
@@ -43,52 +43,67 @@ const weatherViewUpdater = (function () {
         weatherForecastSection.innerHTML = '';
     }
 
-    function createCurrentWeatherCard(currentWeather) {
+    function createWeatherCard(weatherData, isCurrent) {
         const weatherSection = document.getElementById(
-            'newTrip__weather--current'
+            'newTrip__weather--' + (isCurrent ? 'current' : 'forecast')
         );
         const fragment = document.createDocumentFragment();
         const card = document.createElement('ARTICLE');
         card.classList.add('weather__card');
-        card.classList.add('weather__card--current');
+        card.classList.add(
+            'weather__card--' + (isCurrent ? 'current' : 'forecast')
+        );
+        const weatherDescription = makeWeatherDescription(
+            weatherData,
+            isCurrent
+        );
+
+        card.appendChild(weatherDescription);
+        const temperature = makeTemperatureSection(weatherData, isCurrent);
+        card.appendChild(temperature);
+        const wind = makeWindSection(weatherData);
+        card.appendChild(wind);
+        fragment.appendChild(card);
+        weatherSection.appendChild(fragment);
+    }
+
+    function makeWeatherDescription(weatherData, isCurrent) {
         const weatherDescription = document.createElement('HEADER');
         weatherDescription.classList.add('weather__header');
         weatherDescription.innerHTML = `
             <div class="weather__descriptionIcon">
-                <i class="wi wi-wb-${currentWeather.code}" aria-hidden="true"></i>
+                <i class="wi wi-wb-${weatherData.code}" aria-hidden="true"></i>
             </div>
-            <h4 class="weather__description">${currentWeather.description}</h4>`;
-        card.appendChild(weatherDescription);
+            <h4 class="weather__description">${weatherData.description}</h4>
+            <p>${isCurrent ? 'NOW' : makeDate(weatherData)}</p>`;
+        return weatherDescription;
+    }
+
+    function makeTemperatureSection(weatherData, isCurrent) {
         const temperature = document.createElement('SECTION');
+        const temperatureLeft = isCurrent
+            ? weatherData.temperature
+            : weatherData.minTemperature;
+        const temperatureRight = isCurrent
+            ? weatherData.feelsLike
+            : weatherData.maxTemperature;
         temperature.classList.add('weather__temperature');
         temperature.innerHTML = `
             <h5>Temperature</h5>
-            <div class="weather__temperature--real">
-                <h6>Real</h6>
-                <p>
-                    <span class="weather__temperature--celsius">${
-                        currentWeather.temperature
-                    }</span>
-                    <span class="weather__temperature--fahrenheit" hidden aria-hidden="true">${convertCelsiusToFahrenheit(
-                        currentWeather.temperature
-                    )}</span>
-                    <span><i class="wi wi-celsius" aria-label="degrees Celsius"></i></span> | <span><i class="wi wi-fahrenheit icon--active" aria-label="switch to degrees Fahrenheit"></i></span>
-                </p>
+            <div class="weather__temperature--left">
+                <h6>${isCurrent ? 'Real' : 'Low'}</h6>
+                ${makeTemperatureParagraph(temperatureLeft)}
             </div>
-            <div class="weather__temperature--feels">
-                <h6>Feels like</h6>
-                <p>
-                    <span class="weather__temperature--celsius">${
-                        currentWeather.feelsLike
-                    }</span>
-                    <span class="weather__temperature--fahrenheit" hidden aria-hidden="true">${convertCelsiusToFahrenheit(
-                        currentWeather.feelsLike
-                    )}</span>
-                    <span><i class="wi wi-celsius" aria-label="degrees Celsius"></i></span> | <span><i class="wi wi-fahrenheit icon--active" aria-label="switch to degrees Fahrenheit"></i></span>
-                </p>
+            <div class="weather__temperature--right">
+                <h6>${isCurrent ? 'Feels like' : 'High'}</h6>
+                ${makeTemperatureParagraph(temperatureRight)}
             </div>
         `;
-        card.appendChild(temperature);
+        addEventListenersToIcons(temperature, 'celsius');
+        return temperature;
+    }
+
+    function makeWindSection(weatherData) {
         const wind = document.createElement('SECTION');
         wind.classList.add('weather__wind');
         wind.innerHTML = `
@@ -96,39 +111,26 @@ const weatherViewUpdater = (function () {
             <div class="weather__windDirection">
                 <p>
                     <i class="wi wi-wind from-${
-                        currentWeather.windDirectionInDegrees
-                    }-deg" aria-label="${
-            currentWeather.windDirectionAsText
-        }"></i>
+                        weatherData.windDirectionInDegrees
+                    }-deg" aria-label="${weatherData.windDirectionAsText}"></i>
                 </p>
             </div>
             <div class="weather__windSpeed">
                 <p>
-                    <span class="weather__windSpeed--kmh">${getSpeedInKmH(
-                        currentWeather.windSpeed
+                    <span class="weather__windSpeed--kmh" hidden aria-hidden="true">${getSpeedInKmH(
+                        weatherData.windSpeed
                     )} <span aria-label="kilometers per hour">km/h</span></span>
-                    <span class="weather__windSpeed--mph" hidden aria-hidden="true">${getSpeedInMPH(
-                        currentWeather.windSpeed
+                    <span class="weather__windSpeed--mph">${getSpeedInMPH(
+                        weatherData.windSpeed
                     )} <span aria-label="miles per hour">mph</span></span>
                 </p>
             </div>
         `;
-        card.appendChild(wind);
-        fragment.appendChild(card);
-        weatherSection.appendChild(fragment);
-        const fahrenheitIcons = document.getElementsByClassName(
-            'wi-fahrenheit'
-        );
-        for (let i = 0; i < fahrenheitIcons.length; i++) {
-            fahrenheitIcons[i].addEventListener('click', switchUnits);
-        }
+        return wind;
     }
 
-    function createForecastCard(forecastedWeather) {
-        const weatherSection = document.getElementById(
-            'newTrip__weather--forecast'
-        );
-        const date = new Date(forecastedWeather.date);
+    function makeDate(weatherData) {
+        const date = new Date(weatherData.date);
         const options = {
             month: 'long',
             day: 'numeric',
@@ -136,90 +138,50 @@ const weatherViewUpdater = (function () {
         if (date.getFullYear() != new Date().getFullYear()) {
             options.year = 'numeric';
         }
-        const fragment = document.createDocumentFragment();
-        const card = document.createElement('ARTICLE');
-        card.classList.add('weather__card');
-        card.classList.add('weather__card--forecast');
-        const weatherDescription = document.createElement('HEADER');
-        weatherDescription.classList.add('weather__header');
-        weatherDescription.innerHTML = `
-            <div class="weather__descriptionIcon">
-                <i class="wi wi-wb-${
-                    forecastedWeather.code
-                }" aria-hidden="true"></i>
-            </div>
-            <h4 class="weather__description">${
-                forecastedWeather.description
-            }</h4>
-            <p>${date.toLocaleDateString('en-US', options)}</p>`;
-        card.appendChild(weatherDescription);
-        const temperature = document.createElement('SECTION');
-        temperature.classList.add('weather__temperature');
-        temperature.innerHTML = `
-            <h5>Temperature</h5>
-            <div class="weather__temperature--real">
-                <h6>Low</h6>
-                <p>
-                    <span class="weather__temperature--celsius">${
-                        forecastedWeather.minTemperature
-                    }</span>
-                    <span class="weather__temperature--fahrenheit" hidden aria-hidden="true">${convertCelsiusToFahrenheit(
-                        forecastedWeather.minTemperature
-                    )}</span>
-                    <span><i class="wi wi-celsius" aria-label="degrees Celsius"></i></span> | <span><i class="wi wi-fahrenheit icon--active" aria-label="switch to degrees Fahrenheit"></i></span>
-                </p>
-            </div>
-            <div class="weather__temperature--feels">
-                <h6>High</h6>
-                <p>
-                    <span class="weather__temperature--celsius">${
-                        forecastedWeather.maxTemperature
-                    }</span>
-                    <span class="weather__temperature--fahrenheit" hidden aria-hidden="true">${convertCelsiusToFahrenheit(
-                        forecastedWeather.maxTemperature
-                    )}</span>
-                    <span><i class="wi wi-celsius" aria-label="degrees Celsius"></i></span> | <span><i class="wi wi-fahrenheit icon--active" aria-label="switch to degrees Fahrenheit"></i></span>
-                </p>
-            </div>
-        `;
-        card.appendChild(temperature);
-        const wind = document.createElement('SECTION');
-        wind.classList.add('weather__wind');
-        wind.innerHTML = `
-            <h5>Wind</h5>
-            <div class="weather__windDirection">
-                <p>
-                    <i class="wi wi-wind from-${
-                        forecastedWeather.windDirectionInDegrees
-                    }-deg" aria-label="${
-            forecastedWeather.windDirectionAsText
-        }"></i>
-                </p>
-            </div>
-            <div class="weather__windSpeed">
-                <p>
-                    <span class="weather__windSpeed--kmh">${getSpeedInKmH(
-                        forecastedWeather.windSpeed
-                    )} <span aria-label="kilometers per hour">km/h</span></span>
-                    <span class="weather__windSpeed--mph" hidden aria-hidden="true">${getSpeedInMPH(
-                        forecastedWeather.windSpeed
-                    )} <span aria-label="miles per hour">mph</span></span>
-                </p>
-            </div>
-        `;
-        card.appendChild(wind);
-        fragment.appendChild(card);
-        weatherSection.appendChild(fragment);
-        const fahrenheitIcons = document.getElementsByClassName(
-            'wi-fahrenheit'
-        );
-        for (let i = 0; i < fahrenheitIcons.length; i++) {
-            fahrenheitIcons[i].addEventListener('click', switchUnits);
+        return date.toLocaleDateString('en-US', options);
+    }
+
+    function makeTemperatureParagraph(temperature) {
+        return `<p>
+                    <span class="weather__temperature--celsius" hidden aria-hidden="true">
+                        ${temperature}
+                        <span class="screen-reader-only">degrees Celsius</span>
+                    </span>
+                    <span class="weather__temperature--fahrenheit">
+                        ${convertCelsiusToFahrenheit(temperature)}
+                        <span class="screen-reader-only">degrees Fahrenheit</span>
+                    </span>
+                    <span class="weather__icon">
+                        <i class="wi wi-celsius weather__icon--active" aria-label="click here to switch to degrees Celsius"></i>
+                    </span> |
+                    <span class="weather__icon">
+                        <i class="wi wi-fahrenheit" aria-hidden="true"></i>
+                    </span>
+                </p>`;
+    }
+
+    function addEventListenersToIcons(temperatureElement, scale) {
+        const icons = temperatureElement.getElementsByClassName('wi-' + scale);
+        for (let i = 0; i < icons.length; i++) {
+            icons[i].addEventListener('click', switchUnits);
         }
     }
 
+    function getSpeedInKmH(speed) {
+        return Math.round(speed * 3.6);
+    }
+
+    function getSpeedInMPH(speed) {
+        const metersPerMile = 1609.34;
+        return Math.round((speed * 3600) / metersPerMile);
+    }
+
+    function convertCelsiusToFahrenheit(celsius) {
+        return Math.round((celsius * 9) / 5 + 32);
+    }
+
     function switchUnits(event) {
-        const switchToFahrenheit = event.target.classList.contains(
+        const switchToImperial = event.target.classList.contains(
             'wi-fahrenheit'
         );
         const celsiusIcons = document.getElementsByClassName('wi-celsius');
@@ -238,62 +200,80 @@ const weatherViewUpdater = (function () {
         const speedsInMPH = document.getElementsByClassName(
             'weather__windSpeed--mph'
         );
+
+        toggleTemperaturesVisibility(
+            celsiusTemperatures,
+            fahrenheitTemperatures,
+            switchToImperial
+        );
+
+        toggleSpeedsVisibility(speedsInKmH, speedsInMPH, switchToImperial);
+
+        toggleIcons(celsiusIcons, fahrenheitIcons, switchToImperial);
+    }
+
+    function toggleTemperaturesVisibility(
+        celsiusTemperatures,
+        fahrenheitTemperatures,
+        switchToImperial
+    ) {
         for (let i = 0; i < celsiusTemperatures.length; i++) {
-            celsiusTemperatures[i].hidden = switchToFahrenheit;
+            celsiusTemperatures[i].hidden = switchToImperial;
             celsiusTemperatures[i].setAttribute(
                 'aria-hidden',
-                switchToFahrenheit
+                switchToImperial
             );
-            fahrenheitTemperatures[i].hidden = !switchToFahrenheit;
+            fahrenheitTemperatures[i].hidden = !switchToImperial;
             fahrenheitTemperatures[i].setAttribute(
                 'aria-hidden',
-                !switchToFahrenheit
+                !switchToImperial
             );
         }
-        for (let j = 0; j < speedsInKmH.length; j++) {
-            speedsInKmH[j].hidden = switchToFahrenheit;
-            speedsInKmH[j].setAttribute('aria-hidden', switchToFahrenheit);
-            speedsInMPH[j].hidden = !switchToFahrenheit;
-            speedsInMPH[j].setAttribute('aria-hidden', !switchToFahrenheit);
+    }
+
+    function toggleSpeedsVisibility(
+        speedsInKmH,
+        speedsInMPH,
+        switchToImperial
+    ) {
+        for (let i = 0; i < speedsInKmH.length; i++) {
+            speedsInKmH[i].hidden = switchToImperial;
+            speedsInKmH[i].setAttribute('aria-hidden', switchToImperial);
+            speedsInMPH[i].hidden = !switchToImperial;
+            speedsInMPH[i].setAttribute('aria-hidden', !switchToImperial);
         }
-        for (let k = 0; k < celsiusIcons.length; k++) {
-            celsiusIcons[k].classList.toggle(
-                'icon--active',
-                switchToFahrenheit
+    }
+
+    function toggleIcons(celsiusIcons, fahrenheitIcons, switchToImperial) {
+        for (let i = 0; i < celsiusIcons.length; i++) {
+            celsiusIcons[i].classList.toggle(
+                'weather__icon--active',
+                switchToImperial
             );
-            celsiusIcons[k].setAttribute(
-                'aria-label',
-                `${switchToFahrenheit ? 'switch to ' : ''}degrees Celsius`
+            celsiusIcons[i].setAttribute('aria-hidden', !switchToImperial);
+            fahrenheitIcons[i].classList.toggle(
+                'weather__icon--active',
+                !switchToImperial
             );
-            fahrenheitIcons[k].classList.toggle(
-                'icon--active',
-                !switchToFahrenheit
-            );
-            fahrenheitIcons[k].setAttribute(
-                'aria-label',
-                `${!switchToFahrenheit ? 'switch to ' : ''}degrees Fahrenheit`
-            );
-            if (switchToFahrenheit) {
-                celsiusIcons[k].addEventListener('click', switchUnits);
-                fahrenheitIcons[k].removeEventListener('click', switchUnits);
+            fahrenheitIcons[i].setAttribute('aria-hidden', switchToImperial);
+            if (switchToImperial) {
+                celsiusIcons[i].setAttribute(
+                    'aria-label',
+                    'Click here to switch to degrees Celsius'
+                );
+                celsiusIcons[i].addEventListener('click', switchUnits);
+                fahrenheitIcons[i].removeAttribute('aria-label');
+                fahrenheitIcons[i].removeEventListener('click', switchUnits);
             } else {
-                celsiusIcons[k].removeEventListener('click', switchUnits);
-                fahrenheitIcons[k].addEventListener('click', switchUnits);
+                celsiusIcons[i].removeAttribute('aria-label');
+                celsiusIcons[i].removeEventListener('click', switchUnits);
+                fahrenheitIcons[i].setAttribute(
+                    'aria-label',
+                    'Click here to switch to degrees Fahrenheit'
+                );
+                fahrenheitIcons[i].addEventListener('click', switchUnits);
             }
         }
-    }
-
-    function convertCelsiusToFahrenheit(celsius) {
-        return Math.round((celsius * 9) / 5 + 32);
-    }
-
-    function getSpeedInKmH(speed) {
-        return Math.round(speed * 3.6);
-    }
-
-    function getSpeedInMPH(speed) {
-        const metersPerMile = 1609.34;
-        return Math.round((speed * 3600) / metersPerMile);
     }
 
     return {

@@ -48,11 +48,11 @@
             margin-bottom: 0.5rem;
         }
 
-        &--real {
+        &--left {
             grid-area: left;
         }
 
-        &--feels {
+        &--right {
             grid-area: right;
         }
 
@@ -96,14 +96,16 @@
             }
         }
     }
-}
 
-.icon--active {
-    color: $cadet-blue;
-    cursor: pointer;
+    &__icon {
+        &--active {
+            color: $cadet-blue;
+            cursor: pointer;
 
-    &:hover {
-        color: $french-raspberry;
+            &:hover {
+                color: $french-raspberry;
+            }
+        }
     }
 }
 
