@@ -10,39 +10,38 @@ import 'whatwg-fetch';
 
 // *** COMPONENTS ***
 import { app } from './js/app';
-import { applicationState } from './js/applicationState';
-import { apiService } from './js/apiService';
-import { dateController } from './js/dateController';
-import { viewUpdater } from './js/viewUpdater';
-import { cityController } from './js/cityController';
-import { dateInputFactory } from './js/dateInputFactory';
+import { applicationState } from './js/services/applicationState';
+import { apiService } from './js/services/apiService';
+import { dateController } from './js/controllers/dateController';
+import { cityController } from './js/controllers/cityController';
+import { dateInputFactory } from './js/services/dateInputFactory';
+import { newTripViewUpdater } from './js/viewUpdaters/newTripViewUpdater';
+import { dateViewUpdater } from './js/viewUpdaters/dateViewUpdater';
+import { cityViewUpdater } from './js/viewUpdaters/cityViewUpdater';
 
 // *** STYLESHEETS ***
 import './styles/main.scss';
 
 // *** CONFIGURE COMPONENTS ***
-// Configure dependencies for the viewUpdater
-viewUpdater.applicationState = applicationState;
-
 // Configure dependencies for the dateInputFactory
-dateInputFactory.viewUpdater = viewUpdater;
+dateInputFactory.viewUpdater = dateViewUpdater;
 
 // Configure dependencies for the date controller
 dateController.applicationState = applicationState;
-dateController.viewUpdater = viewUpdater;
+dateController.viewUpdater = dateViewUpdater;
 dateController.dateInputFactory = dateInputFactory;
 
-// Configure dependencies for the dropdown list
+// Configure dependencies for the city dropdown list
 cityController.apiService = apiService;
 cityController.appState = applicationState;
-cityController.viewUpdater = viewUpdater;
+cityController.viewUpdater = cityViewUpdater;
 
 // Configure dependencies and start application
 app.apiService = apiService;
 app.applicationState = applicationState;
 app.cityController = cityController;
 app.dateController = dateController;
-app.viewUpdater = viewUpdater;
+app.viewUpdater = newTripViewUpdater;
 app.start();
 
 // Event listener for form submission

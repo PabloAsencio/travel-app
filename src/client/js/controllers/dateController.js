@@ -12,7 +12,6 @@ const dateController = (function () {
         initializeState();
         startDateInput.addEventListener('blur', validateDates);
         endDateInput.addEventListener('blur', validateDates);
-        _viewUpdater.updateDateView();
     }
 
     function validateDates(event) {
@@ -20,7 +19,6 @@ const dateController = (function () {
         const validatedDates = getValidatedDates(event);
         updateState(validatedDates);
         updateErrorMessages(validatedDates);
-        _viewUpdater.updateDateView();
         return !validatedDates.hasOwnProperty('error');
     }
 

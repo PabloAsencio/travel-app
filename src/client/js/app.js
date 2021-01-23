@@ -18,6 +18,23 @@ const app = (function () {
             (_cityController.isValidCity() ||
                 (await _cityController.fetchCity()))
         ) {
+            const newTripData = {
+                destination: {
+                    city: _applicationState.city,
+                    province: _applicationState.province,
+                    country: _applicationState.country,
+                },
+                time: {
+                    daysToTrip: _applicationState.daysToTrip,
+                    duration: _applicationState.duration,
+                    startDate: _applicationState.startDate,
+                    endDate: _applicationState.endDate,
+                },
+                pictures: {},
+                currentWeather: {},
+                weatherForecast: {},
+            };
+
             const currentWeather = _apiService.fetchCurrentWeather(
                 _applicationState.latitude,
                 _applicationState.longitude
@@ -34,20 +51,17 @@ const app = (function () {
                 _applicationState.country
             );
 
-            _viewUpdater.clearWeatherSection();
+            newTripData.currentWeather = await processApiResult(currentWeather);
+            newTripData.weatherForecast = await processApiResult(forecast);
+            newTripData.pictures = await processApiResult(pictures);
 
-            // TODO: Show some informative error message in the UI instead of logging it
-            currentWeather
-                .then((response) => response.json())
-                .then((weather) => _viewUpdater.updateCurrentWeather(weather))
-                .catch((error) => console.log(error.message));
-            forecast
-                .then((response) => response.json())
-                .then((forecast) =>
-                    _viewUpdater.updateWeatherForecast(forecast)
-                )
-                .catch((error) => console.log(error.message));
-            pictures
+            _viewUpdater.updateNewTrip(newTripData);
+        } else {
+            console.log('Something went wrong!');
+        }
+
+        async function processApiResult(promise) {
+            return await promise
                 .then(async (response) => {
                     if (response.ok) {
                         return response.json();
@@ -56,11 +70,9 @@ const app = (function () {
                         throw new Error(data.error);
                     }
                 })
-                .then((pictures) => _viewUpdater.updatePicture(pictures))
-                .catch((error) => _viewUpdater.showPictureError(error.message));
-            _viewUpdater.updateNewTrip();
-        } else {
-            console.log('Something went wrong!');
+                .catch((error) => {
+                    return { error: error.message };
+                });
         }
     }
     return {
