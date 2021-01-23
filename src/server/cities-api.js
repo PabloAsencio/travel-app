@@ -65,7 +65,7 @@ const citiesAPI = (function () {
             query = `${exact ? 'name' : 'name_startsWith'}=${encodeURIComponent(
                 request.query.city
             )}${
-                request.query.province
+                request.query.province && request.query.province != empty
                     ? '&q=' + encodeURIComponent(request.query.province)
                     : ''
             }${
@@ -78,17 +78,19 @@ const citiesAPI = (function () {
     }
 
     function createCityObject(city) {
-        const cityName = capitalize(city.name);
-        const province = capitalize(city.adminName1);
+        const cityName = sanitizeName(capitalize(city.name));
+        const province = sanitizeName(capitalize(city.adminName1));
         const country = _countryCodeService.getCountryName(city.countryCode);
         return {
             completeName: `${cityName}${
-                city.name != city.adminName1 ? ', ' + province : ''
+                city.name != city.adminName1 && city.adminName1
+                    ? ', ' + province
+                    : ''
             }, ${country}`,
             city: cityName,
             province,
             countryCode: city.countryCode,
-            country,
+            country: sanitizeName(country),
             longitude: city.lng,
             latitude: city.lat,
         };
@@ -101,6 +103,18 @@ const citiesAPI = (function () {
                 firstCharacter.toUpperCase()
             )
         );
+    }
+
+    function sanitizeName(province) {
+        if (!province) {
+            return 'empty';
+        } else {
+            return province
+                .replace(/,/g, '')
+                .replace(/\((\p{Script_Extensions=Latin})+\)/gu, '')
+                .replace(/\[(\p{Script_Extensions=Latin})+\]/gu, '')
+                .replace(/\s(\s)+/g, ' ');
+        }
     }
 
     return {
