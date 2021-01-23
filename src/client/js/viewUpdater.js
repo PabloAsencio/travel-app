@@ -1,30 +1,28 @@
 import airplane from '../../assets/images/airplane.svg';
 import calendar from '../../assets/images/calendar.svg';
-import { cityViewUpdater } from './cityViewUpdater';
 import { pictureViewUpdater } from './pictureViewUpdater';
 import { weatherViewUpdater } from './weatherViewUpdater';
 
 const viewUpdater = (function () {
-    let _applicationState;
-
-    function updateNewTrip() {
-        updateHeader();
-        updateTimeElement();
+    function updateNewTrip(newTripData) {
+        weatherViewUpdater.clearWeatherSection();
+        updateHeader(newTripData.destination);
+        updateTimeElement(newTripData.time);
     }
 
-    function updateHeader() {
+    function updateHeader(destinationData) {
         const destination = document.getElementById('newTrip__destination');
         const provinceAndCountry = document.getElementById('newTrip__country');
-        destination.textContent = _applicationState.city.toUpperCase();
+        destination.textContent = destinationData.city.toUpperCase();
         provinceAndCountry.textContent =
-            _applicationState.province +
+            destinationData.province +
             ', ' +
-            _applicationState.country.toUpperCase();
+            destinationData.country.toUpperCase();
     }
 
-    function updateTimeElement() {
-        const startDate = new Date(_applicationState.startDate);
-        const endDate = new Date(_applicationState.endDate);
+    function updateTimeElement(time) {
+        const startDate = new Date(time.startDate);
+        const endDate = new Date(time.endDate);
         const options = {
             year: 'numeric',
             month: 'long',
@@ -37,16 +35,14 @@ const viewUpdater = (function () {
             'newTrip__endDate'
         ).textContent = endDate.toLocaleDateString('en-US', options);
         document.getElementById('newTrip__daysToTrip').textContent =
-            _applicationState.daysToTrip == 0
+            time.daysToTrip == 0
                 ? 'today! Get Ready!'
                 : 'in ' +
-                  _applicationState.daysToTrip +
+                  time.daysToTrip +
                   ' day' +
-                  (_applicationState.daysToTrip != 1 ? 's' : '');
+                  (time.daysToTrip != 1 ? 's' : '');
         document.getElementById('newTrip__duration').textContent =
-            _applicationState.duration +
-            ' day' +
-            (_applicationState.duration != 1 ? 's' : '');
+            time.duration + ' day' + (time.duration != 1 ? 's' : '');
         document.querySelector('.time__icon--calendar').innerHTML = calendar;
         document.querySelector('.time__icon--airplane').innerHTML = airplane;
     }
@@ -74,9 +70,6 @@ const viewUpdater = (function () {
     }
 
     return {
-        set applicationState(applicationState) {
-            _applicationState = applicationState;
-        },
         updateNewTrip,
         updatePicture,
         showPictureError,

@@ -23,9 +23,6 @@ import { cityViewUpdater } from './js/cityViewUpdater';
 import './styles/main.scss';
 
 // *** CONFIGURE COMPONENTS ***
-// Configure dependencies for the viewUpdater
-viewUpdater.applicationState = applicationState;
-
 // Configure dependencies for the dateInputFactory
 dateInputFactory.viewUpdater = dateViewUpdater;
 
