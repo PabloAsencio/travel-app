@@ -29,7 +29,7 @@ main {
 }
 
 .newTrip {
-    padding-bottom: 8.1rem;
+    padding: 1.5rem 0 8.1rem 0;
 
     &__header {
         margin: 0 auto;
@@ -44,7 +44,6 @@ main {
 @media only screen and (min-width: 768px) {
     main {
         min-height: 80vh;
-        //padding-bottom: 8.1rem;
     }
 
     .tripSelection {

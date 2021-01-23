@@ -18,6 +18,7 @@ const newTripViewUpdater = (function () {
         pictureViewUpdater.updatePicture(newTripData.pictures);
         weatherViewUpdater.updateCurrentWeather(newTripData.currentWeather);
         weatherViewUpdater.updateWeatherForecast(newTripData.weatherForecast);
+        scrollToNewTrip();
     }
 
     function populateNewTripSection() {
@@ -94,6 +95,17 @@ const newTripViewUpdater = (function () {
 
     function clearNewTrip() {
         document.getElementById('newTrip').innerHTML = '';
+    }
+
+    function scrollToNewTrip() {
+        const newTrip = document.getElementById('newTrip');
+        const rectangle = newTrip.getBoundingClientRect();
+        const scrollOptions = {
+            left: 0,
+            top: rectangle.y,
+            behavior: 'smooth',
+        };
+        window.scrollBy(scrollOptions);
     }
 
     function updateHeader(destinationData) {
