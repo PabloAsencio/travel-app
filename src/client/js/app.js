@@ -51,18 +51,17 @@ const app = (function () {
                 _applicationState.country
             );
 
-            // TODO: Show some informative error message in the UI instead of logging it
-            currentWeather
-                .then((response) => response.json())
-                .then((weather) => _viewUpdater.updateCurrentWeather(weather))
-                .catch((error) => console.log(error.message));
-            forecast
-                .then((response) => response.json())
-                .then((forecast) =>
-                    _viewUpdater.updateWeatherForecast(forecast)
-                )
-                .catch((error) => console.log(error.message));
-            pictures
+            newTripData.currentWeather = await processApiResult(currentWeather);
+            newTripData.weatherForecast = await processApiResult(forecast);
+            newTripData.pictures = await processApiResult(pictures);
+
+            _viewUpdater.updateNewTrip(newTripData);
+        } else {
+            console.log('Something went wrong!');
+        }
+
+        async function processApiResult(promise) {
+            return await promise
                 .then(async (response) => {
                     if (response.ok) {
                         return response.json();
@@ -71,11 +70,9 @@ const app = (function () {
                         throw new Error(data.error);
                     }
                 })
-                .then((pictures) => _viewUpdater.updatePicture(pictures))
-                .catch((error) => _viewUpdater.showPictureError(error.message));
-            _viewUpdater.updateNewTrip(newTripData);
-        } else {
-            console.log('Something went wrong!');
+                .catch((error) => {
+                    return { error: error.message };
+                });
         }
     }
     return {

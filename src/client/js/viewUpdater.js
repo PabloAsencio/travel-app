@@ -8,6 +8,9 @@ const viewUpdater = (function () {
         weatherViewUpdater.clearWeatherSection();
         updateHeader(newTripData.destination);
         updateTimeElement(newTripData.time);
+        updatePicture(newTripData.pictures);
+        weatherViewUpdater.updateCurrentWeather(newTripData.currentWeather);
+        weatherViewUpdater.updateWeatherForecast(newTripData.weatherForecast);
     }
 
     function updateHeader(destinationData) {
@@ -47,35 +50,16 @@ const viewUpdater = (function () {
         document.querySelector('.time__icon--airplane').innerHTML = airplane;
     }
 
-    // Forwarding commands to pictureViewUpdater
-    function updatePicture(photos) {
-        pictureViewUpdater.updatePicture(photos);
-    }
-
-    function showPictureError(message) {
-        pictureViewUpdater.showPictureError(message);
-    }
-
-    // Forwarding commands to weatherViewUpdater
-    function updateCurrentWeather(currentWeather) {
-        weatherViewUpdater.updateCurrentWeather(currentWeather);
-    }
-
-    function updateWeatherForecast(weatherForecast) {
-        weatherViewUpdater.updateWeatherForecast(weatherForecast);
-    }
-
-    function clearWeatherSection() {
-        weatherViewUpdater.clearWeatherSection();
+    function updatePicture(pictures) {
+        if (pictures.error) {
+            pictureViewUpdater.showPictureError(pictures.error);
+        } else {
+            pictureViewUpdater.updatePicture(pictures);
+        }
     }
 
     return {
         updateNewTrip,
-        updatePicture,
-        showPictureError,
-        updateCurrentWeather,
-        updateWeatherForecast,
-        clearWeatherSection,
     };
 })();
 
