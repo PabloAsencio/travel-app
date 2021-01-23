@@ -1,6 +1,4 @@
 const dateViewUpdater = (function () {
-    let _applicationState;
-
     function renderNativeDateInput(id, labelText) {
         const container = document.getElementById(
             'tripSelection__container--' + id
@@ -185,9 +183,6 @@ const dateViewUpdater = (function () {
     }
 
     return {
-        set applicationState(applicationState) {
-            _applicationState = applicationState;
-        },
         renderNativeDateInput,
         renderFallbackDateInput,
         populateYears,
