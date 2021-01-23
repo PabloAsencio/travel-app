@@ -8,6 +8,11 @@ const viewUpdater = (function () {
     let _applicationState;
 
     function updateNewTrip() {
+        updateHeader();
+        updateTimeElement();
+    }
+
+    function updateHeader() {
         const destination = document.getElementById('newTrip__destination');
         const provinceAndCountry = document.getElementById('newTrip__country');
         destination.textContent = _applicationState.city.toUpperCase();
@@ -15,7 +20,6 @@ const viewUpdater = (function () {
             _applicationState.province +
             ', ' +
             _applicationState.country.toUpperCase();
-        updateTimeElement();
     }
 
     function updateTimeElement() {
