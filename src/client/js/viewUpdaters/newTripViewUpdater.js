@@ -3,7 +3,7 @@ import calendar from '../../assets/images/calendar.svg';
 import { pictureViewUpdater } from './pictureViewUpdater';
 import { weatherViewUpdater } from './weatherViewUpdater';
 
-const viewUpdater = (function () {
+const newTripViewUpdater = (function () {
     function updateNewTrip(newTripData) {
         weatherViewUpdater.clearWeatherSection();
         updateHeader(newTripData.destination);
@@ -55,4 +55,4 @@ const viewUpdater = (function () {
     };
 })();
 
-export { viewUpdater };
+export { newTripViewUpdater };

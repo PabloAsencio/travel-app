@@ -10,14 +10,14 @@ import 'whatwg-fetch';
 
 // *** COMPONENTS ***
 import { app } from './js/app';
-import { applicationState } from './js/applicationState';
-import { apiService } from './js/apiService';
-import { dateController } from './js/dateController';
-import { cityController } from './js/cityController';
-import { dateInputFactory } from './js/dateInputFactory';
-import { viewUpdater } from './js/viewUpdater';
-import { dateViewUpdater } from './js/dateViewUpdater';
-import { cityViewUpdater } from './js/cityViewUpdater';
+import { applicationState } from './js/services/applicationState';
+import { apiService } from './js/services/apiService';
+import { dateController } from './js/controllers/dateController';
+import { cityController } from './js/controllers/cityController';
+import { dateInputFactory } from './js/services/dateInputFactory';
+import { newTripViewUpdater } from './js/viewUpdaters/newTripViewUpdater';
+import { dateViewUpdater } from './js/viewUpdaters/dateViewUpdater';
+import { cityViewUpdater } from './js/viewUpdaters/cityViewUpdater';
 
 // *** STYLESHEETS ***
 import './styles/main.scss';
@@ -41,7 +41,7 @@ app.apiService = apiService;
 app.applicationState = applicationState;
 app.cityController = cityController;
 app.dateController = dateController;
-app.viewUpdater = viewUpdater;
+app.viewUpdater = newTripViewUpdater;
 app.start();
 
 // Event listener for form submission
