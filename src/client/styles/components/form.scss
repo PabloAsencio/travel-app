@@ -142,7 +142,8 @@
         }
     }
 }
-
+// The following styles are based on the example
+// at https://www.w3schools.com/howto/howto_js_autocomplete.asp
 .autocomplete {
     position: relative;
     display: inline-block;
@@ -153,7 +154,7 @@
 
     .autocomplete-items {
         position: absolute;
-        border: 1px solid #d4d4d4;
+        border: 0.1rem solid #d4d4d4;
         border-bottom: none;
         border-top: none;
         z-index: 99;
@@ -181,10 +182,10 @@
         }
     }
     .autocomplete-items div {
-        padding: 10px;
+        padding: 1rem;
         cursor: pointer;
         background-color: #fff;
-        border-bottom: 1px solid #d4d4d4;
+        border-bottom: 0.1rem solid #d4d4d4;
     }
     .autocomplete-items div:hover {
         /*when hovering an item:*/
