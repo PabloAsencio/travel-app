@@ -8,7 +8,7 @@ const viewUpdater = (function () {
         weatherViewUpdater.clearWeatherSection();
         updateHeader(newTripData.destination);
         updateTimeElement(newTripData.time);
-        updatePicture(newTripData.pictures);
+        pictureViewUpdater.updatePicture(newTripData.pictures);
         weatherViewUpdater.updateCurrentWeather(newTripData.currentWeather);
         weatherViewUpdater.updateWeatherForecast(newTripData.weatherForecast);
     }
@@ -48,14 +48,6 @@ const viewUpdater = (function () {
             time.duration + ' day' + (time.duration != 1 ? 's' : '');
         document.querySelector('.time__icon--calendar').innerHTML = calendar;
         document.querySelector('.time__icon--airplane').innerHTML = airplane;
-    }
-
-    function updatePicture(pictures) {
-        if (pictures.error) {
-            pictureViewUpdater.showPictureError(pictures.error);
-        } else {
-            pictureViewUpdater.updatePicture(pictures);
-        }
     }
 
     return {
