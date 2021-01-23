@@ -65,7 +65,7 @@ const citiesAPI = (function () {
             query = `${exact ? 'name' : 'name_startsWith'}=${encodeURIComponent(
                 request.query.city
             )}${
-                request.query.province && request.query.province != empty
+                request.query.province && request.query.province != 'empty'
                     ? '&q=' + encodeURIComponent(request.query.province)
                     : ''
             }${
