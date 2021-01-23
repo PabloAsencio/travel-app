@@ -229,4 +229,4 @@ const dateViewUpdater = (function () {
     };
 })();
 
-export default dateViewUpdater;
+export { dateViewUpdater };
