@@ -52,8 +52,12 @@ const weatherAPI = (function () {
                 .then((weatherbitResponse) => {
                     if (weatherbitResponse.data) {
                         const weatherReport = weatherbitResponse.data;
-                        const dailyForecasts = weatherReport.data.map(
-                            (report) => {
+                        const dailyForecasts = weatherReport.data
+                            .filter(
+                                (report, index) =>
+                                    index >= request.query.daysToTrip
+                            )
+                            .map((report) => {
                                 return {
                                     date: report.valid_date,
                                     code: report.weather.code,
@@ -66,8 +70,7 @@ const weatherAPI = (function () {
                                     maxfeelsLike: report.app_max_temp,
                                     minfeelsLike: report.app_min_temp,
                                 };
-                            }
-                        );
+                            });
                         response.send({
                             dailyForecasts: dailyForecasts,
                         });

@@ -32,27 +32,35 @@ const app = (function () {
                 },
                 pictures: {},
                 currentWeather: {},
-                weatherForecast: {},
+                weatherForecast: {
+                    error:
+                        'We can only show a weather forecast for your stay if the start day of your trip lies within the next 16 days.',
+                },
             };
 
             const currentWeather = _apiService.fetchCurrentWeather(
                 _applicationState.latitude,
                 _applicationState.longitude
             );
-            const forecast = _apiService.fetchWeatherForecast(
-                _applicationState.latitude,
-                _applicationState.longitude,
-                _applicationState.daysToTrip.toString(10),
-                _applicationState.duration.toString(10)
-            );
+
             const pictures = _apiService.fetchPictures(
                 _applicationState.city,
                 _applicationState.province,
                 _applicationState.country
             );
 
+            if (_applicationState.daysToTrip < 16) {
+                const forecast = _apiService.fetchWeatherForecast(
+                    _applicationState.latitude,
+                    _applicationState.longitude,
+                    _applicationState.daysToTrip.toString(10),
+                    _applicationState.duration.toString(10)
+                );
+                newTripData.weatherForecast = await processApiResult(forecast);
+            }
+
             newTripData.currentWeather = await processApiResult(currentWeather);
-            newTripData.weatherForecast = await processApiResult(forecast);
+
             newTripData.pictures = await processApiResult(pictures);
 
             _viewUpdater.updateNewTrip(newTripData);

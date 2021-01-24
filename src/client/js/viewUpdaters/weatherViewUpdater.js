@@ -27,6 +27,7 @@ const weatherViewUpdater = (function () {
     function showErrorMessage(errorMessage, weatherSection) {
         const fragment = document.createDocumentFragment();
         const error = document.createElement('P');
+        error.classList.add('weather__error');
         error.textContent = errorMessage;
         fragment.appendChild(error);
         weatherSection.appendChild(fragment);
