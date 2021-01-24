@@ -44,20 +44,22 @@ app.get('/city', citiesAPI.fetchCitiesWithExactName);
 // *** SERVER SHUTDOWN ***
 // Gracefully close the system and save cache when termination signal is received
 // See https://expressjs.com/en/advanced/healthcheck-graceful-shutdown.html
-process.on('SIGTERM', () => {
-    console.log('SIGTERM signal received: closing HTTP server');
+app.close = () => {
     server.close(() => {
         cacheService.save();
         cacheService.close();
         console.log('HTTP server closed');
     });
+};
+
+process.on('SIGTERM', () => {
+    console.log('SIGTERM signal received: closing HTTP server');
+    app.close();
 });
 
 process.on('SIGINT', () => {
     console.log('SIGINT signal received: closing HTTP server');
-    server.close(() => {
-        cacheService.save();
-        cacheService.close();
-        console.log('HTTP server closed');
-    });
+    app.close();
 });
+
+module.exports = app;
