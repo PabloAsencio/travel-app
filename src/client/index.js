@@ -4,8 +4,6 @@
 // browser that does not support the date input element
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-// TODO: Review handling of http status codes returned from fetch
-// See https://www.npmjs.com/package/whatwg-fetch#handling-http-error-statuses
 import 'whatwg-fetch';
 
 // *** COMPONENTS ***
