@@ -57,6 +57,7 @@
     "raw-loader": "^4.0.2",
     "sass-loader": "^10.1.0",
     "style-loader": "^2.0.0",
+    "supertest": "^6.1.1",
     "terser-webpack-plugin": "^1.4.5",
     "url-loader": "^4.1.1",
     "webpack-dev-server": "^3.11.0",
@@ -66,5 +67,10 @@
     "> 0.25%",
     "not dead",
     "ie 11"
-  ]
+  ],
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  }
 }
